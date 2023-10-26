@@ -1,5 +1,5 @@
 import { ArticleData } from "../../models/article.model";
-import { getArticleByCategory, getArticleAll, getArticleTopNews, getArticleSearch, getArticleTitle, getArticleNumber, getArticlePublished } from "../actions/article.action";
+import { createArticle, editArticle, deleteArticle, getArticleByCategory, getArticleAll, getArticleTopNews, getArticleSearch, getArticleTitle, getArticleNumber, getArticlePublished } from "../actions/article.action";
 import { PayloadAction, createSlice, combineReducers } from "@reduxjs/toolkit";
 
 interface typeOfInitialState {
@@ -19,6 +19,78 @@ const initialState: typeOfInitialState = {
   isSuccess: false,
   errorMessage: "",
 };
+
+export const createArticleSlice = createSlice({
+  name: "createArticleReducer",
+  initialState,
+  reducers: {},
+  extraReducers: (builder) => {
+    builder.addCase(createArticle.pending, (state) => {
+      (state.isLoading = true), (state.errorMessage = "");
+      console.log("PENDING ADD ARTIKEL....");
+    });
+
+    builder.addCase(createArticle.fulfilled, (state, action: PayloadAction<ArticleData[]>) => {
+      state.dataArticle = action.payload;
+      console.log("ADD ARTIKEL SUCCESS");
+    });
+
+    builder.addCase(createArticle.rejected, (state, { payload }) => {
+      if (payload) {
+        console.log("FAILED ADD ARTIKEL");
+        state.isSuccess = false;
+      }
+    });
+  },
+});
+
+export const editArticleSlice = createSlice({
+  name: "editArticleReducer",
+  initialState,
+  reducers: {},
+  extraReducers: (builder) => {
+    builder.addCase(editArticle.pending, (state) => {
+      (state.isLoading = true), (state.errorMessage = "");
+      console.log("PENDING EDIT ARTIKEL....");
+    });
+
+    builder.addCase(editArticle.fulfilled, (state, action: PayloadAction<ArticleData[]>) => {
+      state.dataArticle = action.payload;
+      console.log("EDIT ARTIKEL SUCCESS");
+    });
+
+    builder.addCase(editArticle.rejected, (state, { payload }) => {
+      if (payload) {
+        console.log("FAILED EDIT ARTIKEL");
+        state.isSuccess = false;
+      }
+    });
+  },
+});
+
+export const deleteArticleSlice = createSlice({
+  name: "deleteArticleReducer",
+  initialState,
+  reducers: {},
+  extraReducers: (builder) => {
+    builder.addCase(deleteArticle.pending, (state) => {
+      (state.isLoading = true), (state.errorMessage = "");
+      console.log("PENDING DELETE ARTIKEL....");
+    });
+
+    builder.addCase(deleteArticle.fulfilled, (state, action: PayloadAction<ArticleData[]>) => {
+      state.dataArticle = action.payload;
+      console.log("DELETE ARTIKEL SUCCESS");
+    });
+
+    builder.addCase(deleteArticle.rejected, (state, { payload }) => {
+      if (payload) {
+        console.log("FAILED DELETE ARTIKEL");
+        state.isSuccess = false;
+      }
+    });
+  },
+});
 
 export const articleByCategorySlice = createSlice({
   name: "articleByCategoryReducer",
@@ -202,6 +274,9 @@ export const articleNumberSlice = createSlice({
 });
 
 const articleReducer = combineReducers({
+  createArticle: createArticleSlice.reducer,
+  editArticle: editArticleSlice.reducer,
+  deleteArticle: deleteArticleSlice.reducer,
   articleCategory: articleByCategorySlice.reducer,
   articleTitle: articleTitleSlice.reducer,
   articleAll: articleAllSlice.reducer,

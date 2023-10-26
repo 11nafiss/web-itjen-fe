@@ -1,5 +1,5 @@
 // Import Library
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { Link, useSearchParams } from "react-router-dom";
 import { Pagination, PaginationItem, Stack, Grid, Container, Box, Typography } from "@mui/material";
 import { styled, createTheme, ThemeProvider } from "@mui/material/styles";
@@ -13,7 +13,7 @@ import SearchIcon from "@mui/icons-material/Search";
 
 // Import Api
 import { useAppDispatch, useAppSelector } from "../../../../hooks/useTypedSelector";
-import { getArticleSearch } from "../../../../features/actions/article.action";
+import { getArticleNumber, getArticleSearch } from "../../../../features/actions/article.action";
 import { BASE_URL } from "../../../../services/api";
 
 // Additional Code
@@ -96,14 +96,32 @@ const CustomTitle = styled(Typography)(({ theme }) => ({
 
 // Main Declaration
 const Search = () => {
-  const [searchParams, setSearchParams] = useSearchParams();
+  const [searchParams] = useSearchParams();
 
   // const page = useState(1);
   // const { keyword } = useParams();
 
-  // const dispatch = useAppDispatch();
+  const dispatch = useAppDispatch();
 
-  // const { dataArticle } = useAppSelector((state) => state.article.articleSearch);
+  useEffect(() => {
+    const page = searchParams.get("page") ?? 1;
+    const keyword = searchParams.get("keyword");
+
+    dispatch(getArticleSearch({ page, keyword }));
+    dispatch(getArticleNumber({ keyword }));
+  }, [dispatch, searchParams]);
+
+  const dataArticle = useAppSelector((state) => state.article.articleSearch.dataArticle);
+  const jumlahArticle = useAppSelector((state) => state.article.articleNumber.dataArticle);
+
+  console.log("JUMLAH: ", jumlahArticle);
+
+  const handlePageChange = (event, value) => {
+    const keyword = searchParams.get("keyword");
+
+    dispatch(getArticleSearch({ page: value, keyword }));
+    dispatch(getArticleNumber({ keyword }));
+  };
 
   // const pageSize = 6;
 
@@ -119,12 +137,6 @@ const Search = () => {
 
   //   setPagination({ ...pagination, from: from, to: to });
   // };
-
-  // useEffect(() => {
-  //   dispatch(getArticleSearch(page, keyword));
-  // }, [dispatch, page, keyword]);
-
-  console.log(searchParams.get("keyword"));
 
   // Main Code
   return (
@@ -168,7 +180,7 @@ const Search = () => {
           <CustomContainer>
             <SubText>Hasil Pencarian</SubText>
             <Grid container spacing={{ xs: 3, md: 4 }} column={{ xs: 4, sm: 8, md: 12 }} sx={{ justifyContent: "center" }}>
-              {[].map((obj, index) => (
+              {dataArticle.map((obj, index) => (
                 <GridCenter item key={index} xs={12} sm={6} md={4}>
                   <Card variant="outlined" sx={{ width: "270px", maxWidth: "100%", height: "330px", borderRadius: "20px", boxShadow: "lg", gap: "5px" }}>
                     <CardOverflow>
@@ -210,12 +222,14 @@ const Search = () => {
                   </Card>
                 </GridCenter>
               ))}
+              <GridCenter item xs={12}>
+                <Stack spacing={2}>
+                  <ThemeProvider theme={theme}>
+                    <Pagination color="primary" count={Math.ceil(jumlahArticle / 2)} onChange={handlePageChange} renderItem={(item) => <PaginationItem slots={{ previous: ArrowBackIcon, next: ArrowForwardIcon }} {...item} />} />
+                  </ThemeProvider>
+                </Stack>
+              </GridCenter>
             </Grid>
-            {/* <Stack spacing={2} sx={{ width: "100%", alignItems: "center" }}>
-              <ThemeProvider theme={theme}>
-                <Pagination color="primary" count={Math.ceil(dataArticle.length / pageSize)} onChange={handlePageChange} renderItem={(item) => <PaginationItem slots={{ previous: ArrowBackIcon, next: ArrowForwardIcon }} {...item} />} />
-              </ThemeProvider>
-            </Stack> */}
           </CustomContainer>
         </BoxBg>
       </main>

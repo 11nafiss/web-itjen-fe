@@ -1,4 +1,4 @@
-export interface CarouselImageData {
+export interface BannerData {
   carouselId: number;
   judul: string;
   deskripsi: string;

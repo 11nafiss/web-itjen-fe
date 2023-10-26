@@ -8,6 +8,77 @@ import { artikelService } from "../../services/artikel.service";
 const urlArticle = BASE_URL_API + "article";
 const token = Cookies.get("access_token");
 
+export const createArticle = createAsyncThunk<ArticleData[], any>(
+  "article/createArticle",
+  async ({ title, content, featuredImage, attachment, authorName, categoryId, published, tampilDiBeranda, pending, caption, publishedAt, thumbnail }) => {
+    const response = await axios.post(urlArticle, {
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+      body: JSON.stringify({
+        title,
+        content,
+        featuredImage,
+        attachment,
+        authorName,
+        categoryId,
+        published,
+        tampilDiBeranda,
+        pending,
+        caption,
+        publishedAt,
+        thumbnail,
+      }),
+    });
+
+    const result: ArticleData[] = await response.data;
+    return result;
+  }
+);
+
+export const editArticle = createAsyncThunk<ArticleData[], any, any>(
+  "article/editArticle",
+  async ({ title, content, featuredImage, attachment, authorName, categoryId, published, tampilDiBeranda, pending, caption, publishedAt, thumbnail }, id) => {
+    const response = await axios.put(urlArticle + "/" + id, {
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+      body: JSON.stringify({
+        id: id,
+        title,
+        content,
+        featuredImage,
+        attachment,
+        authorName,
+        categoryId,
+        published,
+        tampilDiBeranda,
+        pending,
+        caption,
+        publishedAt,
+        thumbnail,
+      }),
+    });
+
+    const result: ArticleData[] = await response.data;
+    return result;
+  }
+);
+
+export const deleteArticle = createAsyncThunk<ArticleData[], any>("article/deleteArticle", async (id) => {
+  const response = await axios.delete(urlArticle + "/" + id, {
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${token}`,
+    },
+  });
+
+  const result: ArticleData[] = await response.data;
+  return result;
+});
+
 export const getArticleByCategory = createAsyncThunk<ArticleData[], number, { rejectValue: AxiosError }>("article/getArticleByCategory", async (categoryId) => {
   let url = "";
   if (categoryId === 2) {
@@ -84,112 +155,31 @@ export const getArticleTitle = createAsyncThunk<ArticleData[], string, { rejectV
   }
 });
 
-export const getArticleSearch = createAsyncThunk<ArticleData[], any, { rejectValue: AxiosError }>("article/getArticleSearch", async (page, parameter) => {
-  const take = 10;
-  const skip = page * 10 - 10;
-  let url = "/search/" + parameter + "/" + take + "/" + skip;
+export const getArticleSearch = createAsyncThunk<ArticleData[], any, { rejectValue: AxiosError }>("article/getArticleSearch", async (params, thunkAPI) => {
+  const take = 2;
+  const skip = params.page * 2 - 2;
+  const articleSearchUrl = `/search/${params.keyword}/${take}/${skip}`;
 
-  const response = await axios.get(urlArticle + url, {
+  const responses = await axios.get(urlArticle + articleSearchUrl, {
     headers: {
       "Content-Type": "application/json",
     },
   });
 
-  const data: ArticleData[] = await response.data;
-  const publishedData = data.filter((artikel) => artikel.published === true);
+  const article: ArticleData[] = responses.data;
+  const publishedData = article.filter((artikel) => artikel.published === true);
   return publishedData;
 });
 
-export const getArticleNumber = createAsyncThunk<ArticleData[], any, { rejectValue: AxiosError }>("article/getArticleNumber", async (parameter, { rejectWithValue }) => {
-  try {
-    const response = await artikelService.getJumlahArtikelSearch(parameter);
-    return response as ArticleData[];
-  } catch (error) {
-    if (error instanceof AxiosError) {
-      return rejectWithValue(error);
-    }
-    throw error;
-  }
+export const getArticleNumber = createAsyncThunk<ArticleData[], any, { rejectValue: AxiosError }>("article/getArticleNumber", async (params) => {
+  const articleCountUrl = `/jumlahsearch/${params.keyword}`;
+
+  const response = await axios.get(urlArticle + articleCountUrl, {
+    headers: {
+      "Content-Type": "application/json",
+    },
+  });
+
+  const data: ArticleData[] = response.data;
+  return data;
 });
-
-export const createArticle = createAsyncThunk<ArticleData[], any>(
-  "article/createArticle",
-  async ({ title, content, featuredImage, attachment, authorName, categoryId, published, tampilDiBeranda, pending, caption, publishedAt, thumbnail }) => {
-    const response = await axios.post(
-      urlArticle,
-      JSON.stringify({
-        title,
-        content,
-        featuredImage,
-        attachment,
-        authorName,
-        categoryId,
-        published,
-        tampilDiBeranda,
-        pending,
-        caption,
-        publishedAt,
-        thumbnail,
-      }),
-      {
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`,
-        },
-      },
-    );
-
-    const data: ArticleData[] = await response.data;
-    return data;
-  }
-);
-
-export const editArticle = createAsyncThunk<ArticleData[], any>(
-  "article/editArticle",
-  async ({ title, content, featuredImage, attachment, authorName, categoryId, published, tampilDiBeranda, pending, caption, publishedAt, thumbnail }, id) => {
-    const response = await axios.put(
-      urlArticle + "/" + id,
-      JSON.stringify({
-        title,
-        content,
-        featuredImage,
-        attachment,
-        authorName,
-        categoryId,
-        published,
-        tampilDiBeranda,
-        pending,
-        caption,
-        publishedAt,
-        thumbnail,
-      }),
-      {
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`,
-        },
-      }
-    );
-
-    const data: ArticleData[] = await response.data;
-    return data;
-  }
-);
-
-export const deleteArticle = createAsyncThunk<ArticleData[], any>(
-  "article/deleteArticle",
-  async (id) => {
-    const response = await axios.delete(
-      urlArticle + "/" + id,
-      {
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`,
-        },
-      }
-    );
-
-    const data: ArticleData[] = await response.data;
-    return data;
-  }
-);

@@ -19,7 +19,6 @@ const MainApp = () => {
       </div>
       <div className="content-wrapper">
         <Routes>
-          <Route path="*" element={<NotFound />} />
           <Route path="/" element={<Home />} />
           <Route path="/profil/visi" element={<Vision />} />
           <Route path="/profil/nilai-kemenkeu" element={<Values />} />
@@ -34,6 +33,7 @@ const MainApp = () => {
           <Route path="/baca/lakin-itjen-2022" element={<Books2 />} />
           <Route path="/cari" element={<Search />} />
           <Route path="/:title" element={<Article />} />
+          <Route path="*" element={<NotFound />} />
         </Routes>
         <LiveChat />
       </div>
