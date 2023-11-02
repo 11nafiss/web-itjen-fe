@@ -1,7 +1,7 @@
 // Import Library
 import React from "react";
 import { Box, Link, IconButton } from "@mui/material";
-import { Button, Input,  FormLabel, FormHelperText, Checkbox } from "@mui/joy";
+import { Button, Input, FormLabel, FormHelperText } from "@mui/joy";
 import { styled } from "@mui/material/styles";
 
 // Import Components
@@ -90,15 +90,8 @@ const Admin = () => {
       username,
       password,
     };
-    dispatch(
-      loginUser(userCredentials).then((result) => {
-        if (result.payload) {
-          setUsername("");
-          setPassword("");
-          navigate("/dashboard");
-        }
-      })
-    );
+    dispatch(loginUser(userCredentials));
+    navigate('/dashboard');
   };
 
   // Main Code
@@ -125,57 +118,47 @@ const Admin = () => {
           Login
         </FormLabel>
         <form onSubmit={handleLoginEvent} id="demo">
-            <Input
-              placeholder="Username"
-              type="username"
-              value={username}
-              onChange={(e) => setUsername(e.target.value)}
-              startDecorator={<AccountCircle />}
-              sx={{
-                width: 300,
-                marginBottom: "10px",
-              }}
-              required
-            />
-            <Input
-              placeholder="Password"
-              startDecorator={<VpnKeyIcon />}
-              type={showPassword ? "text" : "password"}
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              required
-              endDecorator={
-                <IconButton aria-label="toggle password visibility" onClick={handleClickShowPassword} onMouseDown={handleMouseDownPassword}>
-                  {showPassword ? <VisibilityOff /> : <Visibility />}
-                </IconButton>
-              }
-              sx={{
-                width: 300,
-                marginBottom: "12px",
-              }}
-            />
-            <Checkbox
-              label="Remember Me"
-              defaultChecked
-              sx={{
-                marginBottom: "20px",
-                fontSize: "13px",
-                fontWeight: "600",
-                marginLeft: "17px",
-              }}
-            />
-            <Button
-              variant="solid"
-              color="primary"
-              type="submit"
-              sx={{
-                borderRadius: "12px",
-                width: "100%",
-              }}
-            >
-              {isLoading ? "Loading..." : "Submit"}
-            </Button>
-            {error && <FormHelperText sx={(theme) => ({ color: theme.vars.palette.danger[400] })}>Login Gagal</FormHelperText>}
+          <Input
+            placeholder="Username"
+            type="username"
+            value={username}
+            onChange={(e) => setUsername(e.target.value)}
+            startDecorator={<AccountCircle />}
+            sx={{
+              width: 300,
+              marginBottom: "10px",
+            }}
+            required
+          />
+          <Input
+            placeholder="Password"
+            startDecorator={<VpnKeyIcon />}
+            type={showPassword ? "text" : "password"}
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            required
+            endDecorator={
+              <IconButton aria-label="toggle password visibility" onClick={handleClickShowPassword} onMouseDown={handleMouseDownPassword}>
+                {showPassword ? <VisibilityOff /> : <Visibility />}
+              </IconButton>
+            }
+            sx={{
+              width: 300,
+              marginBottom: "12px",
+            }}
+          />
+          <Button
+            variant="solid"
+            color="primary"
+            type="submit"
+            sx={{
+              borderRadius: "12px",
+              width: "100%",
+            }}
+          >
+            {isLoading ? "Loading..." : "Submit"}
+          </Button>
+          {error && <FormHelperText sx={(theme) => ({ color: theme.vars.palette.danger[400] })}>Login Gagal</FormHelperText>}
         </form>
       </FormBox>
       <LinkBox>

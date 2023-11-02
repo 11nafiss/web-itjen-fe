@@ -154,30 +154,6 @@ const CrPlacem = () => {
                       sx={{ width: "100%", borderColor: "#252525" }}
                     />
                   </FormControl>
-                  <FormControl sx={{ width: "100%" }}>
-                    <FormLabel
-                      sx={{
-                        fontSize: "18px",
-                      }}
-                    >
-                      Baris
-                    </FormLabel>
-                    <Select
-                      placeholder="Select…"
-                      sx={{
-                        width: "100%",
-                        borderColor: "#252525",
-                        height: "48px",
-                      }}
-                    >
-                      <Option value="1">1</Option>
-                      <Option value="2">2</Option>
-                      <Option value="3">3</Option>
-                      <Option value="4">4</Option>
-                      <Option value="5">5</Option>
-                      <Option value="6">Tambah Baru</Option>
-                    </Select>
-                  </FormControl>
                 </Box>
               </GridFlex>
               <GridFlex item xs={12} md={12} sx={{ justifyContent: { xs: "center", md: "left" } }}>

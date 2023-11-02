@@ -1,11 +1,11 @@
 import { ArticleData } from "../../models/article.model";
-import { createArticle, editArticle, deleteArticle, getArticleByCategory, getArticleAll, getArticleTopNews, getArticleSearch, getArticleTitle, getArticleNumber, getArticlePublished } from "../actions/article.action";
+import { createArticle, editArticle, deleteArticle, getArticleByCategory, getArticleAll, getArticleTopNews, getArticleSearch, getArticleTitle, getArticleNumber, getArticlePublished, getArticleSearchAll } from "../actions/article.action";
 import { PayloadAction, createSlice, combineReducers } from "@reduxjs/toolkit";
 
 interface typeOfInitialState {
   dataArticle: ArticleData[];
-  dataPerPage: number;
-  currentPage: number;
+  newArticle: ArticleData | null;
+  searchKeyword: string;
   isLoading: boolean;
   isSuccess: boolean;
   errorMessage: string;
@@ -13,8 +13,8 @@ interface typeOfInitialState {
 
 const initialState: typeOfInitialState = {
   dataArticle: [],
-  dataPerPage: 6,
-  currentPage: 1,
+  newArticle: null,
+  searchKeyword: "",
   isLoading: false,
   isSuccess: false,
   errorMessage: "",
@@ -30,8 +30,8 @@ export const createArticleSlice = createSlice({
       console.log("PENDING ADD ARTIKEL....");
     });
 
-    builder.addCase(createArticle.fulfilled, (state, action: PayloadAction<ArticleData[]>) => {
-      state.dataArticle = action.payload;
+    builder.addCase(createArticle.fulfilled, (state, action: PayloadAction<ArticleData>) => {
+      state.newArticle = action.payload;
       console.log("ADD ARTIKEL SUCCESS");
     });
 
@@ -167,20 +167,7 @@ export const articleAllSlice = createSlice({
 export const articlePublishedSlice = createSlice({
   name: "articlePublishedReducer",
   initialState,
-  reducers: {
-    onNavigateNext: (state) => {
-      state.currentPage++;
-    },
-    onNavigatePrev: (state) => {
-      state.currentPage--;
-    },
-    onChangeDataPerPage: (state, action) => {
-      state.dataPerPage = action.payload;
-    },
-    onClickCurrentPage: (state, action) => {
-      state.currentPage = action.payload;
-    },
-  },
+  reducers: {},
   extraReducers: (builder) => {
     builder.addCase(getArticlePublished.pending, (state) => {
       (state.isLoading = true), (state.errorMessage = "");
@@ -204,7 +191,11 @@ export const articlePublishedSlice = createSlice({
 export const articleSearchSlice = createSlice({
   name: "articleSearchReducer",
   initialState,
-  reducers: {},
+  reducers: {
+    setSearchKeyword: (state, action) => {
+      state.searchKeyword = action.payload;
+    },
+  },
   extraReducers: (builder) => {
     builder.addCase(getArticleSearch.pending, (state) => {
       (state.isLoading = true), (state.errorMessage = "");
@@ -217,6 +208,34 @@ export const articleSearchSlice = createSlice({
     });
 
     builder.addCase(getArticleSearch.rejected, (state, { payload }) => {
+      if (payload) {
+        console.log("FAILED ARTIKEL");
+        state.isSuccess = false;
+      }
+    });
+  },
+});
+
+export const articleSearchAllSlice = createSlice({
+  name: "articleSearchReducer",
+  initialState,
+  reducers: {
+    setSearchKeyword: (state, action) => {
+      state.searchKeyword = action.payload;
+    },
+  },
+  extraReducers: (builder) => {
+    builder.addCase(getArticleSearchAll.pending, (state) => {
+      (state.isLoading = true), (state.errorMessage = "");
+      console.log("PENDING ARTIKEL....");
+    });
+
+    builder.addCase(getArticleSearchAll.fulfilled, (state, action: PayloadAction<ArticleData[]>) => {
+      state.dataArticle = action.payload;
+      console.log("Filled ARTIKEL");
+    });
+
+    builder.addCase(getArticleSearchAll.rejected, (state, { payload }) => {
       if (payload) {
         console.log("FAILED ARTIKEL");
         state.isSuccess = false;
@@ -282,6 +301,7 @@ const articleReducer = combineReducers({
   articleAll: articleAllSlice.reducer,
   articlePublised: articlePublishedSlice.reducer,
   articleSearch: articleSearchSlice.reducer,
+  articleSearchAll: articleSearchAllSlice.reducer,
   articleNumber: articleNumberSlice.reducer,
   articleTopNews: articleTopNewsSlice.reducer,
 });

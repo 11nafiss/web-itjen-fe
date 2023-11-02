@@ -11,6 +11,7 @@ import { OrgBsip, ProIrjen } from "./SubContent/SubContent";
 
 // Main Declaration
 const MainApp = () => {
+
   // Main Code
   return (
     <div className="main-wrapper">
@@ -32,7 +33,7 @@ const MainApp = () => {
           <Route path="/laporan-kinerja" element={<Report />} />
           <Route path="/baca/lakin-itjen-2022" element={<Books2 />} />
           <Route path="/cari" element={<Search />} />
-          <Route path="/:title" element={<Article />} />
+          <Route path="/:category/:title" element={<Article />} />
           <Route path="*" element={<NotFound />} />
         </Routes>
         <LiveChat />

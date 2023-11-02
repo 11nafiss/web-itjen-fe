@@ -1,6 +1,6 @@
 // Import Library
 import React from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate  } from "react-router-dom";
 import { Box, CssBaseline, IconButton, Toolbar, Typography, List, Divider, ListItem, ListItemButton, ListItemText } from "@mui/material";
 import { styled, useTheme } from "@mui/material/styles";
 import MuiAppBar from "@mui/material/AppBar";
@@ -16,24 +16,15 @@ import { RiLogoutBoxRFill, RiDashboardFill, RiServiceFill } from "react-icons/ri
 import { ImHome } from "react-icons/im";
 import { FaUsers, FaStar } from "react-icons/fa";
 import { MdArticle, MdViewCarousel, MdImage } from "react-icons/md";
-import { HiGlobeAlt } from "react-icons/hi";
-import { HiChatBubbleLeftRight } from "react-icons/hi2";
+import { HiGlobeAlt, HiDocumentReport } from "react-icons/hi";
 import { IoJournal } from "react-icons/io5";
 
-// Main Declaration
-const HeadDash = () => {
-  const theme = useTheme();
-  const [open, setOpen] = React.useState(false);
+// Import Api
+import { useAppDispatch } from "../../../hooks/useTypedSelector";
+import { loginSlice } from "../../../features/slice/user.slice";
 
-  const handleDrawerOpen = () => {
-    setOpen(true);
-  };
 
-  const handleDrawerClose = () => {
-    setOpen(false);
-  };
-
-  const drawerWidth = 220;
+const drawerWidth = 220;
 
   const openedMixin = (theme) => ({
     width: drawerWidth,
@@ -58,61 +49,83 @@ const HeadDash = () => {
     },
   });
 
-  // MUI Styling CSS
-  const DrawerHeader = styled("div")(({ theme }) => ({
-    display: "flex",
-    alignItems: "center",
-    justifyContent: "flex-end",
-    height: "80px",
-    backgroundColor: "#08245C",
-    padding: theme.spacing(0, 1),
-    // necessary for content to be below app bar
-    ...theme.mixins.toolbar,
-  }));
+// MUI Styling CSS
+const DrawerHeader = styled("div")(({ theme }) => ({
+  display: "flex",
+  alignItems: "center",
+  justifyContent: "flex-end",
+  height: "80px",
+  backgroundColor: "#08245C",
+  padding: theme.spacing(0, 1),
+  // necessary for content to be below app bar
+  ...theme.mixins.toolbar,
+}));
 
-  const AppBar = styled(MuiAppBar, {
-    shouldForwardProp: (prop) => prop !== "open",
-  })(({ theme, open }) => ({
-    height: "80px",
-    backgroundColor: "#fff",
-    zIndex: theme.zIndex.drawer + 1,
+const AppBar = styled(MuiAppBar, {
+  shouldForwardProp: (prop) => prop !== "open",
+})(({ theme, open }) => ({
+  height: "80px",
+  backgroundColor: "#fff",
+  zIndex: theme.zIndex.drawer + 1,
+  transition: theme.transitions.create(["width", "margin"], {
+    easing: theme.transitions.easing.sharp,
+    duration: theme.transitions.duration.leavingScreen,
+  }),
+  ...(open && {
+    marginLeft: drawerWidth,
+    width: `calc(100% - ${drawerWidth}px)`,
     transition: theme.transitions.create(["width", "margin"], {
       easing: theme.transitions.easing.sharp,
-      duration: theme.transitions.duration.leavingScreen,
+      duration: theme.transitions.duration.enteringScreen,
     }),
-    ...(open && {
-      marginLeft: drawerWidth,
-      width: `calc(100% - ${drawerWidth}px)`,
-      transition: theme.transitions.create(["width", "margin"], {
-        easing: theme.transitions.easing.sharp,
-        duration: theme.transitions.duration.enteringScreen,
-      }),
-    }),
-  }));
+  }),
+}));
 
-  const Drawer = styled(MuiDrawer, { shouldForwardProp: (prop) => prop !== "open" })(({ theme, open }) => ({
-    width: drawerWidth,
-    flexShrink: 0,
-    whiteSpace: "nowrap",
-    boxSizing: "border-box",
-    ...(open && {
-      ...openedMixin(theme),
-      "& .MuiDrawer-paper": openedMixin(theme),
-    }),
-    ...(!open && {
-      ...closedMixin(theme),
-      "& .MuiDrawer-paper": closedMixin(theme),
-      backgroundColor: "#08245C",
-    }),
-  }));
+const Drawer = styled(MuiDrawer, { shouldForwardProp: (prop) => prop !== "open" })(({ theme, open }) => ({
+  width: drawerWidth,
+  flexShrink: 0,
+  whiteSpace: "nowrap",
+  boxSizing: "border-box",
+  ...(open && {
+    ...openedMixin(theme),
+    "& .MuiDrawer-paper": openedMixin(theme),
+  }),
+  ...(!open && {
+    ...closedMixin(theme),
+    "& .MuiDrawer-paper": closedMixin(theme),
+    backgroundColor: "#08245C",
+  }),
+}));
 
-  const HeadBox = styled(Box)(() => ({
-    display: "flex",
-    flexGrow: 1,
-    alignItems: "center",
-    maxWidth: "200px",
-    height: "50px",
-  }));
+const HeadBox = styled(Box)(() => ({
+  display: "flex",
+  flexGrow: 1,
+  alignItems: "center",
+  maxWidth: "200px",
+  height: "50px",
+}));
+
+
+// Main Declaration
+const HeadDash = () => {
+  const theme = useTheme();
+  const [open, setOpen] = React.useState(false);
+
+  const handleDrawerOpen = () => {
+    setOpen(true);
+  };
+
+  const handleDrawerClose = () => {
+    setOpen(false);
+  };
+
+  const dispatch = useAppDispatch();
+  const navigate = useNavigate();
+
+  const handleLogOut = () => {
+    dispatch(loginSlice.actions.logout());
+    navigate(`/`);
+  };
 
   // Main Code
   return (
@@ -243,6 +256,30 @@ const HeadDash = () => {
                 </ListItemText>
               </ListItemButton>
             </Link>
+            <Link to="/dashboard/laporan" className="link">
+              <ListItemButton
+                sx={{
+                  minHeight: 48,
+                  justifyContent: open ? "initial" : "center",
+                  px: 2.5,
+                }}
+              >
+                <ListItemIcon
+                  sx={{
+                    minWidth: 0,
+                    mr: open ? 3 : "auto",
+                    justifyContent: "center",
+                    color: "#fff",
+                    fontSize: "25px",
+                  }}
+                >
+                  <HiDocumentReport />
+                </ListItemIcon>
+                <ListItemText sx={{ opacity: open ? 1 : 0, color: "#fff" }}>
+                  <Typography sx={{ fontSize: "16px" }}>Laporan</Typography>
+                </ListItemText>
+              </ListItemButton>
+            </Link>
             <Link to="/dashboard/pejabat" className="link">
               <ListItemButton
                 sx={{
@@ -368,30 +405,6 @@ const HeadDash = () => {
         <Divider color="white" />
         <List sx={{ backgroundColor: "#08245C" }}>
           <ListItem disablePadding sx={{ display: "block" }}>
-            <Link to="/dashboard/chats" className="link">
-              <ListItemButton
-                sx={{
-                  minHeight: 48,
-                  justifyContent: open ? "initial" : "center",
-                  px: 2.5,
-                }}
-              >
-                <ListItemIcon
-                  sx={{
-                    minWidth: 0,
-                    mr: open ? 3 : "auto",
-                    justifyContent: "center",
-                    color: "#fff",
-                    fontSize: "22px",
-                  }}
-                >
-                  <HiChatBubbleLeftRight />
-                </ListItemIcon>
-                <ListItemText sx={{ opacity: open ? 1 : 0, color: "#fff" }}>
-                  <Typography sx={{ fontSize: "16px" }}>Chats</Typography>
-                </ListItemText>
-              </ListItemButton>
-            </Link>
             <Link to="/dashboard/users" className="link">
               <ListItemButton
                 sx={{
@@ -417,6 +430,7 @@ const HeadDash = () => {
               </ListItemButton>
             </Link>
             <ListItemButton
+              onClick={handleLogOut}
               sx={{
                 minHeight: 48,
                 justifyContent: open ? "initial" : "center",

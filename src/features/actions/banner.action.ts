@@ -27,7 +27,7 @@ export const createBanner = createAsyncThunk<BannerData[], any>("banner/createBa
   return result;
 });
 
-export const editBanner = createAsyncThunk<BannerData[], any, any>("banner/editBanner", async ({ judul, deskripsi, pathGambar, link, munculkanText }, id) => {
+export const editBanner = createAsyncThunk<BannerData[], any, any>("banner/editBanner", async ({ id,judul, deskripsi, pathGambar, link, munculkanText }) => {
   const response = await axios.put(urlBanner + "/" + id, {
     headers: {
       "Content-Type": "application/json",

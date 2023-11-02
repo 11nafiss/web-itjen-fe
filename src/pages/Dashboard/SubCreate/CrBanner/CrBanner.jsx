@@ -7,48 +7,49 @@ import { styled } from "@mui/material/styles";
 // Import Assets
 import UploadIcon from "@mui/icons-material/Upload";
 
+
+// MUI Styling CSS
+const Kotak = styled(Box)(() => ({
+  borderRadius: "15px",
+  backgroundColor: "#fff",
+  width: "100%",
+  minHeight: "505px",
+  padding: "30px",
+}));
+
+const Judul = styled(Typography)(() => ({
+  fontSize: "30px",
+  fontWeight: "700",
+  display: "flex",
+  justifyContent: "left",
+  alignItems: "center",
+  height: "100%",
+  margin: "10px",
+}));
+
+const SpaceGrid = styled(Grid)(() => ({
+  display: "flex",
+  justifyContent: "right",
+  width: "100%",
+}));
+
+const GridFlex = styled(Grid)(({ theme }) => ({
+  display: "flex",
+  alignItems: "center",
+  width: "100%",
+  height: "100%",
+  padding: "20px 30px",
+  flexDirection: "column",
+  [theme.breakpoints.down("md")]: {
+    padding: "10px 0px",
+  },
+}));
+
 // Main Declaration
 const CrBanner = () => {
   const [setUpload] = React.useState(false);
 
   const handleClickUpload = () => setUpload((bool) => !bool);
-
-// MUI Styling CSS
-  const Kotak = styled(Box)(() => ({
-    borderRadius: "15px",
-    backgroundColor: "#fff",
-    width: "100%",
-    minHeight: "505px",
-    padding: "30px",
-  }));
-
-  const Judul = styled(Typography)(() => ({
-    fontSize: "30px",
-    fontWeight: "700",
-    display: "flex",
-    justifyContent: "left",
-    alignItems: "center",
-    height: "100%",
-    margin: "10px",
-  }));
-
-  const SpaceGrid = styled(Grid)(() => ({
-    display: "flex",
-    justifyContent: "right",
-    width: "100%",
-  }));
-
-  const GridFlex = styled(Grid)(({ theme }) => ({
-    display: "flex",
-    alignItems: "center",
-    width: "100%",
-    height: "100%",
-    padding: "20px 30px",
-    flexDirection: "column",
-    [theme.breakpoints.down("md")]: {
-      padding: "10px 0px",
-    },
-  }));
 
 // Main Code
   return (
@@ -71,7 +72,6 @@ const CrBanner = () => {
                     </FormLabel>
                     <Input size="lg" name="Size" placeholder="..." sx={{ width: "100%", borderColor: "#252525" }} />
                   </FormControl>
-
                   <FormControl sx={{ width: "100%" }}>
                     <FormLabel
                       sx={{

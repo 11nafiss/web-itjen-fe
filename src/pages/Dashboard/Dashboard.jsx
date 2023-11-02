@@ -19,6 +19,7 @@ import {
   MenuDash,
   ReportDash,
   UserDash,
+  CategoryDash,
 } from "./SubDash/SubDash";
 import { 
   CrArticle,
@@ -33,6 +34,19 @@ import {
   CrReport,
   CrUser,
 } from "./SubCreate/SubCreate";
+import { 
+    EdArticle,
+    EdAudit,
+    EdBanner,
+    EdCategory,
+    EdEselon,
+    EdFeatur,
+    EdImage,
+    EdPlacem,
+    EdMenu,
+    EdReport,
+    EdUser, 
+} from "./SubEdit/SubEdit";
 
 // Main Declaration
 const Dashboard = () => {
@@ -57,6 +71,7 @@ const Dashboard = () => {
             <Route path="/menus" element={<MenuDash />} />
             <Route path="/laporan" element={<ReportDash />} />
             <Route path="/users" element={<UserDash />} />
+            <Route path="/kategori" element={<CategoryDash />} />
 
             <Route path="/artikel/tambah" element={<CrArticle />} />
             <Route path="/banner/tambah" element={<CrBanner />} />
@@ -69,6 +84,18 @@ const Dashboard = () => {
             <Route path="/laporan/tambah" element={<CrReport />} />
             <Route path="/users/tambah" element={<CrUser />} />
             <Route path="/kategori/tambah" element={<CrCategory />} />
+
+            <Route path="/artikel/edit/:id" element={<EdArticle />} />
+            <Route path="/banner/edit/:id" element={<EdBanner />} />
+            <Route path="/auditoria/edit/:id" element={<EdAudit />} />
+            <Route path="/eselon/edit/:id" element={<EdEselon />} />
+            <Route path="/layanan/edit/:id" element={<EdFeatur />} />
+            <Route path="/gambar/edit/:id" element={<EdImage />} />
+            <Route path="/pejabat/edit/:id" element={<EdPlacem />} />
+            <Route path="/menus/edit/:id" element={<EdMenu />} />
+            <Route path="/laporan/edit/:id" element={<EdReport />} />
+            <Route path="/users/edit/:id" element={<EdUser />} />
+            <Route path="/kategori/edit/:id" element={<EdCategory />} />
           </Routes>
         </div>
       </Box>

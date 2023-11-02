@@ -18,7 +18,7 @@ const CrAudit = () => {
 
   const handleClickUpload = () => setUpload((bool) => !bool);
 
-// MUI Styling CSS
+  // MUI Styling CSS
   const Kotak = styled(Box)(() => ({
     borderRadius: "15px",
     backgroundColor: "#fff",
@@ -55,7 +55,7 @@ const CrAudit = () => {
     },
   }));
 
-// Main Code
+  // Main Code
   return (
     <Box component="main" sx={{ flexGrow: 1, p: 3, backgroundColor: "#D9D9D9", height: "100%" }}>
       <Grid container spacing={3}>
@@ -144,9 +144,19 @@ const CrAudit = () => {
                       fontSize: "18px",
                     }}
                   >
+                    Link
+                  </FormLabel>
+                  <Input size="lg" name="Size" placeholder="Go to..." sx={{ width: "100%", borderColor: "#252525" }} />
+                </FormControl>
+                <FormControl sx={{ width: "100%",  mt: "20px" }}>
+                  <FormLabel
+                    sx={{
+                      fontSize: "18px",
+                    }}
+                  >
                     Deskripsi
                   </FormLabel>
-                  <Textarea name="desc" placeholder="Type in here…" variant="soft" size="lg" sx={{ width: "100%", borderColor: "#252525", height: "250px" }} />
+                  <Textarea name="desc" placeholder="Type in here…" variant="soft" size="lg" sx={{ width: "100%", borderColor: "#252525", height: "150px" }} />
                 </FormControl>
               </GridFlex>
               <GridFlex item xs={12} md={12} sx={{ justifyContent: { xs: "center", md: "left" } }}>

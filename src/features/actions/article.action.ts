@@ -6,44 +6,27 @@ import { ArticleData } from "../../models/article.model";
 import { artikelService } from "../../services/artikel.service";
 
 const urlArticle = BASE_URL_API + "article";
-const token = Cookies.get("access_token");
 
-export const createArticle = createAsyncThunk<ArticleData[], any>(
+export const createArticle = createAsyncThunk<ArticleData, any>(
   "article/createArticle",
-  async ({ title, content, featuredImage, attachment, authorName, categoryId, published, tampilDiBeranda, pending, caption, publishedAt, thumbnail }) => {
-    const response = await axios.post(urlArticle, {
+  async (articleCredentials) => {
+    const response = await axios.post(urlArticle, articleCredentials, {
       headers: {
         "Content-Type": "application/json",
-        Authorization: `Bearer ${token}`,
       },
-      body: JSON.stringify({
-        title,
-        content,
-        featuredImage,
-        attachment,
-        authorName,
-        categoryId,
-        published,
-        tampilDiBeranda,
-        pending,
-        caption,
-        publishedAt,
-        thumbnail,
-      }),
     });
 
-    const result: ArticleData[] = await response.data;
+    const result: ArticleData = await response.data;
     return result;
   }
 );
 
 export const editArticle = createAsyncThunk<ArticleData[], any, any>(
   "article/editArticle",
-  async ({ title, content, featuredImage, attachment, authorName, categoryId, published, tampilDiBeranda, pending, caption, publishedAt, thumbnail }, id) => {
+  async ({ id, title, content, featuredImage, attachment, authorName, categoryId, published, tampilDiBeranda, pending, caption, publishedAt, thumbnail } ) => {
     const response = await axios.put(urlArticle + "/" + id, {
       headers: {
         "Content-Type": "application/json",
-        Authorization: `Bearer ${token}`,
       },
       body: JSON.stringify({
         id: id,
@@ -71,7 +54,6 @@ export const deleteArticle = createAsyncThunk<ArticleData[], any>("article/delet
   const response = await axios.delete(urlArticle + "/" + id, {
     headers: {
       "Content-Type": "application/json",
-      Authorization: `Bearer ${token}`,
     },
   });
 
@@ -156,8 +138,8 @@ export const getArticleTitle = createAsyncThunk<ArticleData[], string, { rejectV
 });
 
 export const getArticleSearch = createAsyncThunk<ArticleData[], any, { rejectValue: AxiosError }>("article/getArticleSearch", async (params, thunkAPI) => {
-  const take = 2;
-  const skip = params.page * 2 - 2;
+  const take = 6;
+  const skip = params.page * 6 - 6;
   const articleSearchUrl = `/search/${params.keyword}/${take}/${skip}`;
 
   const responses = await axios.get(urlArticle + articleSearchUrl, {
@@ -169,6 +151,21 @@ export const getArticleSearch = createAsyncThunk<ArticleData[], any, { rejectVal
   const article: ArticleData[] = responses.data;
   const publishedData = article.filter((artikel) => artikel.published === true);
   return publishedData;
+});
+
+export const getArticleSearchAll = createAsyncThunk<ArticleData[], any, { rejectValue: AxiosError }>("article/getArticleSearch", async (params, thunkAPI) => {
+  const take = 6;
+  const skip = params.page * 6 - 6;
+  const articleSearchUrl = `/search/${params.keyword}/${take}/${skip}`;
+
+  const responses = await axios.get(urlArticle + articleSearchUrl, {
+    headers: {
+      "Content-Type": "application/json",
+    },
+  });
+
+  const article: ArticleData[] = responses.data;
+  return article;
 });
 
 export const getArticleNumber = createAsyncThunk<ArticleData[], any, { rejectValue: AxiosError }>("article/getArticleNumber", async (params) => {

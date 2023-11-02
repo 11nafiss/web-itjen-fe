@@ -18,6 +18,7 @@ import { BsPersonVcard } from "react-icons/bs";
 // Import Api
 import { useAppDispatch, useAppSelector } from "../../../hooks/useTypedSelector";
 import { getArticleByCategory } from "../../../features/actions/article.action";
+import { getCategory } from "../../../features/actions/category.action";
 import { BASE_URL } from "../../../services/api";
 
 // Main Declaration
@@ -25,8 +26,11 @@ const Updates = () => {
   const dispatch = useAppDispatch();
   useEffect(() => {
     dispatch(getArticleByCategory(2));
+    dispatch(getCategory());
   }, [dispatch]);
   const { dataArticle } = useAppSelector((state) => state.article.articleCategory);
+  const dataCategory = useAppSelector((state) => state.category.categoryAll.dataCategory);
+  console.log("kategori artikel ini = " + dataCategory);
 
   function FetchArticleByCategory(categoryId) {
     dispatch(getArticleByCategory(categoryId));
@@ -242,7 +246,7 @@ const Updates = () => {
                       </CardContent>
                       <CardOverflow variant="soft" sx={{ bgcolor: "background.level1", padding: "0px" }}>
                         <CardContent sx={{ width: "100%", padding: "0px" }}>
-                          <Link to={`/` + obj.title.replace(/ /g, '-')} className="link">
+                          <Link to={`/${obj.categoryId}/` + obj.title.replace(/ /g, '-')} className="link">
                             <ClickButton variant="solid" size="lg">
                               Baca Artikel
                             </ClickButton>

@@ -6,41 +6,41 @@ import { styled } from "@mui/material/styles";
 // Import Components
 import { AddButton, SearchBox, TableSpace } from "../../../../components/components";
 
+// MUI Styling CSS
+const CustomBox = styled(Box)(() => ({
+  borderRadius: "15px",
+  backgroundColor: "#fff",
+  width: "100%",
+  maxWidth: "1400px",
+  minHeight: "555px",
+  padding: "30px",
+}));
+
+const CustomTitle = styled(Typography)(() => ({
+  fontSize: "30px",
+  fontWeight: "700",
+  display: "flex",
+  justifyContent: "left",
+  alignItems: "center",
+  height: "100%",
+  margin: "10px",
+}));
+
+const SpaceGrid = styled(Grid)(() => ({
+  display: "flex",
+  justifyContent: "right",
+  width: "100%",
+}));
+
+const GridFlex = styled(Grid)(() => ({
+  display: "flex",
+  alignItems: "center",
+  width: "100%",
+  height: "60px",
+}));
+
 // Main Declaration
 const EselonDash = () => {
-
-// MUI Styling CSS
-  const CustomBox = styled(Box)(() => ({
-    borderRadius: "15px",
-    backgroundColor: "#fff",
-    width: "100%",
-    maxWidth: "1400px",
-    minHeight: "555px",
-    padding: "30px",
-  }));
-
-  const CustomTitle = styled(Typography)(() => ({
-    fontSize: "30px",
-    fontWeight: "700",
-    display: "flex",
-    justifyContent: "left",
-    alignItems: "center",
-    height: "100%",
-    margin: "10px",
-  }));
-
-  const SpaceGrid = styled(Grid)(() => ({
-    display: "flex",
-    justifyContent: "right",
-    width: "100%",
-  }));
-
-  const GridFlex = styled(Grid)(() => ({
-    display: "flex",
-    alignItems: "center",
-    width: "100%",
-    height: "60px",
-  }));
 
 // Main Code
   return (

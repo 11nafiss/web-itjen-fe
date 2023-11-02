@@ -1,9 +1,10 @@
 import { PayloadAction, createSlice, combineReducers } from "@reduxjs/toolkit";
-import { getUserData, loginUser } from "../actions/user.action";
+import { createUser, deleteUser, getUserData, loginUser } from "../actions/user.action";
 import { UserData } from "../../models/user.model";
 
 interface typeOfInitialState {
   dataUser: UserData[];
+  currentUser: UserData | null;
   isLoading: boolean;
   isSuccess: boolean;
   error: any;
@@ -11,10 +12,59 @@ interface typeOfInitialState {
 
 const initialState: typeOfInitialState = {
   dataUser: [],
+  currentUser: null,
   isLoading: false,
   isSuccess: false,
   error: null,
 };
+
+export const createUserSlice = createSlice({
+  name: "createUserReducer",
+  initialState,
+  reducers: {},
+  extraReducers: (builder) => {
+    builder.addCase(createUser.pending, (state) => {
+      (state.isLoading = true), (state.error = "");
+      console.log("PENDING ADD USER....");
+    });
+
+    builder.addCase(createUser.fulfilled, (state, action: PayloadAction<UserData[]>) => {
+      state.dataUser = action.payload;
+      console.log("ADD USER SUCCESS");
+    });
+
+    builder.addCase(createUser.rejected, (state, { payload }) => {
+      if (payload) {
+        console.log("FAILED ADD USER");
+        state.isSuccess = false;
+      }
+    });
+  },
+});
+
+export const deleteUserSlice = createSlice({
+  name: "deleteUserReducer",
+  initialState,
+  reducers: {},
+  extraReducers: (builder) => {
+    builder.addCase(deleteUser.pending, (state) => {
+      (state.isLoading = true), (state.error = "");
+      console.log("PENDING DELETE USER....");
+    });
+
+    builder.addCase(deleteUser.fulfilled, (state, action: PayloadAction<UserData[]>) => {
+      state.dataUser = action.payload;
+      console.log("DELETE USER SUCCESS");
+    });
+
+    builder.addCase(deleteUser.rejected, (state, { payload }) => {
+      if (payload) {
+        console.log("FAILED DELETE USER");
+        state.isSuccess = false;
+      }
+    });
+  },
+});
 
 export const userSlice = createSlice({
   name: "User",
@@ -41,16 +91,20 @@ export const userSlice = createSlice({
 export const loginSlice = createSlice({
   name: "Login",
   initialState,
-  reducers: {},
+  reducers: {
+    logout: (state) => {
+      return initialState;
+    },
+  },
   extraReducers: (builder) => {
     builder.addCase(loginUser.pending, (state) => {
       state.isLoading = true;
       state.error = null;
     });
 
-    builder.addCase(loginUser.fulfilled, (state, action: PayloadAction<UserData[]>) => {
+    builder.addCase(loginUser.fulfilled, (state, action: PayloadAction<UserData>) => {
       state.isLoading = false;
-      state.dataUser = action.payload;
+      state.currentUser = action.payload;
       state.error = null;
     });
 
@@ -58,7 +112,7 @@ export const loginSlice = createSlice({
       state.isLoading = false;
       if (payload) {
         state.isSuccess = false;
-        state.error = 'Access Denied! Invalid Credentials';
+        state.error = "Access Denied! Invalid Credentials";
       } else {
         state.error = null;
       }
@@ -71,6 +125,8 @@ export const loginSlice = createSlice({
 const userReducer = combineReducers({
   userAll: userSlice.reducer,
   loginUser: loginSlice.reducer,
+  createUser: createUserSlice.reducer,
+  deleteUser: deleteUserSlice.reducer,
 });
 
 export default userReducer;

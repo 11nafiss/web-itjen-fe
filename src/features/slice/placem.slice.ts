@@ -1,5 +1,5 @@
 import { PayloadAction, createSlice, combineReducers } from "@reduxjs/toolkit";
-import { getPlacemData } from "../actions/placem.action";
+import { createPlacem, editPlacem, deletePlacem, getPlacemData } from "../actions/placem.action";
 import { PlacemData } from "../../models/placem.model";
 
 interface typeOfInitialState {
@@ -19,6 +19,78 @@ const initialState: typeOfInitialState = {
   isSuccess: false,
   errorMessage: "",
 };
+
+export const createPlacemSlice = createSlice({
+  name: "createPlacemReducer",
+  initialState,
+  reducers: {},
+  extraReducers: (builder) => {
+    builder.addCase(createPlacem.pending, (state) => {
+      (state.isLoading = true), (state.errorMessage = "");
+      console.log("PENDING ADD PLACEMAN....");
+    });
+
+    builder.addCase(createPlacem.fulfilled, (state, action: PayloadAction<PlacemData[]>) => {
+      state.dataPlacem = action.payload;
+      console.log("ADD PLACEMAN SUCCESS");
+    });
+
+    builder.addCase(createPlacem.rejected, (state, { payload }) => {
+      if (payload) {
+        console.log("FAILED ADD PLACEMAN");
+        state.isSuccess = false;
+      }
+    });
+  },
+});
+
+export const editPlacemSlice = createSlice({
+  name: "editPlacemReducer",
+  initialState,
+  reducers: {},
+  extraReducers: (builder) => {
+    builder.addCase(editPlacem.pending, (state) => {
+      (state.isLoading = true), (state.errorMessage = "");
+      console.log("PENDING EDIT PLACEMAN....");
+    });
+
+    builder.addCase(editPlacem.fulfilled, (state, action: PayloadAction<PlacemData[]>) => {
+      state.dataPlacem = action.payload;
+      console.log("EDIT PLACEMAN SUCCESS");
+    });
+
+    builder.addCase(editPlacem.rejected, (state, { payload }) => {
+      if (payload) {
+        console.log("FAILED EDIT PLACEMAN");
+        state.isSuccess = false;
+      }
+    });
+  },
+});
+
+export const deletePlacemSlice = createSlice({
+  name: "deletePlacemReducer",
+  initialState,
+  reducers: {},
+  extraReducers: (builder) => {
+    builder.addCase(deletePlacem.pending, (state) => {
+      (state.isLoading = true), (state.errorMessage = "");
+      console.log("PENDING DELETE PLACEMAN....");
+    });
+
+    builder.addCase(deletePlacem.fulfilled, (state, action: PayloadAction<PlacemData[]>) => {
+      state.dataPlacem = action.payload;
+      console.log("DELETE PLACEMAN SUCCESS");
+    });
+
+    builder.addCase(deletePlacem.rejected, (state, { payload }) => {
+      if (payload) {
+        console.log("FAILED DELETE PLACEMAN");
+        state.isSuccess = false;
+      }
+    });
+  },
+});
 
 export const placemSlice = createSlice({
   name: "Placem",

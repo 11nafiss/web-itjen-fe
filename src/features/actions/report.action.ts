@@ -9,7 +9,7 @@ const urlReport = BASE_URL_API + "laporan";
 const token = Cookies.get("access_token");
 
 
-export const createReport = createAsyncThunk<ReportData[], any>("report/createReport", async ({ judul, deskripsi, pathPdf, pathImage, publishedAt, bulanItem, tahunItem, tampilDiBeranda, link }) => {
+export const createReport = createAsyncThunk<ReportData[], any>("report/createReport", async ({ judul, deskripsi, pathPdf, pathImage, publishedAt, bulanItem, tahunItem, tampilDiBeranda, link, jenis }) => {
   const response = await axios.post(
     urlReport,
     {
@@ -27,6 +27,7 @@ export const createReport = createAsyncThunk<ReportData[], any>("report/createRe
         tahunItem,
         tampilDiBeranda,
         link,
+        jenis
       })
       ,
     }
@@ -36,7 +37,7 @@ export const createReport = createAsyncThunk<ReportData[], any>("report/createRe
   return result;
 });
 
-export const editReport = createAsyncThunk<ReportData[], any, any>("report/editReport", async ({ judul, deskripsi, pathPdf, pathImage, publishedAt, bulanItem, tahunItem, tampilDiBeranda, link }, id) => {
+export const editReport = createAsyncThunk<ReportData[], any, any>("report/editReport", async ({ id, judul, deskripsi, pathPdf, pathImage, publishedAt, bulanItem, tahunItem, tampilDiBeranda, link, jenis }) => {
   const response = await axios.put(
     urlReport + "/" + id,
     {
@@ -55,6 +56,7 @@ export const editReport = createAsyncThunk<ReportData[], any, any>("report/editR
         tahunItem,
         tampilDiBeranda,
         link,
+        jenis
       }),
     }
   );

@@ -1,6 +1,6 @@
 // Import Library
 import { Grid, Box, Typography, Divider } from "@mui/material";
-import { Option, Select, Button, Input, FormControl, FormLabel } from "@mui/joy";
+import { Button, Input, FormControl, FormLabel } from "@mui/joy";
 import { styled } from "@mui/material/styles";
 
 // Main Declaration
@@ -53,16 +53,28 @@ const CrEselon = () => {
             <Divider sx={{ borderSize: "20px" }} />
             <SpaceGrid container sx={{ justifyContent: { xs: "center", md: "left" }, paddingTop: "10px" }}>
               <GridFlex item xs={12} md={6} sx={{ justifyContent: { xs: "center", md: "left" } }}>
-                <FormControl sx={{ width: "100%" }}>
-                  <FormLabel
-                    sx={{
-                      fontSize: "18px",
-                    }}
-                  >
-                    Nama Eselon 1
-                  </FormLabel>
-                  <Input size="lg" name="Size" placeholder="..." sx={{ width: "100%", borderColor: "#252525" }} />
-                </FormControl>
+              <Box sx={{ width: "100%", display: "flex", flexDirection: { xs: "column", lg: "row" }, gap: "20px" }}>
+                  <FormControl sx={{ width: "100%" }}>
+                    <FormLabel
+                      sx={{
+                        fontSize: "18px",
+                      }}
+                    >
+                      Nama Eselon 1
+                    </FormLabel>
+                    <Input size="lg" name="Size" placeholder="..." sx={{ width: "100%", borderColor: "#252525" }} />
+                  </FormControl>
+                  <FormControl sx={{ width: "100%" }}>
+                    <FormLabel
+                      sx={{
+                        fontSize: "18px",
+                      }}
+                    >
+                      Singkatan
+                    </FormLabel>
+                    <Input size="lg" name="Size" placeholder="..." sx={{ width: "100%", borderColor: "#252525" }} />
+                  </FormControl>
+                </Box>
                 <Box sx={{ width: "100%", paddingTop: "20px", display: "flex", flexDirection: { xs: "column", lg: "row" }, gap: "20px" }}>
                   <FormControl sx={{ width: "100%" }}>
                     <FormLabel
@@ -73,30 +85,6 @@ const CrEselon = () => {
                       Link
                     </FormLabel>
                     <Input size="lg" name="Size" placeholder="Go to..." sx={{ width: "100%", borderColor: "#252525" }} />
-                  </FormControl>
-                  <FormControl sx={{ width: "100%" }}>
-                    <FormLabel
-                      sx={{
-                        fontSize: "18px",
-                      }}
-                    >
-                      Urutan
-                    </FormLabel>
-                    <Select
-                      placeholder="Select…"
-                      sx={{
-                        width: "100%",
-                        borderColor: "#252525",
-                        height: "48px",
-                      }}
-                    >
-                      <Option value="1">1</Option>
-                      <Option value="2">2</Option>
-                      <Option value="3">3</Option>
-                      <Option value="4">4</Option>
-                      <Option value="5">5</Option>
-                      <Option value="6">lainnya</Option>
-                    </Select>
                   </FormControl>
                 </Box>
               </GridFlex>

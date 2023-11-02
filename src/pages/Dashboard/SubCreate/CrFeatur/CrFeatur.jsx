@@ -1,11 +1,48 @@
 // Import Library
 import React from "react";
 import { Grid, Box, Typography, Divider } from "@mui/material";
-import { Option, Select, Button, IconButton, Input, FormControl, FormLabel, Textarea } from "@mui/joy";
+import { Button, IconButton, Input, FormControl, FormLabel } from "@mui/joy";
 import { styled } from "@mui/material/styles";
 
 // Import Assets
 import UploadIcon from "@mui/icons-material/Upload";
+
+// MUI Styling CSS
+const Kotak = styled(Box)(() => ({
+  borderRadius: "15px",
+  backgroundColor: "#fff",
+  width: "100%",
+  minHeight: "505px",
+  padding: "30px",
+}));
+
+const Judul = styled(Typography)(() => ({
+  fontSize: "30px",
+  fontWeight: "700",
+  display: "flex",
+  justifyContent: "left",
+  alignItems: "center",
+  height: "100%",
+  margin: "10px",
+}));
+
+const SpaceGrid = styled(Grid)(() => ({
+  display: "flex",
+  justifyContent: "right",
+  width: "100%",
+}));
+
+const GridFlex = styled(Grid)(({ theme }) => ({
+  display: "flex",
+  alignItems: "center",
+  width: "100%",
+  height: "100%",
+  padding: "20px 30px",
+  flexDirection: "column",
+  [theme.breakpoints.down("md")]: {
+    padding: "10px 0px",
+  },
+}));
 
 // Main Declaration
 const CrFeatur = () => {
@@ -13,45 +50,7 @@ const CrFeatur = () => {
 
   const handleClickUpload = () => setUpload((bool) => !bool);
 
-// MUI Styling CSS
-  const Kotak = styled(Box)(() => ({
-    borderRadius: "15px",
-    backgroundColor: "#fff",
-    width: "100%",
-    minHeight: "505px",
-    padding: "30px",
-  }));
-
-  const Judul = styled(Typography)(() => ({
-    fontSize: "30px",
-    fontWeight: "700",
-    display: "flex",
-    justifyContent: "left",
-    alignItems: "center",
-    height: "100%",
-    margin: "10px",
-  }));
-
-  const SpaceGrid = styled(Grid)(() => ({
-    display: "flex",
-    justifyContent: "right",
-    width: "100%",
-  }));
-
-  const GridFlex = styled(Grid)(({ theme }) => ({
-    display: "flex",
-    alignItems: "center",
-    width: "100%",
-    height: "100%",
-    padding: "20px 30px",
-    flexDirection: "column",
-    [theme.breakpoints.down("md")]: {
-      padding: "10px 0px",
-    },
-  }));
-
-
-// Main Code
+  // Main Code
   return (
     <Box component="main" sx={{ flexGrow: 1, p: 3, backgroundColor: "#D9D9D9", height: "100%" }}>
       <Grid container spacing={3}>
@@ -78,19 +77,9 @@ const CrFeatur = () => {
                         fontSize: "18px",
                       }}
                     >
-                      Icon
+                      Singkatan
                     </FormLabel>
-                    <Input
-                      size="lg"
-                      name="Size"
-                      placeholder="Select SVG..."
-                      endDecorator={
-                        <IconButton aria-label="upload btn" color="neutral" onClick={handleClickUpload}>
-                          <UploadIcon />
-                        </IconButton>
-                      }
-                      sx={{ width: "100%", borderColor: "#252525" }}
-                    />
+                    <Input size="lg" name="Size" placeholder="..." sx={{ width: "100%", borderColor: "#252525" }} />
                   </FormControl>
                 </Box>
                 <Box sx={{ width: "100%", paddingTop: "20px", display: "flex", flexDirection: { xs: "column", lg: "row" }, gap: "20px" }}>
@@ -110,37 +99,21 @@ const CrFeatur = () => {
                         fontSize: "18px",
                       }}
                     >
-                      Urutan
+                      Icon
                     </FormLabel>
-                    <Select
-                      placeholder="Select…"
-                      sx={{
-                        width: "100%",
-                        borderColor: "#252525",
-                        height: "48px",
-                      }}
-                    >
-                      <Option value="1">1</Option>
-                      <Option value="2">2</Option>
-                      <Option value="3">3</Option>
-                      <Option value="4">4</Option>
-                      <Option value="5">5</Option>
-                      <Option value="6">lainnya</Option>
-                    </Select>
+                    <Input
+                      size="lg"
+                      name="Size"
+                      placeholder="Select SVG..."
+                      endDecorator={
+                        <IconButton aria-label="upload btn" color="neutral" onClick={handleClickUpload}>
+                          <UploadIcon />
+                        </IconButton>
+                      }
+                      sx={{ width: "100%", borderColor: "#252525" }}
+                    />
                   </FormControl>
                 </Box>
-              </GridFlex>
-              <GridFlex item xs={12} md={6} sx={{ justifyContent: { xs: "center", md: "left" } }}>
-                <FormControl sx={{ width: "100%" }}>
-                  <FormLabel
-                    sx={{
-                      fontSize: "18px",
-                    }}
-                  >
-                    Deskripsi
-                  </FormLabel>
-                  <Textarea name="desc" placeholder="Type in here…" variant="soft" size="lg" sx={{ width: "100%", borderColor: "#252525", height: "150px" }} />
-                </FormControl>
               </GridFlex>
               <GridFlex item xs={12} md={12} sx={{ justifyContent: { xs: "center", md: "left" } }}>
                 <Box sx={{ height: "100%", width: "100%", display: "flex", flexDirection: "column", justifyContent: "left", gap: "30px" }}>

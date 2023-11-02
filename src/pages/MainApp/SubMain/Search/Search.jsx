@@ -1,5 +1,5 @@
 // Import Library
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { Link, useSearchParams } from "react-router-dom";
 import { Pagination, PaginationItem, Stack, Grid, Container, Box, Typography } from "@mui/material";
 import { styled, createTheme, ThemeProvider } from "@mui/material/styles";
@@ -13,6 +13,7 @@ import SearchIcon from "@mui/icons-material/Search";
 
 // Import Api
 import { useAppDispatch, useAppSelector } from "../../../../hooks/useTypedSelector";
+import { articleSearchSlice } from "../../../../features/slice/article.slice";
 import { getArticleNumber, getArticleSearch } from "../../../../features/actions/article.action";
 import { BASE_URL } from "../../../../services/api";
 
@@ -96,16 +97,15 @@ const CustomTitle = styled(Typography)(({ theme }) => ({
 
 // Main Declaration
 const Search = () => {
-  const [searchParams] = useSearchParams();
-
-  // const page = useState(1);
-  // const { keyword } = useParams();
+  const [searchParams, setSearchParams] = useSearchParams();
+  const [searchInput, setSearchInput] = useState("");
 
   const dispatch = useAppDispatch();
 
   useEffect(() => {
     const page = searchParams.get("page") ?? 1;
     const keyword = searchParams.get("keyword");
+    setSearchInput(keyword);
 
     dispatch(getArticleSearch({ page, keyword }));
     dispatch(getArticleNumber({ keyword }));
@@ -114,29 +114,27 @@ const Search = () => {
   const dataArticle = useAppSelector((state) => state.article.articleSearch.dataArticle);
   const jumlahArticle = useAppSelector((state) => state.article.articleNumber.dataArticle);
 
-  console.log("JUMLAH: ", jumlahArticle);
-
   const handlePageChange = (event, value) => {
     const keyword = searchParams.get("keyword");
+    let updatedSearchParams = new URLSearchParams(searchParams.toString());
+    updatedSearchParams.set("page", value);
 
     dispatch(getArticleSearch({ page: value, keyword }));
     dispatch(getArticleNumber({ keyword }));
+    setSearchParams(updatedSearchParams.toString());
   };
 
-  // const pageSize = 6;
+  function handleSubmit(event) {
+    event.preventDefault();
+    const page = searchParams.get("page") ?? 1;
+    let updatedSearchParams = new URLSearchParams(searchParams.toString());
+    updatedSearchParams.set("keyword", searchInput);
+    setSearchParams(updatedSearchParams.toString());
 
-  // const [pagination, setPagination] = useState({
-  //   count: 0,
-  //   from: 0,
-  //   to: pageSize,
-  // });
-
-  // const handlePageChange = (event, page) => {
-  //   const from = (page - 1) * pageSize;
-  //   const to = (page - 1) * pageSize + pageSize;
-
-  //   setPagination({ ...pagination, from: from, to: to });
-  // };
+    dispatch(articleSearchSlice.actions.setSearchKeyword(searchInput));
+    dispatch(getArticleSearch({ page, searchInput }));
+    dispatch(getArticleNumber({ searchInput }));
+  }
 
   // Main Code
   return (
@@ -148,88 +146,97 @@ const Search = () => {
               <CustomTitle>Temukan Bacaan Untukmu</CustomTitle>
             </GridCenter>
             <GridCenter item xs={12}>
-              <Input
-                placeholder="Silahkan cari disini.."
-                startDecorator={<SearchIcon style={{ color: "#08347C" }} />}
-                endDecorator={
-                  <Button
-                    sx={{
-                      height: "50px",
-                      width: "100px",
-                      left: "5px",
-                      borderRadius: "0px 10px 10px 0px",
-                      backgroundColor: "#08347C",
-                      fontSize: "16px",
-                    }}
-                  >
-                    Search
-                  </Button>
-                }
-                sx={{
-                  display: { xs: "none", sm: "flex" },
-                  margin: "30px 50px",
-                  width: "800px",
-                  height: "50px",
-                  borderRadius: "10px",
-                }}
-              />
+              <form onSubmit={handleSubmit}>
+                <Input
+                  placeholder="Silahkan cari disini.."
+                  startDecorator={<SearchIcon style={{ color: "#08347C" }} />}
+                  value={searchInput}
+                  onChange={(e) => setSearchInput(e.target.value)}
+                  endDecorator={
+                    <Button
+                      type="submit"
+                      sx={{
+                        height: "50px",
+                        width: "100px",
+                        left: "5px",
+                        borderRadius: "0px 10px 10px 0px",
+                        backgroundColor: "#08347C",
+                        fontSize: "16px",
+                      }}
+                    >
+                      Search
+                    </Button>
+                  }
+                  sx={{
+                    display: { xs: "none", sm: "flex" },
+                    margin: "30px 50px",
+                    width: "800px",
+                    height: "50px",
+                    borderRadius: "10px",
+                  }}
+                />
+              </form>
             </GridCenter>
           </Grid>
         </CustomContainer>
         <BoxBg>
           <CustomContainer>
             <SubText>Hasil Pencarian</SubText>
-            <Grid container spacing={{ xs: 3, md: 4 }} column={{ xs: 4, sm: 8, md: 12 }} sx={{ justifyContent: "center" }}>
-              {dataArticle.map((obj, index) => (
-                <GridCenter item key={index} xs={12} sm={6} md={4}>
-                  <Card variant="outlined" sx={{ width: "270px", maxWidth: "100%", height: "330px", borderRadius: "20px", boxShadow: "lg", gap: "5px" }}>
-                    <CardOverflow>
-                      <AspectRatio ratio="16/9">
-                        <img src={`${BASE_URL}images/${obj.featuredImage}`} loading="lazy" alt="" />
-                      </AspectRatio>
-                    </CardOverflow>
-                    <CardContent sx={{ display: "flex", textAlign: "center" }}>
-                      <Typography
-                        gutterBottom
-                        sx={{
-                          fontSize: "14px",
-                          color: "#0D5CAB",
-                          fontWeight: "500",
-                          margin: "10px 0px 10px 0px",
-                        }}
-                      >
-                        {formatDate(obj.publishedAt)}
-                      </Typography>
-                      <Typography
-                        sx={{
-                          fontSize: "14px",
-                          fontWeight: "600",
-                          marginBottom: "2px",
-                        }}
-                      >
-                        {obj.title}
-                      </Typography>
-                    </CardContent>
-                    <CardOverflow variant="soft" sx={{ bgcolor: "background.level1", padding: "0px" }}>
-                      <CardContent sx={{ width: "100%", padding: "0px" }}>
-                        <Link to={`/${obj.title.replace(/ /g, "-")}`} className="link">
-                          <ClickButton variant="solid" size="lg">
-                            Baca Artikel
-                          </ClickButton>
-                        </Link>
+            {dataArticle.length === 0 ? (
+              <div>Data Tidak Ditemukan</div>
+            ) : (
+              <Grid container spacing={{ xs: 3, md: 4 }} column={{ xs: 4, sm: 8, md: 12 }} sx={{ justifyContent: "center" }}>
+                {dataArticle.map((obj, index) => (
+                  <GridCenter item key={index} xs={12} sm={6} md={4}>
+                    <Card variant="outlined" sx={{ width: "270px", maxWidth: "100%", height: "330px", borderRadius: "20px", boxShadow: "lg", gap: "5px" }}>
+                      <CardOverflow>
+                        <AspectRatio ratio="16/9">
+                          <img src={`${BASE_URL}images/${obj.featuredImage}`} loading="lazy" alt="" />
+                        </AspectRatio>
+                      </CardOverflow>
+                      <CardContent sx={{ display: "flex", textAlign: "center" }}>
+                        <Typography
+                          gutterBottom
+                          sx={{
+                            fontSize: "14px",
+                            color: "#0D5CAB",
+                            fontWeight: "500",
+                            margin: "10px 0px 10px 0px",
+                          }}
+                        >
+                          {formatDate(obj.publishedAt)}
+                        </Typography>
+                        <Typography
+                          sx={{
+                            fontSize: "14px",
+                            fontWeight: "600",
+                            marginBottom: "2px",
+                          }}
+                        >
+                          {obj.title}
+                        </Typography>
                       </CardContent>
-                    </CardOverflow>
-                  </Card>
+                      <CardOverflow variant="soft" sx={{ bgcolor: "background.level1", padding: "0px" }}>
+                        <CardContent sx={{ width: "100%", padding: "0px" }}>
+                          <Link to={`/${obj.categoryId}/${obj.title.replace(/ /g, "-")}`} className="link">
+                            <ClickButton variant="solid" size="lg">
+                              Baca Artikel
+                            </ClickButton>
+                          </Link>
+                        </CardContent>
+                      </CardOverflow>
+                    </Card>
+                  </GridCenter>
+                ))}
+                <GridCenter item xs={12}>
+                  <Stack spacing={2}>
+                    <ThemeProvider theme={theme}>
+                      <Pagination color="primary" count={Math.ceil(jumlahArticle / 6)} onChange={handlePageChange} renderItem={(item) => <PaginationItem slots={{ previous: ArrowBackIcon, next: ArrowForwardIcon }} {...item} />} />
+                    </ThemeProvider>
+                  </Stack>
                 </GridCenter>
-              ))}
-              <GridCenter item xs={12}>
-                <Stack spacing={2}>
-                  <ThemeProvider theme={theme}>
-                    <Pagination color="primary" count={Math.ceil(jumlahArticle / 2)} onChange={handlePageChange} renderItem={(item) => <PaginationItem slots={{ previous: ArrowBackIcon, next: ArrowForwardIcon }} {...item} />} />
-                  </ThemeProvider>
-                </Stack>
-              </GridCenter>
-            </Grid>
+              </Grid>
+            )}
           </CustomContainer>
         </BoxBg>
       </main>

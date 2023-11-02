@@ -1,5 +1,5 @@
 import { PayloadAction, createSlice, combineReducers } from '@reduxjs/toolkit'
-import { getMenuData } from '../actions/menu.action'
+import { createMenu, editMenu, deleteMenu, getMenuData } from '../actions/menu.action'
 import { MenuData } from '../../models/menu.model'
 
 interface typeOfInitialState {
@@ -15,6 +15,78 @@ interface typeOfInitialState {
     isSuccess: false,
     errorMessage: ''
   }
+
+  export const createMenuSlice = createSlice({
+    name: "createMenuReducer",
+    initialState,
+    reducers: {},
+    extraReducers: (builder) => {
+      builder.addCase(createMenu.pending, (state) => {
+        (state.isLoading = true), (state.errorMessage = "");
+        console.log("PENDING ADD MENU....");
+      });
+  
+      builder.addCase(createMenu.fulfilled, (state, action: PayloadAction<MenuData[]>) => {
+        state.dataMenu = action.payload;
+        console.log("ADD MENU SUCCESS");
+      });
+  
+      builder.addCase(createMenu.rejected, (state, { payload }) => {
+        if (payload) {
+          console.log("FAILED ADD MENU");
+          state.isSuccess = false;
+        }
+      });
+    },
+  });
+  
+  export const editMenuSlice = createSlice({
+    name: "editMenuReducer",
+    initialState,
+    reducers: {},
+    extraReducers: (builder) => {
+      builder.addCase(editMenu.pending, (state) => {
+        (state.isLoading = true), (state.errorMessage = "");
+        console.log("PENDING EDIT MENU....");
+      });
+  
+      builder.addCase(editMenu.fulfilled, (state, action: PayloadAction<MenuData[]>) => {
+        state.dataMenu = action.payload;
+        console.log("EDIT MENU SUCCESS");
+      });
+  
+      builder.addCase(editMenu.rejected, (state, { payload }) => {
+        if (payload) {
+          console.log("FAILED EDIT MENU");
+          state.isSuccess = false;
+        }
+      });
+    },
+  });
+  
+  export const deleteMenuSlice = createSlice({
+    name: "deleteMenuReducer",
+    initialState,
+    reducers: {},
+    extraReducers: (builder) => {
+      builder.addCase(deleteMenu.pending, (state) => {
+        (state.isLoading = true), (state.errorMessage = "");
+        console.log("PENDING DELETE MENU....");
+      });
+  
+      builder.addCase(deleteMenu.fulfilled, (state, action: PayloadAction<MenuData[]>) => {
+        state.dataMenu = action.payload;
+        console.log("DELETE MENU SUCCESS");
+      });
+  
+      builder.addCase(deleteMenu.rejected, (state, { payload }) => {
+        if (payload) {
+          console.log("FAILED DELETE MENU");
+          state.isSuccess = false;
+        }
+      });
+    },
+  });
   
   export const menuSlice = createSlice({
     name: "Menu",

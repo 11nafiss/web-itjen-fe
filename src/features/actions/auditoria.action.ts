@@ -36,7 +36,7 @@ export const createAuditoria = createAsyncThunk<AuditoriaData[], any>("auditoria
   return result;
 });
 
-export const editAuditoria = createAsyncThunk<AuditoriaData[], any, any>("auditoria/editAuditoria", async ({ judul, deskripsi, pathPdf, pathImage, publishedAt, bulanItem, tahunItem, tampilDiBeranda, link }, id) => {
+export const editAuditoria = createAsyncThunk<AuditoriaData[], any, any>("auditoria/editAuditoria", async ({ id, judul, deskripsi, pathPdf, pathImage, publishedAt, bulanItem, tahunItem, tampilDiBeranda, link }) => {
   const response = await axios.put(
     urlAuditoria + "/" + id,
     {

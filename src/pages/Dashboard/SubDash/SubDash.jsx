@@ -10,6 +10,7 @@ import PlacemDash from './PlacemDash/PlacemDash'
 import MenuDash from './MenuDash/MenuDash'
 import ReportDash from './ReportDash/ReportDash'
 import UserDash from './UserDash/UserDash'
+import CategoryDash from './CategoryDash/CategoryDash'
 
 // Export Code
 export {
@@ -24,4 +25,5 @@ export {
     MenuDash,
     ReportDash,
     UserDash,
+    CategoryDash,
 }

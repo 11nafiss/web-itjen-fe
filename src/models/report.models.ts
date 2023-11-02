@@ -10,4 +10,5 @@ export interface ReportData {
     tahunItem: number,
     tampilDiBeranda: boolean,
     link: string,
+    jenis: string,
   }

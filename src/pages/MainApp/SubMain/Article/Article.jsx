@@ -5,7 +5,7 @@ import { Button } from "@mui/joy";
 import { styled } from "@mui/material/styles";
 import { RWebShare } from "react-web-share";
 import { useParams } from "react-router-dom";
-import ReactHtmlParser from "react-html-parser";
+import FroalaEditorView from 'react-froala-wysiwyg/FroalaEditorView';
 
 // Import Components
 import { formatDate } from "../../../../utils/custom-format-date";
@@ -135,7 +135,9 @@ const Article = () => {
                     </TimeBox>
                   </GridCenter>
                   <GridCenter item xs={12}>
-                    <ContentBox>{ReactHtmlParser(dataArticle.content)}</ContentBox>
+                    <ContentBox><FroalaEditorView
+                    model={dataArticle.content}
+                /></ContentBox>
                   </GridCenter>
                 </Grid>
               </CustomBox>
