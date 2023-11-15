@@ -1,6 +1,6 @@
 // Import Library
 import React from "react";
-import { Link, useNavigate  } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { Box, CssBaseline, IconButton, Toolbar, Typography, List, Divider, ListItem, ListItemButton, ListItemText } from "@mui/material";
 import { styled, useTheme } from "@mui/material/styles";
 import MuiAppBar from "@mui/material/AppBar";
@@ -16,38 +16,37 @@ import { RiLogoutBoxRFill, RiDashboardFill, RiServiceFill } from "react-icons/ri
 import { ImHome } from "react-icons/im";
 import { FaUsers, FaStar } from "react-icons/fa";
 import { MdArticle, MdViewCarousel, MdImage } from "react-icons/md";
-import { HiGlobeAlt, HiDocumentReport } from "react-icons/hi";
+import { HiGlobeAlt, HiDocumentReport, HiPresentationChartLine } from "react-icons/hi";
 import { IoJournal } from "react-icons/io5";
 
 // Import Api
 import { useAppDispatch } from "../../../hooks/useTypedSelector";
 import { loginSlice } from "../../../features/slice/user.slice";
 
-
 const drawerWidth = 220;
 
-  const openedMixin = (theme) => ({
-    width: drawerWidth,
-    transition: theme.transitions.create("width", {
-      easing: theme.transitions.easing.sharp,
-      duration: theme.transitions.duration.enteringScreen,
-    }),
-    overflowX: "hidden",
-    backgroundColor: "#08245C",
-  });
+const openedMixin = (theme) => ({
+  width: drawerWidth,
+  transition: theme.transitions.create("width", {
+    easing: theme.transitions.easing.sharp,
+    duration: theme.transitions.duration.enteringScreen,
+  }),
+  overflowX: "hidden",
+  backgroundColor: "#08245C",
+});
 
-  const closedMixin = (theme) => ({
-    transition: theme.transitions.create("width", {
-      easing: theme.transitions.easing.sharp,
-      duration: theme.transitions.duration.leavingScreen,
-    }),
-    overflowX: "hidden",
-    backgroundColor: "#08245C",
-    width: `calc(${theme.spacing(7)} + 1px)`,
-    [theme.breakpoints.up("sm")]: {
-      width: `calc(${theme.spacing(8)} + 1px)`,
-    },
-  });
+const closedMixin = (theme) => ({
+  transition: theme.transitions.create("width", {
+    easing: theme.transitions.easing.sharp,
+    duration: theme.transitions.duration.leavingScreen,
+  }),
+  overflowX: "hidden",
+  backgroundColor: "#08245C",
+  width: `calc(${theme.spacing(7)} + 1px)`,
+  [theme.breakpoints.up("sm")]: {
+    width: `calc(${theme.spacing(8)} + 1px)`,
+  },
+});
 
 // MUI Styling CSS
 const DrawerHeader = styled("div")(({ theme }) => ({
@@ -104,7 +103,6 @@ const HeadBox = styled(Box)(() => ({
   maxWidth: "200px",
   height: "50px",
 }));
-
 
 // Main Declaration
 const HeadDash = () => {
@@ -280,6 +278,30 @@ const HeadDash = () => {
                 </ListItemText>
               </ListItemButton>
             </Link>
+            <Link to="/dashboard/visual" className="link">
+              <ListItemButton
+                sx={{
+                  minHeight: 48,
+                  justifyContent: open ? "initial" : "center",
+                  px: 2.5,
+                }}
+              >
+                <ListItemIcon
+                  sx={{
+                    minWidth: 0,
+                    mr: open ? 3 : "auto",
+                    justifyContent: "center",
+                    color: "#fff",
+                    fontSize: "24px",
+                  }}
+                >
+                  <HiPresentationChartLine />
+                </ListItemIcon>
+                <ListItemText sx={{ opacity: open ? 1 : 0, color: "#fff" }}>
+                  <Typography sx={{ fontSize: "16px" }}>Visual</Typography>
+                </ListItemText>
+              </ListItemButton>
+            </Link>
             <Link to="/dashboard/pejabat" className="link">
               <ListItemButton
                 sx={{
@@ -304,7 +326,7 @@ const HeadDash = () => {
                 </ListItemText>
               </ListItemButton>
             </Link>
-            <Link to="/dashboard/menus" className="link">
+            <Link to="/dashboard/gambar" className="link">
               <ListItemButton
                 sx={{
                   minHeight: 48,
@@ -321,10 +343,10 @@ const HeadDash = () => {
                     fontSize: "22px",
                   }}
                 >
-                  <ImHome />
+                  <MdImage />
                 </ListItemIcon>
                 <ListItemText sx={{ opacity: open ? 1 : 0, color: "#fff" }}>
-                  <Typography sx={{ fontSize: "16px" }}>Navigasi</Typography>
+                  <Typography sx={{ fontSize: "16px" }}>Gambar</Typography>
                 </ListItemText>
               </ListItemButton>
             </Link>
@@ -376,7 +398,7 @@ const HeadDash = () => {
                 </ListItemText>
               </ListItemButton>
             </Link>
-            <Link to="/dashboard/gambar" className="link">
+            <Link to="/dashboard/menus" className="link">
               <ListItemButton
                 sx={{
                   minHeight: 48,
@@ -393,10 +415,10 @@ const HeadDash = () => {
                     fontSize: "22px",
                   }}
                 >
-                  <MdImage />
+                  <ImHome />
                 </ListItemIcon>
                 <ListItemText sx={{ opacity: open ? 1 : 0, color: "#fff" }}>
-                  <Typography sx={{ fontSize: "16px" }}>Gambar</Typography>
+                  <Typography sx={{ fontSize: "16px" }}>Navigasi</Typography>
                 </ListItemText>
               </ListItemButton>
             </Link>

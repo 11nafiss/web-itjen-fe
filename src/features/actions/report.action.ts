@@ -89,16 +89,58 @@ export const getReportData = createAsyncThunk<ReportData[], void, { rejectValue:
   }
 });
 
-export const getReportTake = createAsyncThunk<ReportData[], void, { rejectValue: AxiosError }>("report/fetchAllReport", async (_, { rejectWithValue }) => {
-  try {
-    const take = 1;
-    const skip = 0;
-    const response = await laporanService.getLaporanTake(take, skip);
-    return response as ReportData[];
-  } catch (error) {
-    if (error instanceof AxiosError) {
-      return rejectWithValue(error);
-    }
-    throw error;
-  }
+export const getReportAllTake = createAsyncThunk<ReportData[], any, { rejectValue: AxiosError }>("Report/getReportAllTake", async (params, thunkAPI) => {
+  const take = params.take;
+  const skip = params.page * params.take - params.take;
+  const newUrl = `/${take}/${skip}`;
+  
+  const response = await axios.get(urlReport + newUrl, {
+    headers: {
+      "Content-Type": "application/json",
+    },
+  });
+
+  const data: ReportData[] = await response.data;
+  return data;
+});
+
+export const getReportAllCount = createAsyncThunk<ReportData[], any, { rejectValue: AxiosError }>("Report/getReportAllCount", async (params) => {
+  const newUrl = `/jumlahall`;
+
+  const response = await axios.get(urlReport + newUrl, {
+    headers: {
+      "Content-Type": "application/json",
+    },
+  });
+
+  const data: ReportData[] = response.data;
+  return data;
+});
+
+export const getReportSearchAll = createAsyncThunk<ReportData[], any, { rejectValue: AxiosError }>("Report/getReportSearch", async (params, thunkAPI) => {
+  const take = params.take;
+  const skip = params.page * params.take - params.take;
+  const ReportSearchUrl = `/search/${params.keyword}/${take}/${skip}`;
+
+  const responses = await axios.get(urlReport + ReportSearchUrl, {
+    headers: {
+      "Content-Type": "application/json",
+    },
+  });
+
+  const Report: ReportData[] = responses.data;
+  return Report;
+});
+
+export const getReportSearchCount = createAsyncThunk<ReportData[], any, { rejectValue: AxiosError }>("Report/getReportSearchCount", async (params) => {
+  const ReportCountUrl = `/jumlahsearch/${params.keyword}`;
+
+  const response = await axios.get(urlReport + ReportCountUrl, {
+    headers: {
+      "Content-Type": "application/json",
+    },
+  });
+
+  const data: ReportData[] = response.data;
+  return data;
 });

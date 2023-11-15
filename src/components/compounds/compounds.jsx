@@ -2,6 +2,7 @@
 import Header from './Header/header'
 import HeadSmall from './HeadSmall/headsmall'
 import HeadDash from './HeadDash/headdash'
+import HeadVisual from './HeadVisual/headvisual'
 import Footer from './Footer/footer'
 import TitleBar1 from './TitleBar1/titlebar1'
 import TitleBar2 from './TitleBar2/titlebar2'
@@ -17,6 +18,7 @@ export {
     Footer,
     HeadSmall,
     HeadDash,
+    HeadVisual,
     TitleBar1,
     TitleBar2,
     TitleBar3,

@@ -73,11 +73,11 @@ const PopupNav = () => {
                     <Grid container spacing={1}>
                       <GridCenter item xs={12}>
                         <CustomBox style={{ padding: "30px" }}>
-                          <img src={WhisIcon} style={{ width: "40px" }} />
+                          <img src={WhisIcon} style={{ width: "35px" }} />
                         </CustomBox>
                       </GridCenter>
                       <GridCenter item xs={12}>
-                        <CustomType>{obj.deskripsi}</CustomType>
+                        <CustomType>{obj.singkatan}</CustomType>
                       </GridCenter>
                     </Grid>
                   </MenuIcon>

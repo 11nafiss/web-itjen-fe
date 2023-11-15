@@ -1,11 +1,13 @@
 import { ArticleData } from "../../models/article.model";
-import { createArticle, editArticle, deleteArticle, getArticleByCategory, getArticleAll, getArticleTopNews, getArticleSearch, getArticleTitle, getArticleNumber, getArticlePublished, getArticleSearchAll } from "../actions/article.action";
+import { createArticle, editArticle, deleteArticle, getArticleByCategory, getArticleAllTake, getArticleTopNews, getArticleSearch, getArticleTitle, getArticleSearchCount, getArticlePublished, getArticleSearchAll, getArticleById, getArticlePublishedCount, getArticleAllCount } from "../actions/article.action";
 import { PayloadAction, createSlice, combineReducers } from "@reduxjs/toolkit";
 
 interface typeOfInitialState {
   dataArticle: ArticleData[];
-  newArticle: ArticleData | null;
+  currentArticle: ArticleData | null;
   searchKeyword: string;
+  dataPerPage: number;
+  currentPage: number;
   isLoading: boolean;
   isSuccess: boolean;
   errorMessage: string;
@@ -13,8 +15,10 @@ interface typeOfInitialState {
 
 const initialState: typeOfInitialState = {
   dataArticle: [],
-  newArticle: null,
+  currentArticle: null,
   searchKeyword: "",
+  dataPerPage: 6,
+  currentPage: 1,
   isLoading: false,
   isSuccess: false,
   errorMessage: "",
@@ -31,7 +35,7 @@ export const createArticleSlice = createSlice({
     });
 
     builder.addCase(createArticle.fulfilled, (state, action: PayloadAction<ArticleData>) => {
-      state.newArticle = action.payload;
+      state.currentArticle = action.payload;
       console.log("ADD ARTIKEL SUCCESS");
     });
 
@@ -54,8 +58,8 @@ export const editArticleSlice = createSlice({
       console.log("PENDING EDIT ARTIKEL....");
     });
 
-    builder.addCase(editArticle.fulfilled, (state, action: PayloadAction<ArticleData[]>) => {
-      state.dataArticle = action.payload;
+    builder.addCase(editArticle.fulfilled, (state, action: PayloadAction<ArticleData>) => {
+      state.currentArticle = action.payload;
       console.log("EDIT ARTIKEL SUCCESS");
     });
 
@@ -78,8 +82,8 @@ export const deleteArticleSlice = createSlice({
       console.log("PENDING DELETE ARTIKEL....");
     });
 
-    builder.addCase(deleteArticle.fulfilled, (state, action: PayloadAction<ArticleData[]>) => {
-      state.dataArticle = action.payload;
+    builder.addCase(deleteArticle.fulfilled, (state, action: PayloadAction<ArticleData>) => {
+      state.currentArticle = action.payload;
       console.log("DELETE ARTIKEL SUCCESS");
     });
 
@@ -143,19 +147,32 @@ export const articleTitleSlice = createSlice({
 export const articleAllSlice = createSlice({
   name: "articleAllReducer",
   initialState,
-  reducers: {},
+  reducers: {
+    onNavigateNext: (state) => {
+      state.currentPage++;
+    },
+    onNavigatePrev: (state) => {
+      state.currentPage--;
+    },
+    onChangeDataPerPage: (state, action) => {
+      state.dataPerPage = action.payload;
+    },
+    onClickCurrentPage: (state, action) => {
+      state.currentPage = action.payload;
+    },
+  },
   extraReducers: (builder) => {
-    builder.addCase(getArticleAll.pending, (state) => {
+    builder.addCase(getArticleAllTake.pending, (state) => {
       (state.isLoading = true), (state.errorMessage = "");
       console.log("PENDING ARTIKEL....");
     });
 
-    builder.addCase(getArticleAll.fulfilled, (state, action: PayloadAction<ArticleData[]>) => {
+    builder.addCase(getArticleAllTake.fulfilled, (state, action: PayloadAction<ArticleData[]>) => {
       state.dataArticle = action.payload;
       console.log("Filled ARTIKEL");
     });
 
-    builder.addCase(getArticleAll.rejected, (state, { payload }) => {
+    builder.addCase(getArticleAllTake.rejected, (state, { payload }) => {
       if (payload) {
         console.log("FAILED ARTIKEL");
         state.isSuccess = false;
@@ -163,6 +180,55 @@ export const articleAllSlice = createSlice({
     });
   },
 });
+
+export const articleAllCountSlice = createSlice({
+  name: "articleAllCountReducer",
+  initialState,
+  reducers: {},
+  extraReducers: (builder) => {
+    builder.addCase(getArticleAllCount.pending, (state) => {
+      (state.isLoading = true), (state.errorMessage = "");
+      console.log("PENDING ARTIKEL....");
+    });
+
+    builder.addCase(getArticleAllCount.fulfilled, (state, action: PayloadAction<ArticleData[]>) => {
+      state.dataArticle = action.payload;
+      console.log("Filled ARTIKEL");
+    });
+
+    builder.addCase(getArticleAllCount.rejected, (state, { payload }) => {
+      if (payload) {
+        console.log("FAILED ARTIKEL");
+        state.isSuccess = false;
+      }
+    });
+  },
+});
+
+export const articleByIdSlice = createSlice({
+  name: "articleByIdReducer",
+  initialState,
+  reducers: {},
+  extraReducers: (builder) => {
+    builder.addCase(getArticleById.pending, (state) => {
+      (state.isLoading = true), (state.errorMessage = "");
+      console.log("PENDING ARTIKEL....");
+    });
+
+    builder.addCase(getArticleById.fulfilled, (state, action: PayloadAction<ArticleData[]>) => {
+      state.dataArticle = action.payload;
+      console.log("Filled ARTIKEL");
+    });
+
+    builder.addCase(getArticleById.rejected, (state, { payload }) => {
+      if (payload) {
+        console.log("FAILED ARTIKEL");
+        state.isSuccess = false;
+      }
+    });
+  },
+});
+
 
 export const articlePublishedSlice = createSlice({
   name: "articlePublishedReducer",
@@ -180,6 +246,30 @@ export const articlePublishedSlice = createSlice({
     });
 
     builder.addCase(getArticlePublished.rejected, (state, { payload }) => {
+      if (payload) {
+        console.log("FAILED ARTIKEL");
+        state.isSuccess = false;
+      }
+    });
+  },
+});
+
+export const articlePublishedCountSlice = createSlice({
+  name: "articlePublishedCountReducer",
+  initialState,
+  reducers: {},
+  extraReducers: (builder) => {
+    builder.addCase(getArticlePublishedCount.pending, (state) => {
+      (state.isLoading = true), (state.errorMessage = "");
+      console.log("PENDING ARTIKEL....");
+    });
+
+    builder.addCase(getArticlePublishedCount.fulfilled, (state, action: PayloadAction<ArticleData[]>) => {
+      state.dataArticle = action.payload;
+      console.log("Filled ARTIKEL");
+    });
+
+    builder.addCase(getArticlePublishedCount.rejected, (state, { payload }) => {
       if (payload) {
         console.log("FAILED ARTIKEL");
         state.isSuccess = false;
@@ -216,6 +306,32 @@ export const articleSearchSlice = createSlice({
   },
 });
 
+
+
+export const articleTopNewsSlice = createSlice({
+  name: "articleTopNewsReducer",
+  initialState,
+  reducers: {},
+  extraReducers: (builder) => {
+    builder.addCase(getArticleTopNews.pending, (state) => {
+      (state.isLoading = true), (state.errorMessage = "");
+      console.log("PENDING ARTIKEL TOP NEWS....");
+    });
+
+    builder.addCase(getArticleTopNews.fulfilled, (state, action: PayloadAction<ArticleData[]>) => {
+      state.dataArticle = action.payload;
+      console.log("Filled ARTIKEL TOP NEWS");
+    });
+
+    builder.addCase(getArticleTopNews.rejected, (state, { payload }) => {
+      if (payload) {
+        console.log("FAILED ARTIKEL TOP NEWS");
+        state.isSuccess = false;
+      }
+    });
+  },
+});
+
 export const articleSearchAllSlice = createSlice({
   name: "articleSearchReducer",
   initialState,
@@ -244,46 +360,22 @@ export const articleSearchAllSlice = createSlice({
   },
 });
 
-export const articleTopNewsSlice = createSlice({
-  name: "articleTopNewsReducer",
+export const articleSearchCountSlice = createSlice({
+  name: "articleSearchCountReducer",
   initialState,
   reducers: {},
   extraReducers: (builder) => {
-    builder.addCase(getArticleTopNews.pending, (state) => {
-      (state.isLoading = true), (state.errorMessage = "");
-      console.log("PENDING ARTIKEL TOP NEWS....");
-    });
-
-    builder.addCase(getArticleTopNews.fulfilled, (state, action: PayloadAction<ArticleData[]>) => {
-      state.dataArticle = action.payload;
-      console.log("Filled ARTIKEL TOP NEWS");
-    });
-
-    builder.addCase(getArticleTopNews.rejected, (state, { payload }) => {
-      if (payload) {
-        console.log("FAILED ARTIKEL TOP NEWS");
-        state.isSuccess = false;
-      }
-    });
-  },
-});
-
-export const articleNumberSlice = createSlice({
-  name: "articleNumberReducer",
-  initialState,
-  reducers: {},
-  extraReducers: (builder) => {
-    builder.addCase(getArticleNumber.pending, (state) => {
+    builder.addCase(getArticleSearchCount.pending, (state) => {
       (state.isLoading = true), (state.errorMessage = "");
       console.log("PENDING ARTIKEL....");
     });
 
-    builder.addCase(getArticleNumber.fulfilled, (state, action: PayloadAction<ArticleData[]>) => {
+    builder.addCase(getArticleSearchCount.fulfilled, (state, action: PayloadAction<ArticleData[]>) => {
       state.dataArticle = action.payload;
       console.log("Filled ARTIKEL");
     });
 
-    builder.addCase(getArticleNumber.rejected, (state, { payload }) => {
+    builder.addCase(getArticleSearchCount.rejected, (state, { payload }) => {
       if (payload) {
         console.log("FAILED ARTIKEL");
         state.isSuccess = false;
@@ -299,10 +391,13 @@ const articleReducer = combineReducers({
   articleCategory: articleByCategorySlice.reducer,
   articleTitle: articleTitleSlice.reducer,
   articleAll: articleAllSlice.reducer,
-  articlePublised: articlePublishedSlice.reducer,
+  articleAllCount: articleAllCountSlice.reducer,
+  articleId: articleByIdSlice.reducer,
+  articlePublished: articlePublishedSlice.reducer,
+  articlePublishedCount: articlePublishedCountSlice.reducer,
   articleSearch: articleSearchSlice.reducer,
   articleSearchAll: articleSearchAllSlice.reducer,
-  articleNumber: articleNumberSlice.reducer,
+  articleSearchCount: articleSearchCountSlice.reducer,
   articleTopNews: articleTopNewsSlice.reducer,
 });
 

@@ -1,8 +1,7 @@
 // Import Library
-import { useState } from "react";
-import axios from "axios";
+import { useState, useRef } from "react";
+import emailjs from "@emailjs/browser";
 import PropTypes from "prop-types";
-
 
 // Import CSS
 import { styles } from "./styles";
@@ -11,52 +10,22 @@ import { styles } from "./styles";
 import { LoadingOutlined } from "@ant-design/icons";
 
 const ChatEmail = (props) => {
-  const [email, setEmail] = useState('');
   const [loading, setLoading] = useState(false);
 
-  const apiKey = import.meta.env.VITE_CE_PRIVATE_KEY;
+  const form = useRef();
 
-  function getOrCreateUser(callback) {
-    axios.put(
-        "https://api.chatengine.io/users/",
-        {
-          "username": email,
-          "secret": email,
-          "email": email,
-        },
-        { headers: { "Private-Key": apiKey } }
-      )
-      .then((r) => callback(r.data));
-  }
-
-  function getOrCreateChat(callback) {
-    axios.put(
-        "https://api.chatengine.io/chats/",
-        {
-          "usernames": ["admin", email],
-          "title": "New chat",
-          "is_direct_chat": true,
-        },
-        { headers: { "Private-Key": apiKey } }
-      )
-      .then((r) => callback(r.data));
-  }
-
-
-  function handleSubmit(event) {
-    event.preventDefault();
+  const sendEmail = (e) => {
+    e.preventDefault();
     setLoading(true);
-
-    console.log("mengirimkan email", email);
-
-    getOrCreateUser((user) => {
-      props.setUser(user);
-
-      getOrCreateChat((chat) => {
-        props.setChat(chat);
+    emailjs.sendForm('service_dzkytxv', 'template_ksymijj', form.current, 'Cn_tbf-bN-PpyJlHb')
+      .then((result) => {
+          console.log("pesan terkirim", result.text);
+          alert("Pesan Email Terkirim");
+          setLoading(false);
+      }, (error) => {
+          console.log("pesan gagal", error.text);
       });
-    });
-  }
+  };
 
   // Main Code
   return (
@@ -110,24 +79,26 @@ const ChatEmail = (props) => {
           textAlign: "center",
         }}
       >
-
         <div style={styles.topText}>
           Selamat Datang,
           <br /> Silahkan Kirim Email disini
         </div>
 
         <form
-          onSubmit={(e) => handleSubmit(e)}
+          ref={form}
+          onSubmit={sendEmail}
           style={{
             position: "relative",
             width: "100%",
             top: "8%",
           }}
         >
-          <input style={styles.inputOne} onChange={(e) => setEmail(e.target.value)} placeholder="Namamu" />
-          <input style={styles.inputOne} onChange={(e) => setEmail(e.target.value)} placeholder="Emailmu" />
-          <textarea style={styles.inputTwo} onChange={(e) => setEmail(e.target.value)} placeholder="Isi Pesan" />
-          <button style={styles.sendButton}>Kirim</button>
+          <input style={styles.inputOne} name="user_name" placeholder="Namamu" type="text" required />
+          <input style={styles.inputOne} name="user_email" placeholder="Emailmu" type="email" required />
+          <textarea style={styles.inputTwo} name="message" placeholder="Isi Pesan" required />
+          <button style={styles.sendButton} value="Send">
+            Kirim
+          </button>
         </form>
       </div>
     </div>
@@ -136,8 +107,6 @@ const ChatEmail = (props) => {
 
 // Props Validation
 ChatEmail.propTypes = {
-  setUser: PropTypes.func.isRequired,
-  setChat: PropTypes.func.isRequired,
   visible: PropTypes.bool.isRequired,
 };
 

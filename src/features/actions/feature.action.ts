@@ -66,3 +66,59 @@ export const getFeatureData = createAsyncThunk<FeatureData[], void, { rejectValu
     throw error;
   }
 });
+
+export const getFeatureAllTake = createAsyncThunk<FeatureData[], any, { rejectValue: AxiosError }>("Feature/getFeatureAllTake", async (params, thunkAPI) => {
+  const take = params.take;
+  const skip = params.page * params.take - params.take;
+  const newUrl = `/${take}/${skip}`;
+  
+  const response = await axios.get(urlFeature + newUrl, {
+    headers: {
+      "Content-Type": "application/json",
+    },
+  });
+
+  const data: FeatureData[] = await response.data;
+  return data;
+});
+
+export const getFeatureAllCount = createAsyncThunk<FeatureData[], any, { rejectValue: AxiosError }>("Feature/getFeatureAllCount", async (params) => {
+  const newUrl = `/jumlahall`;
+
+  const response = await axios.get(urlFeature + newUrl, {
+    headers: {
+      "Content-Type": "application/json",
+    },
+  });
+
+  const data: FeatureData[] = response.data;
+  return data;
+});
+
+export const getFeatureSearchAll = createAsyncThunk<FeatureData[], any, { rejectValue: AxiosError }>("Feature/getFeatureSearch", async (params, thunkAPI) => {
+  const take = params.take;
+  const skip = params.page * params.take - params.take;
+  const FeatureSearchUrl = `/search/${params.keyword}/${take}/${skip}`;
+
+  const responses = await axios.get(urlFeature + FeatureSearchUrl, {
+    headers: {
+      "Content-Type": "application/json",
+    },
+  });
+
+  const Feature: FeatureData[] = responses.data;
+  return Feature;
+});
+
+export const getFeatureSearchCount = createAsyncThunk<FeatureData[], any, { rejectValue: AxiosError }>("Feature/getFeatureSearchCount", async (params) => {
+  const FeatureCountUrl = `/jumlahsearch/${params.keyword}`;
+
+  const response = await axios.get(urlFeature + FeatureCountUrl, {
+    headers: {
+      "Content-Type": "application/json",
+    },
+  });
+
+  const data: FeatureData[] = response.data;
+  return data;
+});

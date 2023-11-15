@@ -15,7 +15,7 @@ import { Report1 } from "../../../../assets/assets";
 
 // Import Api
 import { useAppDispatch } from "../../../../hooks/useTypedSelector";
-import { getArticlePublished, getArticleNumber } from "../../../../features/actions/article.action";
+import { getArticlePublished } from "../../../../features/actions/article.action";
 
 // Additional Code
 const theme = createTheme({
@@ -100,7 +100,6 @@ const Report = () => {
   const dispatch = useAppDispatch();
   useEffect(() => {
     dispatch(getArticlePublished());
-    dispatch(getArticleNumber());
   }, [dispatch]);
 
 

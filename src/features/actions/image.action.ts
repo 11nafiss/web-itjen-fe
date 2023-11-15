@@ -52,13 +52,68 @@ export const deleteImage = createAsyncThunk<ImageData[], any>("image/deleteImage
 });
 
 export const getImageData = createAsyncThunk<ImageData[], void, { rejectValue: AxiosError }>("image/fetchAllImage", async (_, { rejectWithValue }) => {
-  try {
-    const response = await imagegalleryService.getJumlahImageGallery();
-    return response as ImageData[];
-  } catch (error) {
-    if (error instanceof AxiosError) {
-      return rejectWithValue(error);
-    }
-    throw error;
-  }
+  const response = await axios.get(urlImage, {
+    headers: {
+      "Content-Type": "application/json",
+    },
+  });
+
+  const data: ImageData[] = await response.data;
+  return data;
+});
+
+export const getImageAllTake = createAsyncThunk<ImageData[], any, { rejectValue: AxiosError }>("Image/getImageAllTake", async (params, thunkAPI) => {
+  const take = params.take;
+  const skip = params.page * params.take - params.take;
+  const newUrl = `/${take}/${skip}`;
+  
+  const response = await axios.get(urlImage + newUrl, {
+    headers: {
+      "Content-Type": "application/json",
+    },
+  });
+
+  const data: ImageData[] = await response.data;
+  return data;
+});
+
+export const getImageAllCount = createAsyncThunk<ImageData[], any, { rejectValue: AxiosError }>("Image/getImageAllCount", async (params) => {
+  const newUrl = `/jumlahall`;
+
+  const response = await axios.get(urlImage + newUrl, {
+    headers: {
+      "Content-Type": "application/json",
+    },
+  });
+
+  const data: ImageData[] = response.data;
+  return data;
+});
+
+export const getImageSearchAll = createAsyncThunk<ImageData[], any, { rejectValue: AxiosError }>("Image/getImageSearch", async (params, thunkAPI) => {
+  const take = params.take;
+  const skip = params.page * params.take - params.take;
+  const ImageSearchUrl = `/search/${params.keyword}/${take}/${skip}`;
+
+  const responses = await axios.get(urlImage + ImageSearchUrl, {
+    headers: {
+      "Content-Type": "application/json",
+    },
+  });
+
+  const Image: ImageData[] = responses.data;
+  return Image;
+});
+
+export const getImageSearchCount = createAsyncThunk<ImageData[], any, { rejectValue: AxiosError }>("Image/getImageSearchCount", async (params) => {
+  const ImageCountUrl = `/jumlahsearch/${params.keyword}`;
+
+  const response = await axios.get(urlImage + ImageCountUrl, {
+    headers: {
+      "Content-Type": "application/json",
+    },
+  });
+
+  const data: ImageData[] = response.data;
+  return data;
 });

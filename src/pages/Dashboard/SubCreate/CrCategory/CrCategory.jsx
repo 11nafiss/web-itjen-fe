@@ -1,11 +1,9 @@
 // Import Library
-import React from "react";
 import { Grid, Box, Typography, Divider } from "@mui/material";
-import { Button, IconButton, Input, FormControl, FormLabel } from "@mui/joy";
+import { Button, Input, FormControl, FormLabel } from "@mui/joy";
 import { styled } from "@mui/material/styles";
 
-// Import Assets
-import Visibility from "@mui/icons-material/Visibility";
+
 
 // MUI Styling CSS
 const Kotak = styled(Box)(() => ({
@@ -47,9 +45,6 @@ const GridFlex = styled(Grid)(({ theme }) => ({
 
 // Main Declaration
 const CrCategory = () => {
-  const [setUpload] = React.useState(false);
-
-  const handleClickUpload = () => setUpload((bool) => !bool);
 
 // Main Code
   return (
@@ -71,28 +66,6 @@ const CrCategory = () => {
                   </FormLabel>
                   <Input size="lg" name="Size" placeholder="..." sx={{ width: "100%", borderColor: "#252525" }} />
                 </FormControl>
-                <Box sx={{ width: "100%", paddingTop: "20px", display: "flex", flexDirection: { xs: "column", lg: "row" }, gap: "20px" }}>
-                  <FormControl sx={{ width: "100%" }}>
-                    <FormLabel
-                      sx={{
-                        fontSize: "18px",
-                      }}
-                    >
-                      Link
-                    </FormLabel>
-                    <Input
-                      size="lg"
-                      name="Size"
-                      placeholder="https://itjen.kemenkeu.go.id/.../"
-                      endDecorator={
-                        <IconButton aria-label="upload btn" color="neutral" onClick={handleClickUpload}>
-                          <Visibility />
-                        </IconButton>
-                      }
-                      sx={{ width: "100%", borderColor: "#252525" }}
-                    />
-                  </FormControl>
-                </Box>
               </GridFlex>
               <GridFlex item xs={12} md={12} sx={{ justifyContent: { xs: "center", md: "left" } }}>
                 <Box sx={{ height: "100%", width: "100%", display: "flex", flexDirection: "column", justifyContent: "left", gap: "30px" }}>

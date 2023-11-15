@@ -1,10 +1,13 @@
 import { PayloadAction, createSlice, combineReducers } from "@reduxjs/toolkit";
-import { createUser, deleteUser, getUserData, loginUser } from "../actions/user.action";
+import { createUser, deleteUser, getUserAllCount, getUserAllTake, getUserData, getUserSearchAll, getUserSearchCount, loginUser } from "../actions/user.action";
 import { UserData } from "../../models/user.model";
 
 interface typeOfInitialState {
   dataUser: UserData[];
   currentUser: UserData | null;
+  searchKeyword: string;
+  dataPerPage: number;
+  currentPage: number;
   isLoading: boolean;
   isSuccess: boolean;
   error: any;
@@ -13,6 +16,9 @@ interface typeOfInitialState {
 const initialState: typeOfInitialState = {
   dataUser: [],
   currentUser: null,
+  searchKeyword: "",
+  dataPerPage: 5,
+  currentPage: 1,
   isLoading: false,
   isSuccess: false,
   error: null,
@@ -69,7 +75,20 @@ export const deleteUserSlice = createSlice({
 export const userSlice = createSlice({
   name: "User",
   initialState,
-  reducers: {},
+  reducers: {
+    onNavigateNext: (state) => {
+      state.currentPage++;
+    },
+    onNavigatePrev: (state) => {
+      state.currentPage--;
+    },
+    onChangeDataPerPage: (state, action) => {
+      state.dataPerPage = action.payload;
+    },
+    onClickCurrentPage: (state, action) => {
+      state.currentPage = action.payload;
+    },
+  },
   extraReducers: (builder) => {
     builder.addCase(getUserData.pending, (state) => {
       state.isLoading = true;
@@ -120,6 +139,104 @@ export const loginSlice = createSlice({
   },
 });
 
+export const userAllTakeSlice = createSlice({
+  name: "userAllTake",
+  initialState,
+  reducers: {},
+  extraReducers: (builder) => {
+    builder.addCase(getUserAllTake.pending, (state) => {
+      state.isLoading = true;
+      state.error = "";
+    });
+
+    builder.addCase(getUserAllTake.fulfilled, (state, action: PayloadAction<UserData[]>) => {
+      state.dataUser = action.payload;
+    });
+
+    builder.addCase(getUserAllTake.rejected, (state, { payload }) => {
+      if (payload) {
+        state.isSuccess = false;
+      }
+    });
+  },
+});
+
+export const userAllCountSlice = createSlice({
+  name: "userAllCountReducer",
+  initialState,
+  reducers: {},
+  extraReducers: (builder) => {
+    builder.addCase(getUserAllCount.pending, (state) => {
+      (state.isLoading = true), (state.error = "");
+      console.log("PENDING REPORT....");
+    });
+
+    builder.addCase(getUserAllCount.fulfilled, (state, action: PayloadAction<UserData[]>) => {
+      state.dataUser = action.payload;
+      console.log("Filled REPORT");
+    });
+
+    builder.addCase(getUserAllCount.rejected, (state, { payload }) => {
+      if (payload) {
+        console.log("FAILED REPORT");
+        state.isSuccess = false;
+      }
+    });
+  },
+});
+
+export const userSearchAllSlice = createSlice({
+  name: "userSearchReducer",
+  initialState,
+  reducers: {
+    setSearchKeyword: (state, action) => {
+      state.searchKeyword = action.payload;
+    },
+  },
+  extraReducers: (builder) => {
+    builder.addCase(getUserSearchAll.pending, (state) => {
+      (state.isLoading = true), (state.error = "");
+      console.log("PENDING REPORT....");
+    });
+
+    builder.addCase(getUserSearchAll.fulfilled, (state, action: PayloadAction<UserData[]>) => {
+      state.dataUser = action.payload;
+      console.log("Filled REPORT");
+    });
+
+    builder.addCase(getUserSearchAll.rejected, (state, { payload }) => {
+      if (payload) {
+        console.log("FAILED REPORT");
+        state.isSuccess = false;
+      }
+    });
+  },
+});
+
+export const userSearchCountSlice = createSlice({
+  name: "userSearchCountReducer",
+  initialState,
+  reducers: {},
+  extraReducers: (builder) => {
+    builder.addCase(getUserSearchCount.pending, (state) => {
+      (state.isLoading = true), (state.error = "");
+      console.log("PENDING REPORT....");
+    });
+
+    builder.addCase(getUserSearchCount.fulfilled, (state, action: PayloadAction<UserData[]>) => {
+      state.dataUser = action.payload;
+      console.log("Filled REPORT");
+    });
+
+    builder.addCase(getUserSearchCount.rejected, (state, { payload }) => {
+      if (payload) {
+        console.log("FAILED REPORT");
+        state.isSuccess = false;
+      }
+    });
+  },
+});
+
 // export default userSlice.reducer
 
 const userReducer = combineReducers({
@@ -127,6 +244,10 @@ const userReducer = combineReducers({
   loginUser: loginSlice.reducer,
   createUser: createUserSlice.reducer,
   deleteUser: deleteUserSlice.reducer,
+  userAllTake: userAllTakeSlice.reducer,
+  userAllCount: userAllCountSlice.reducer,
+  userSearchAll: userSearchAllSlice.reducer,
+  userSearchCount: userSearchCountSlice.reducer,
 });
 
 export default userReducer;

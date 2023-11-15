@@ -20,6 +20,7 @@ import {
   ReportDash,
   UserDash,
   CategoryDash,
+  VitjenDash,
 } from "./SubDash/SubDash";
 import { 
   CrArticle,
@@ -34,19 +35,6 @@ import {
   CrReport,
   CrUser,
 } from "./SubCreate/SubCreate";
-import { 
-    EdArticle,
-    EdAudit,
-    EdBanner,
-    EdCategory,
-    EdEselon,
-    EdFeatur,
-    EdImage,
-    EdPlacem,
-    EdMenu,
-    EdReport,
-    EdUser, 
-} from "./SubEdit/SubEdit";
 
 // Main Declaration
 const Dashboard = () => {
@@ -72,30 +60,31 @@ const Dashboard = () => {
             <Route path="/laporan" element={<ReportDash />} />
             <Route path="/users" element={<UserDash />} />
             <Route path="/kategori" element={<CategoryDash />} />
+            <Route path="/visual" element={<VitjenDash />} />
 
-            <Route path="/artikel/tambah" element={<CrArticle />} />
-            <Route path="/banner/tambah" element={<CrBanner />} />
-            <Route path="/auditoria/tambah" element={<CrAudit />} />
-            <Route path="/eselon/tambah" element={<CrEselon />} />
-            <Route path="/layanan/tambah" element={<CrFeatur />} />
-            <Route path="/gambar/tambah" element={<CrImage />} />
-            <Route path="/pejabat/tambah" element={<CrPlacem />} />
-            <Route path="/menus/tambah" element={<CrMenu />} />
-            <Route path="/laporan/tambah" element={<CrReport />} />
-            <Route path="/users/tambah" element={<CrUser />} />
-            <Route path="/kategori/tambah" element={<CrCategory />} />
+            <Route path="/artikel/tambah" element={<CrArticle mode="create" />} />
+            <Route path="/banner/tambah" element={<CrBanner mode="create" />} />
+            <Route path="/auditoria/tambah" element={<CrAudit mode="create" />} />
+            <Route path="/eselon/tambah" element={<CrEselon mode="create" />} />
+            <Route path="/layanan/tambah" element={<CrFeatur mode="create" />} />
+            <Route path="/gambar/tambah" element={<CrImage mode="create" />} />
+            <Route path="/pejabat/tambah" element={<CrPlacem mode="create" />} />
+            <Route path="/menus/tambah" element={<CrMenu mode="create" />} />
+            <Route path="/laporan/tambah" element={<CrReport mode="create" />} />
+            <Route path="/users/tambah" element={<CrUser mode="create" />} />
+            <Route path="/kategori/tambah" element={<CrCategory mode="create" />} />
 
-            <Route path="/artikel/edit/:id" element={<EdArticle />} />
-            <Route path="/banner/edit/:id" element={<EdBanner />} />
-            <Route path="/auditoria/edit/:id" element={<EdAudit />} />
-            <Route path="/eselon/edit/:id" element={<EdEselon />} />
-            <Route path="/layanan/edit/:id" element={<EdFeatur />} />
-            <Route path="/gambar/edit/:id" element={<EdImage />} />
-            <Route path="/pejabat/edit/:id" element={<EdPlacem />} />
-            <Route path="/menus/edit/:id" element={<EdMenu />} />
-            <Route path="/laporan/edit/:id" element={<EdReport />} />
-            <Route path="/users/edit/:id" element={<EdUser />} />
-            <Route path="/kategori/edit/:id" element={<EdCategory />} />
+            <Route path="/artikel/edit/:id" element={<CrArticle mode="edit" />} />
+            <Route path="/banner/edit/:id" element={<CrBanner mode="edit" />} />
+            <Route path="/auditoria/edit/:id" element={<CrAudit mode="edit" />} />
+            <Route path="/eselon/edit/:id" element={<CrEselon mode="edit" />} />
+            <Route path="/layanan/edit/:id" element={<CrFeatur mode="edit" />} />
+            <Route path="/gambar/edit/:id" element={<CrImage mode="edit" />} />
+            <Route path="/pejabat/edit/:id" element={<CrPlacem mode="edit" />} />
+            <Route path="/menus/edit/:id" element={<CrMenu mode="edit" />} />
+            <Route path="/laporan/edit/:id" element={<CrReport mode="edit" />} />
+            <Route path="/users/edit/:id" element={<CrUser mode="edit" />} />
+            <Route path="/kategori/edit/:id" element={<CrCategory mode="edit" />} />
           </Routes>
         </div>
       </Box>

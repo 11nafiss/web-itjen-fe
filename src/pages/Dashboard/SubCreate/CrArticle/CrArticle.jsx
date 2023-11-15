@@ -1,6 +1,6 @@
 // Import Library
-import { useState } from "react";
-import { Link } from "react-router-dom";
+import { useCallback, useEffect, useRef, useState } from "react";
+import { Link, useParams } from "react-router-dom";
 import { Grid, Box, Typography, Divider } from "@mui/material";
 import { FormHelperText, Option, Select, Radio, RadioGroup, Button, IconButton, Input, FormControl, FormLabel, Checkbox } from "@mui/joy";
 import { styled } from "@mui/material/styles";
@@ -9,19 +9,26 @@ import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 import { useNavigate } from "react-router-dom";
+import moment from "moment";
 
 // Import Assets
-import UploadIcon from "@mui/icons-material/Upload";
 import AddIcon from "@mui/icons-material/Add";
+import UploadIcon from "@mui/icons-material/Upload";
 
 // Import Api
 import { useAppDispatch, useAppSelector } from "../../../../hooks/useTypedSelector";
-import { createArticle } from "../../../../features/actions/article.action";
+import { createArticle, editArticle } from "../../../../features/actions/article.action";
+import { artikelService } from "../../../../services/artikel.service";
 
 // Import Editor
 import "froala-editor/css/froala_style.min.css";
 import "froala-editor/css/froala_editor.pkgd.min.css";
+import "froala-editor/js/plugins.pkgd.min.js";
+import "font-awesome/css/font-awesome.css";
 import FroalaEditorComponent from "react-froala-wysiwyg";
+import { getCategory } from "../../../../features/actions/category.action";
+import { BASE_URL } from "../../../../services/api";
+import axios from "axios";
 
 // MUI Styling CSS
 const Kotak = styled(Box)(() => ({
@@ -61,54 +68,130 @@ const GridFlex = styled(Grid)(({ theme }) => ({
 }));
 
 // Main Declaration
-const CrArticle = () => {
+const CrArticle = (mode) => {
   const [title, setTitle] = useState("");
-  const [content] = useState("");
+  const [content, setContent] = useState("");
   const [featuredImage, setFeaturedImage] = useState("");
-  const [attachment] = useState("");
-  const [authorName] = useState("");
   const [categoryId, setCategoryId] = useState();
   const [published, setPublished] = useState("published");
-  const [tampilDiBeranda, setTampilDiBeranda] = useState();
-  const [pending] = useState();
+  const [tampilDiBeranda, setTampilDiBeranda] = useState(false);
   const [caption, setCaption] = useState("");
   const [publishedAt, setPublishedAt] = useState("");
-  const [thumbnail] = useState();
+  const [thumbnail, setThumbnail] = useState();
+  const [file, setFile] = useState();
+  const [progress, setProgress] = useState({ started: false, pc: 0 });
+  const [msg, SetMsg] = useState(null);
 
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
+  const { id } = useParams();
+  const inputFile = useRef();
+  const [articleId, SetArticleId] = useState(id);
 
   const { isLoading, errorMessage } = useAppSelector((state) => state.article.createArticle);
+  const dataCategory = useAppSelector((state) => state.category.categoryAll.dataCategory);
+  const currentUser = useAppSelector((state) => state.user.loginUser.currentUser);
 
-  const [model, setModel] = useState("Example Set");
+  const fetchArticleById = useCallback(async () => {
+    const response = await artikelService.getArtikelById(id);
+    SetArticleId(response.id);
+    setTitle(response.title);
+    setContent(response.content);
+    setFeaturedImage(response.featuredImage);
+    setThumbnail(response.thumbnail);
+    setCaption(response.caption);
+    setPublishedAt(moment(response.publishedAt));
+    setTampilDiBeranda(response.tampilDiBeranda);
+    setCategoryId(response.categoryId);
+    setPublished(response.published === true ? "published" : "pending");
+  }, [id]);
+
+  useEffect(() => {
+    dispatch(getCategory());
+    if (mode.mode === "edit") {
+      fetchArticleById();
+    }
+  }, [fetchArticleById, mode, dispatch]);
 
   const handleModelChange = (event) => {
-    setModel(event);
+    setContent(event);
+  };
+
+  function handleFile(event) {
+    setFile(event.target.files[0]);
+    setFeaturedImage(event.target.files[0].name);
+  }
+
+  const handleChange = (newValue) => {
+    setCategoryId(newValue);
+    console.log(newValue);
   };
 
   const handleUploadArticle = (e) => {
     e.preventDefault();
+    if (!file) {
+      console.log("No file Selected");
+      return;
+    }
+
     let articleCredentials = {
+      id: articleId,
       title,
       content,
       featuredImage,
-      attachment,
-      authorName,
+      authorName: currentUser.username,
       categoryId,
-      published,
+      published: published === "published" ? true : false,
+      pending: false,
       tampilDiBeranda,
-      pending,
       caption,
-      publishedAt,
+      publishedAt: moment(publishedAt).format(),
       thumbnail,
     };
-    dispatch(createArticle(articleCredentials));
+
+    if (mode.mode === "edit") {
+      dispatch(editArticle({ id, articleCredentials }));
+      console.log("ini id", id);
+    } else {
+      dispatch(createArticle(articleCredentials));
+    }
+
+    const url = `${BASE_URL}api/upload/imagesartikelthumbnail`;
+    const formData = new FormData();
+    formData.append("file", file);
+
+    SetMsg("Uploading...");
+    setProgress((prevState) => {
+      return { ...prevState, started: true };
+    });
+
+    const config = {
+      onUploadProgress: (progressEvent) => {
+        setProgress((prevState) => {
+          return { ...prevState, pc: progressEvent.progress * 100 };
+        });
+      },
+      headers: {
+        "content-type": "multipart/form-data",
+      },
+    };
+    axios
+      .post(url, formData, config)
+      .then((response) => {
+        SetMsg("Upload Successful");
+        console.log(response.data);
+      })
+      .catch((err) => {
+        SetMsg("Upload failed");
+        console.log(err);
+      });
+
     navigate("/dashboard/artikel");
   };
 
   // Main Code
   return (
-    <Box component="main" sx={{ flexGrow: 1, p: 3, backgroundColor: "#D9D9D9", height: "100%" }}>
+    <Box component="main" sx={{ flexGrow: 1, p: 3, backgroundColor: "#D9D9D9", height: "100%", maxWidth: "100vw" }}>
       <Grid container spacing={3}>
         <Grid item xs={12} md={12}>
           <Kotak>
@@ -140,7 +223,7 @@ const CrArticle = () => {
                         <DemoContainer components={["DatePicker"]} sx={{ padding: "0px", borderColor: "#252525" }}>
                           <DatePicker
                             value={publishedAt}
-                            onChange={(e) => setPublishedAt(e.target.value)}
+                            onChange={(e) => setPublishedAt(e)}
                             sx={{ width: "100%", "& .MuiOutlinedInput-root": { height: "48px", fontSize: "15px", overflow: "hidden", borderRadius: "7px" }, "& .MuiOutlinedInput-notchedOutline": { borderColor: "#252525", padding: "0px" } }}
                           />
                         </DemoContainer>
@@ -156,20 +239,23 @@ const CrArticle = () => {
                       </FormLabel>
                       <Box sx={{ width: "100%", display: "flex", flexDirection: "row", alignItems: "center" }}>
                         <Select
-                          value={categoryId}
-                          onChange={(e) => setCategoryId(e.target.value)}
+                          defaultValue={categoryId}
+                          onChange={handleChange}
                           placeholder="Pilih…"
                           sx={{
                             width: "100%",
                             borderColor: "#252525",
                             height: "48px",
                           }}
+                          required
                         >
-                          <Option value="1">Berita</Option>
-                          <Option value="2">Pengumuman</Option>
-                          <Option value="4">Siaran Pers</Option>
+                          {dataCategory.map((option) => (
+                            <Option key={option.categoryId} value={option.categoryId} label={option.categoryName}>
+                              {option.categoryName}
+                            </Option>
+                          ))}
                         </Select>
-                        <Link to="/dashboard/kategori/tambah">
+                        <Link to="/dashboard/kategori">
                           <IconButton aria-label="upload btn" color="neutral" sx={{ backgroundColor: "#252525", color: "#fff", "&:hover": { color: "#252525" }, height: "100%", borderRadius: "0px 10px 10px 0px" }}>
                             <AddIcon />
                           </IconButton>
@@ -189,17 +275,22 @@ const CrArticle = () => {
                     </FormLabel>
                     <Input
                       value={featuredImage}
-                      onChange={(e) => setFeaturedImage(e.target.value)}
+                      onChange={() => setFeaturedImage(inputFile.current)}
+                      onClick={() => inputFile.current.click()}
+                      readOnly
                       size="lg"
                       name="Size"
                       placeholder="Upload..."
                       endDecorator={
                         <IconButton aria-label="upload btn" color="neutral">
+                          <input hidden type="file" ref={inputFile} onChange={handleFile}></input>
                           <UploadIcon />
                         </IconButton>
                       }
                       sx={{ width: "100%", borderColor: "#252525" }}
                     />
+                    {progress.started && <progress max="100" value={progress.pc}></progress>}
+                    {msg && <span>{msg}</span>}
                   </FormControl>
                   <Box sx={{ width: "100%", paddingTop: "20px", display: "flex", flexDirection: { xs: "column", lg: "row" }, gap: "20px" }}>
                     <FormControl sx={{ width: "100%" }}>
@@ -270,18 +361,21 @@ const CrArticle = () => {
                 </GridFlex>
                 <GridFlex item xs={12} md={12} sx={{ justifyContent: { xs: "center", md: "left" } }}>
                   <Box sx={{ height: "100%", width: "100%", paddingTop: "10px", display: "flex", flexDirection: "column", justifyContent: "left", gap: "30px" }}>
-                    <FroalaEditorComponent tag="textarea" values={model} onModelChange={handleModelChange} />
+                    <Box sx={{ maxWidth: { xs: "350px", sm: "600px", md: "900px", lg: "1250px" } }}>
+                      <FroalaEditorComponent tag="textarea" model={content} onModelChange={handleModelChange} />
+                    </Box>
                     <Box sx={{ width: "100%", display: "flex", justifyContent: "left", padding: "50px 0px 0px 5px" }}>
-                      <Checkbox value={tampilDiBeranda} onChange={(e) => setTampilDiBeranda(e.target.value)} label="Tampilkan di Beranda?" color="neutral" defaultChecked />
+                      <Checkbox checked={tampilDiBeranda} onChange={(e) => setTampilDiBeranda(e.target.checked)} label="Tampilkan di Beranda?" color="neutral" />
                     </Box>
                     <Button
+                      type="submit"
                       sx={{
                         width: { xs: "100%", md: "25%" },
                         height: "48px",
                         fontSize: "16px",
                       }}
                     >
-                      {isLoading ? "Loading..." : "Submit"}
+                      {isLoading ? "Submit" : "Loading..."}
                     </Button>
                     {errorMessage && <FormHelperText sx={(theme) => ({ color: theme.vars.palette.danger[400] })}>Upload Article Gagal</FormHelperText>}
                   </Box>

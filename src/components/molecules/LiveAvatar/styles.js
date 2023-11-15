@@ -20,7 +20,7 @@ export const styles = {
     avatarHello: { 
         // Position
         position: 'absolute', 
-        left: 'calc(-100% - 44px - 30px)', 
+        left: 'calc(-100% - 80px)', 
         top: 'calc(50% - 24px)', 
         // Layering
         zIndex: '10000',

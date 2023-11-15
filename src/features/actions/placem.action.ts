@@ -72,3 +72,59 @@ export const getPlacemData = createAsyncThunk<PlacemData[], void, { rejectValue:
     throw error;
   }
 });
+
+export const getPlacemAllTake = createAsyncThunk<PlacemData[], any, { rejectValue: AxiosError }>("Placem/getPlacemAllTake", async (params, thunkAPI) => {
+  const take = params.take;
+  const skip = params.page * params.take - params.take;
+  const newUrl = `/${take}/${skip}`;
+  
+  const response = await axios.get(urlPlacem + newUrl, {
+    headers: {
+      "Content-Type": "application/json",
+    },
+  });
+
+  const data: PlacemData[] = await response.data;
+  return data;
+});
+
+export const getPlacemAllCount = createAsyncThunk<PlacemData[], any, { rejectValue: AxiosError }>("Placem/getPlacemAllCount", async (params) => {
+  const newUrl = `/jumlahall`;
+
+  const response = await axios.get(urlPlacem + newUrl, {
+    headers: {
+      "Content-Type": "application/json",
+    },
+  });
+
+  const data: PlacemData[] = response.data;
+  return data;
+});
+
+export const getPlacemSearchAll = createAsyncThunk<PlacemData[], any, { rejectValue: AxiosError }>("Placem/getPlacemSearch", async (params, thunkAPI) => {
+  const take = params.take;
+  const skip = params.page * params.take - params.take;
+  const PlacemSearchUrl = `/search/${params.keyword}/${take}/${skip}`;
+
+  const responses = await axios.get(urlPlacem + PlacemSearchUrl, {
+    headers: {
+      "Content-Type": "application/json",
+    },
+  });
+
+  const Placem: PlacemData[] = responses.data;
+  return Placem;
+});
+
+export const getPlacemSearchCount = createAsyncThunk<PlacemData[], any, { rejectValue: AxiosError }>("Placem/getPlacemSearchCount", async (params) => {
+  const PlacemCountUrl = `/jumlahsearch/${params.keyword}`;
+
+  const response = await axios.get(urlPlacem + PlacemCountUrl, {
+    headers: {
+      "Content-Type": "application/json",
+    },
+  });
+
+  const data: PlacemData[] = response.data;
+  return data;
+});

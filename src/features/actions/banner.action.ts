@@ -70,3 +70,59 @@ export const getBanner = createAsyncThunk<BannerData[], void, { rejectValue: Axi
     throw error;
   }
 });
+
+export const getBannerAllTake = createAsyncThunk<BannerData[], any, { rejectValue: AxiosError }>("Banner/getBannerAllTake", async (params, thunkAPI) => {
+  const take = params.take;
+  const skip = params.page * params.take - params.take;
+  const newUrl = `/${take}/${skip}`;
+  
+  const response = await axios.get(urlBanner + newUrl, {
+    headers: {
+      "Content-Type": "application/json",
+    },
+  });
+
+  const data: BannerData[] = await response.data;
+  return data;
+});
+
+export const getBannerAllCount = createAsyncThunk<BannerData[], any, { rejectValue: AxiosError }>("Banner/getBannerAllCount", async (params) => {
+  const newUrl = `/jumlahall`;
+
+  const response = await axios.get(urlBanner + newUrl, {
+    headers: {
+      "Content-Type": "application/json",
+    },
+  });
+
+  const data: BannerData[] = response.data;
+  return data;
+});
+
+export const getBannerSearchAll = createAsyncThunk<BannerData[], any, { rejectValue: AxiosError }>("Banner/getBannerSearch", async (params, thunkAPI) => {
+  const take = params.take;
+  const skip = params.page * params.take - params.take;
+  const BannerSearchUrl = `/search/${params.keyword}/${take}/${skip}`;
+
+  const responses = await axios.get(urlBanner + BannerSearchUrl, {
+    headers: {
+      "Content-Type": "application/json",
+    },
+  });
+
+  const Banner: BannerData[] = responses.data;
+  return Banner;
+});
+
+export const getBannerSearchCount = createAsyncThunk<BannerData[], any, { rejectValue: AxiosError }>("Banner/getBannerSearchCount", async (params) => {
+  const BannerCountUrl = `/jumlahsearch/${params.keyword}`;
+
+  const response = await axios.get(urlBanner + BannerCountUrl, {
+    headers: {
+      "Content-Type": "application/json",
+    },
+  });
+
+  const data: BannerData[] = response.data;
+  return data;
+});

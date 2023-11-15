@@ -1,0 +1,35 @@
+// Export CSS
+export const styles = {
+  textBox: {
+    position: "absolute",
+    top: "50%",
+    left: "50%",
+    transform: "translate(-50%, -50%)",
+    color: "#fff",
+    height: "100%",
+    width: "100%",
+    backdropFilter: "brightness(30%)",
+    display: "flex",
+    flexDirection: "column",
+    justifyContent: "center",
+    paddingLeft: "5%",
+    gap: "0px",
+  },
+  textButton: {
+    width: "100px",
+    height: "50px",
+    color: "#fff",
+    fontSize: "16px",
+    borderColor: "#fff",
+    borderWidth: "5px",
+    marginTop: "5px",
+    boxShadow: "none",
+    cursor: "pointer",
+    transition: ".5s ease all",
+    "&:hover": {
+      backgroundColor: "#fff",
+      color: "#252525",
+      fontWeight: "bold",
+    },
+  },
+};

@@ -11,77 +11,80 @@ import { MdOutlineArrowCircleRight, MdOutlineDownloadForOffline } from "react-ic
 
 // Import Api
 import { useAppDispatch, useAppSelector } from "../../../hooks/useTypedSelector";
-import { getAuditoriaTake } from "../../../features/actions/auditoria.action";
+import { getAuditoriaAllTake } from "../../../features/actions/auditoria.action";
 import { BASE_URL } from "../../../services/api";
+
+// MUI Styling CSS
+const Background = styled(Box)(() => ({
+  backgroundColor: "#F05023",
+  color: "#fff",
+}));
+
+const CustomContainer = styled(Container)(({ theme }) => ({
+  display: "flex",
+  justifyContent: "space-around",
+  gap: theme.spacing(5),
+  padding: "50px 0px",
+  [theme.breakpoints.down("md")]: {
+    flexDirection: "column",
+    textAlign: "center",
+  },
+}));
+
+const CustomTitle = styled(Typography)(() => ({
+  fontSize: "32px",
+  color: "#fff",
+  fontWeight: "700",
+  margin: "5px 0px",
+}));
+
+const CustomText = styled(Typography)(({ theme }) => ({
+  fontSize: "16px",
+  color: "#fff",
+  fontWeight: "500",
+  margin: "20px 0px",
+  [theme.breakpoints.down("md")]: {
+    margin: "20px",
+  },
+}));
+
+const ButtonText = styled(Typography)(() => ({
+  fontSize: "16px",
+  color: "#0D5CAB",
+  fontWeight: "600",
+}));
+
+const ButtonAudit = styled(Button)(() => ({
+  backgroundColor: "#fff",
+  padding: "9px",
+  margin: "20px 0px",
+  fontSize: "16px",
+  fontWeight: "500",
+  display: "flex",
+  justifyContent: "space-between",
+  "&:hover": {
+    borderColor: "#0D5CAB",
+  },
+  borderWidth: "2px",
+  borderColor: "#0D5CAB",
+}));
+
+const IconBox = styled(Box)(() => ({
+  display: "flex",
+  fontSize: "24px",
+  marginLeft: "10px",
+}));
 
 // Main Declaration
 const Auditoria = () => {
   const dispatch = useAppDispatch();
+  const take = 1;
+  const page = 1;
+
   useEffect(() => {
-    dispatch(getAuditoriaTake());
+    dispatch(getAuditoriaAllTake({take, page}));
   }, [dispatch]);
-  const { dataAuditoria } = useAppSelector((state) => state.auditoria.auditoriaTake);
-
-  // MUI Styling CSS
-  const Background = styled(Box)(() => ({
-    backgroundColor: "#F05023",
-    color: "#fff",
-  }));
-
-  const CustomContainer = styled(Container)(({ theme }) => ({
-    display: "flex",
-    justifyContent: "space-around",
-    gap: theme.spacing(5),
-    padding: "50px 0px",
-    [theme.breakpoints.down("md")]: {
-      flexDirection: "column",
-      textAlign: "center",
-    },
-  }));
-
-  const CustomTitle = styled(Typography)(() => ({
-    fontSize: "32px",
-    color: "#fff",
-    fontWeight: "700",
-    margin: "5px 0px",
-  }));
-
-  const CustomText = styled(Typography)(({ theme }) => ({
-    fontSize: "16px",
-    color: "#fff",
-    fontWeight: "500",
-    margin: "20px 0px",
-    [theme.breakpoints.down("md")]: {
-      margin: "20px",
-    },
-  }));
-
-  const ButtonText = styled(Typography)(() => ({
-    fontSize: "16px",
-    color: "#0D5CAB",
-    fontWeight: "600",
-  }));
-
-  const ButtonAudit = styled(Button)(() => ({
-    backgroundColor: "#fff",
-    padding: "9px",
-    margin: "20px 0px",
-    fontSize: "16px",
-    fontWeight: "500",
-    display: "flex",
-    justifyContent: "space-between",
-    "&:hover": {
-      borderColor: "#0D5CAB",
-    },
-    borderWidth: "2px",
-    borderColor: "#0D5CAB",
-  }));
-
-  const IconBox = styled(Box)(() => ({
-    display: "flex",
-    fontSize: "24px",
-    marginLeft: "10px",
-  }));
+  const { dataAuditoria } = useAppSelector((state) => state.auditoria.auditoriaAllTake);
 
   // Main Code
   return (

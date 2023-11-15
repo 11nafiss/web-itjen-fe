@@ -1,6 +1,6 @@
 // Import Library
 import { Routes, Route } from "react-router-dom";
-import { MainApp, Admin, Dashboard } from "../../pages/index";
+import { MainApp, Admin, Dashboard, Visual } from "../../pages/index";
 
 // Import Api
 import { useAppSelector } from "../../hooks/useTypedSelector";
@@ -14,6 +14,7 @@ const Router = () => {
       <Routes>
         <Route path="/*" element={<MainApp />} />
         <Route path="admin-login/*" element={<Admin />} />
+        <Route path="visual/*" element={<Visual />} />
         <Route path="dashboard/*" element={<Dashboard />} />
       </Routes>
     );
@@ -21,6 +22,7 @@ const Router = () => {
     return (
       <Routes>
         <Route path="/*" element={<MainApp />} />
+        <Route path="visual/*" element={<Visual />} />
         <Route path="admin-login/*" element={<Admin />} />
       </Routes>
     );

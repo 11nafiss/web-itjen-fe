@@ -87,16 +87,58 @@ export const getAuditoriaData = createAsyncThunk<AuditoriaData[], void, { reject
   }
 });
 
-export const getAuditoriaTake = createAsyncThunk<AuditoriaData[], void, { rejectValue: AxiosError }>("auditoria/fetchAllAuditoria", async (_, { rejectWithValue }) => {
-  try {
-    const take = 1;
-    const skip = 0;
-    const response = await auditoriaService.getAuditoriaTake(take, skip);
-    return response as AuditoriaData[];
-  } catch (error) {
-    if (error instanceof AxiosError) {
-      return rejectWithValue(error);
-    }
-    throw error;
-  }
+export const getAuditoriaAllTake = createAsyncThunk<AuditoriaData[], any, { rejectValue: AxiosError }>("Auditoria/getAuditoriaAllTake", async (params, thunkAPI) => {
+  const take = params.take;
+  const skip = params.page * params.take - params.take;
+  const newUrl = `/${take}/${skip}`;
+  
+  const response = await axios.get(urlAuditoria + newUrl, {
+    headers: {
+      "Content-Type": "application/json",
+    },
+  });
+
+  const data: AuditoriaData[] = await response.data;
+  return data;
+});
+
+export const getAuditoriaAllCount = createAsyncThunk<AuditoriaData[], any, { rejectValue: AxiosError }>("Auditoria/getAuditoriaAllCount", async (params) => {
+  const newUrl = `/jumlahall`;
+
+  const response = await axios.get(urlAuditoria + newUrl, {
+    headers: {
+      "Content-Type": "application/json",
+    },
+  });
+
+  const data: AuditoriaData[] = response.data;
+  return data;
+});
+
+export const getAuditoriaSearchAll = createAsyncThunk<AuditoriaData[], any, { rejectValue: AxiosError }>("Auditoria/getAuditoriaSearch", async (params, thunkAPI) => {
+  const take = params.take;
+  const skip = params.page * params.take - params.take;
+  const AuditoriaSearchUrl = `/search/${params.keyword}/${take}/${skip}`;
+
+  const responses = await axios.get(urlAuditoria + AuditoriaSearchUrl, {
+    headers: {
+      "Content-Type": "application/json",
+    },
+  });
+
+  const Auditoria: AuditoriaData[] = responses.data;
+  return Auditoria;
+});
+
+export const getAuditoriaSearchCount = createAsyncThunk<AuditoriaData[], any, { rejectValue: AxiosError }>("Auditoria/getAuditoriaSearchCount", async (params) => {
+  const AuditoriaCountUrl = `/jumlahsearch/${params.keyword}`;
+
+  const response = await axios.get(urlAuditoria + AuditoriaCountUrl, {
+    headers: {
+      "Content-Type": "application/json",
+    },
+  });
+
+  const data: AuditoriaData[] = response.data;
+  return data;
 });

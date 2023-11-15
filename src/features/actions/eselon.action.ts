@@ -66,3 +66,59 @@ export const getEselonData = createAsyncThunk<EselonData[], void, { rejectValue:
     throw error;
   }
 });
+
+export const getEselonAllTake = createAsyncThunk<EselonData[], any, { rejectValue: AxiosError }>("Eselon/getEselonAllTake", async (params, thunkAPI) => {
+  const take = params.take;
+  const skip = params.page * params.take - params.take;
+  const newUrl = `/${take}/${skip}`;
+  
+  const response = await axios.get(urlEselon + newUrl, {
+    headers: {
+      "Content-Type": "application/json",
+    },
+  });
+
+  const data: EselonData[] = await response.data;
+  return data;
+});
+
+export const getEselonAllCount = createAsyncThunk<EselonData[], any, { rejectValue: AxiosError }>("Eselon/getEselonAllCount", async (params) => {
+  const newUrl = `/jumlahall`;
+
+  const response = await axios.get(urlEselon + newUrl, {
+    headers: {
+      "Content-Type": "application/json",
+    },
+  });
+
+  const data: EselonData[] = response.data;
+  return data;
+});
+
+export const getEselonSearchAll = createAsyncThunk<EselonData[], any, { rejectValue: AxiosError }>("Eselon/getEselonSearch", async (params, thunkAPI) => {
+  const take = params.take;
+  const skip = params.page * params.take - params.take;
+  const EselonSearchUrl = `/search/${params.keyword}/${take}/${skip}`;
+
+  const responses = await axios.get(urlEselon + EselonSearchUrl, {
+    headers: {
+      "Content-Type": "application/json",
+    },
+  });
+
+  const Eselon: EselonData[] = responses.data;
+  return Eselon;
+});
+
+export const getEselonSearchCount = createAsyncThunk<EselonData[], any, { rejectValue: AxiosError }>("Eselon/getEselonSearchCount", async (params) => {
+  const EselonCountUrl = `/jumlahsearch/${params.keyword}`;
+
+  const response = await axios.get(urlEselon + EselonCountUrl, {
+    headers: {
+      "Content-Type": "application/json",
+    },
+  });
+
+  const data: EselonData[] = response.data;
+  return data;
+});

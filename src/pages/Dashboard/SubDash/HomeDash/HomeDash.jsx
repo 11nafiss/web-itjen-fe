@@ -8,70 +8,76 @@ import { GrKuartal, GrBulanan } from "../../../../assets/assets";
 import { AiFillCalendar } from "react-icons/ai";
 import { MdVisibility } from "react-icons/md";
 
+// Import Api
+import { useAppSelector } from "../../../../hooks/useTypedSelector";
+
+// MUI Styling CSS
+const CustomBox = styled(Box)(() => ({
+  borderRadius: "15px",
+  backgroundColor: "#fff",
+  width: "100%",
+  minHeight: "150px",
+  padding: "30px",
+}));
+
+const CustomSquare = styled(Box)(() => ({
+  display: "flex",
+  justifyContent: "start",
+  flexDirection: "column",
+  alignItems: "center",
+  borderRadius: "15px",
+  backgroundColor: "#fff",
+  width: "100%",
+  height: "100%",
+  padding: "20px",
+}));
+
+const CustomTitle = styled(Typography)(() => ({
+  fontSize: "36px",
+  fontWeight: "700",
+  display: "flex",
+  justifyContent: "center",
+  alignItems: "center",
+  height: "80px",
+}));
+
+const CustomText = styled(Typography)(() => ({
+  fontSize: "20px",
+  fontWeight: "700",
+}));
+
+const SpaceGrid = styled(Grid)(() => ({
+  display: "flex",
+  justifyContent: "space-between",
+  width: "100%",
+}));
+
+const GridFlex = styled(Grid)(() => ({
+  display: "flex",
+  alignItems: "center",
+  width: "100%",
+  height: "60px",
+}));
+
+const IconBox = styled(Box)(() => ({
+  display: "flex",
+  justifyContent: "center",
+  alignItems: "center",
+  marginInline: "10px",
+  height: "100%",
+  fontSize: "24px",
+}));
+
+const ImgBox = styled(Box)(() => ({
+  display: "flex",
+  justifyContent: "center",
+}));
+
 // Main Declaration
 const HomeDash = () => {
 
-// MUI Styling CSS
-  const CustomBox = styled(Box)(() => ({
-    borderRadius: "15px",
-    backgroundColor: "#fff",
-    width: "100%",
-    minHeight: "150px",
-    padding: "30px",
-  }));
-
-  const CustomSquare = styled(Box)(() => ({
-    display: "flex",
-    justifyContent: "start",
-    flexDirection: "column",
-    alignItems: "center",
-    borderRadius: "15px",
-    backgroundColor: "#fff",
-    width: "100%",
-    height: "100%",
-    padding: "20px",
-  }));
-
-  const CustomTitle = styled(Typography)(() => ({
-    fontSize: "36px",
-    fontWeight: "700",
-    display: "flex",
-    justifyContent: "center",
-    alignItems: "center",
-    height: "80px",
-  }));
-
-  const CustomText = styled(Typography)(() => ({
-    fontSize: "20px",
-    fontWeight: "700",
-  }));
-
-  const SpaceGrid = styled(Grid)(() => ({
-    display: "flex",
-    justifyContent: "space-between",
-    width: "100%",
-  }));
-
-  const GridFlex = styled(Grid)(() => ({
-    display: "flex",
-    alignItems: "center",
-    width: "100%",
-    height: "60px",
-  }));
-
-  const IconBox = styled(Box)(() => ({
-    display: "flex",
-    justifyContent: "center",
-    alignItems: "center",
-    marginInline: "10px",
-    height: "100%",
-    fontSize: "24px",
-  }));
-
-  const ImgBox = styled(Box)(() => ({
-    display: "flex",
-    justifyContent: "center",
-  }));
+  const dataUser = useAppSelector((state) => state.user.loginUser.currentUser);
+  console.log("ini", dataUser.username)
 
 // Main Code
   return (
@@ -79,7 +85,7 @@ const HomeDash = () => {
       <Grid container spacing={3}>
         <Grid item xs={12} md={12}>
           <CustomBox>
-            <CustomTitle>Halo, Admin</CustomTitle>
+            <CustomTitle>Halo, {dataUser.username}</CustomTitle>
             <Divider sx={{ borderSize: "20px" }} />
             <SpaceGrid container>
               <GridFlex item xs={12} md={6} sx={{ display: "flex", justifyContent: { xs: "center", md: "start " }, margin: { xs: "30px 0px", md: "0px 0px" } }}>

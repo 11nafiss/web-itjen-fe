@@ -1,7 +1,7 @@
 // @ts-ignore
 
 // Import Library
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useKeenSlider } from "keen-slider/react";
 import "keen-slider/keen-slider.min.css";
 import { Grid, Container, Box, Typography } from "@mui/material";
@@ -9,13 +9,33 @@ import Tooltip from "@mui/joy/Tooltip";
 import { styled } from "@mui/material/styles";
 import PropTypes from "prop-types";
 
+// Import Api
+import { useAppDispatch, useAppSelector } from "../../../hooks/useTypedSelector";
+import { getFeatureData } from "../../../features/actions/feature.action";
+
 // Import Assets
-import { GiWhistle } from "react-icons/gi";
-import { HiOutlineCursorClick, HiDocumentReport } from "react-icons/hi";
-import { IoChatboxEllipses } from "react-icons/io5";
-import { GoFileSubmodule } from "react-icons/go";
-import { RiBook2Fill, RiPencilRuler2Fill } from "react-icons/ri";
-import { AiFillPieChart } from "react-icons/ai";
+import { WhisIcon } from "../../../assets/assets";
+import { Link } from "react-router-dom";
+
+const CustomBox = styled(Box)(() => ({
+  display: "flex",
+  justifyContent: "center",
+  alignItems: "center",
+  borderRadius: "100%",
+  backgroundColor: "#08347C",
+  width: "110px",
+  height: "110px",
+  marginTop: "15px",
+  marginInline: "auto",
+}));
+
+const CustomType = styled(Typography)(() => ({
+  color: "#000000",
+  fontSize: "16px",
+  fontWeight: "700",
+  textAlign: "center",
+  cursor: "pointer",
+}));
 
 // Main Declaration
 const Features = () => {
@@ -29,17 +49,28 @@ const Features = () => {
     },
     mode: "free-snap",
     slides: {
-      perView: 2,
+      perView: 6,
       spacing: 10,
     },
     breakpoints: {
+      "(max-width: 1200px)": {
+        slides: {
+          perView: 4,
+        },
+      },
       "(max-width: 800px)": {
         slides: {
-          perView: 1,
+          perView: 2,
         },
       },
     },
   });
+
+  const dispatch = useAppDispatch();
+  useEffect(() => {
+    dispatch(getFeatureData());
+  }, [dispatch]);
+  const { dataFeature } = useAppSelector((state) => state.feature.featureAll);
 
   // MUI Styling CSS
   const CustomContainer = styled(Container)(({ theme }) => ({
@@ -51,25 +82,6 @@ const Features = () => {
       flexDirection: "column",
       textAlign: "center",
     },
-  }));
-
-  const CustomBox = styled(Box)(() => ({
-    display: "flex",
-    justifyContent: "center",
-    alignItems: "center",
-    borderRadius: "100%",
-    backgroundColor: "#08347C",
-    width: "110px",
-    height: "110px",
-    marginTop: "15px",
-  }));
-
-  const CustomType = styled(Typography)(() => ({
-    color: "#000000",
-    fontSize: "16px",
-    fontWeight: "700",
-    textAlign: "center",
-    cursor: "pointer",
   }));
 
   // Main Code
@@ -91,132 +103,30 @@ const Features = () => {
         <Grid item xs={12}>
           <div className="navigation-wrapper">
             <div ref={sliderRef} className="keen-slider">
-              <div className="keen-slider__slide">
-                <Grid container spacing={1}>
-                  <Grid item xs={6} lg={3} sx={{ margin: "15px 0px" }}>
+              {dataFeature.map((obj, index) => (
+                <div key={index} className="keen-slider__slide">
+                  <Link to={obj.link} className="link">
                     <Grid container spacing={2}>
                       <Grid item xs={12} sx={{ display: "flex", justifyContent: "center", alignItems: "center" }}>
-                        <Tooltip title="WISE" color="primary" placement="top" variant="solid" arrow sx={{ cursor: "pointer" }}>
-                          <CustomBox style={{ color: "#fff", fontSize: "60px" }}>
-                            <GiWhistle  />
+                        <Tooltip title={obj.deskripsi} color="primary" placement="top" variant="solid" arrow sx={{ cursor: "pointer" }}>
+                          <CustomBox style={{ padding: "20px" }}>
+                            <img src={WhisIcon} style={{ width: "50px" }} />
                           </CustomBox>
                         </Tooltip>
                       </Grid>
                       <Grid item xs={12} sx={{ display: "flex", justifyContent: "center", alignItems: "center" }}>
-                        <CustomType>WISE</CustomType>
+                        <CustomType>{obj.singkatan}</CustomType>
                       </Grid>
                     </Grid>
-                  </Grid>
-                  <Grid item xs={6} lg={3} sx={{ margin: "10px 0px" }}>
-                    <Grid container spacing={2}>
-                      <Grid item xs={12} sx={{ display: "flex", justifyContent: "center", alignItems: "center" }}>
-                        <Tooltip title="AlPHA" color="primary" placement="top" variant="solid" arrow sx={{ cursor: "pointer" }}>
-                          <CustomBox style={{ color: "#fff", fontSize: "60px" }}>
-                            <HiOutlineCursorClick  />
-                          </CustomBox>
-                        </Tooltip>
-                      </Grid>
-                      <Grid item xs={12} sx={{ display: "flex", justifyContent: "center", alignItems: "center" }}>
-                        <CustomType>ALPHA</CustomType>
-                      </Grid>
-                    </Grid>
-                  </Grid>
-                  <Grid item xs={6} lg={3} sx={{ margin: "10px 0px" }}>
-                    <Grid container spacing={2}>
-                      <Grid item xs={12} sx={{ display: "flex", justifyContent: "center", alignItems: "center" }}>
-                        <Tooltip title="PNPB" color="primary" placement="top" variant="solid" arrow sx={{ cursor: "pointer" }}>
-                          <CustomBox style={{ color: "#fff", fontSize: "60px" }}>
-                            <IoChatboxEllipses  />
-                          </CustomBox>
-                        </Tooltip>
-                      </Grid>
-                      <Grid item xs={12} sx={{ display: "flex", justifyContent: "center", alignItems: "center" }}>
-                        <CustomType>PNPB</CustomType>
-                      </Grid>
-                    </Grid>
-                  </Grid>
-                  <Grid item xs={6} lg={3} sx={{ margin: "10px 0px" }}>
-                    <Grid container spacing={2}>
-                      <Grid item xs={12} sx={{ display: "flex", justifyContent: "center", alignItems: "center" }}>
-                        <Tooltip title="RKAKL" color="primary" placement="top" variant="solid" arrow sx={{ cursor: "pointer" }}>
-                          <CustomBox style={{ color: "#fff", fontSize: "60px" }}>
-                            <AiFillPieChart />
-                          </CustomBox>
-                        </Tooltip>
-                      </Grid>
-                      <Grid item xs={12} sx={{ display: "flex", justifyContent: "center", alignItems: "center" }}>
-                        <CustomType>RKAKL</CustomType>
-                      </Grid>
-                    </Grid>
-                  </Grid>
-                </Grid>
-              </div>
-              <div className="keen-slider__slide">
-                <Grid container spacing={1}>
-                  <Grid item xs={6} lg={3} sx={{ margin: "10px 0px" }}>
-                    <Grid container spacing={2}>
-                      <Grid item xs={12} sx={{ display: "flex", justifyContent: "center", alignItems: "center" }}>
-                        <Tooltip title="Prouki" color="primary" placement="top" variant="solid" arrow sx={{ cursor: "pointer" }}>
-                          <CustomBox style={{ color: "#fff", fontSize: "60px" }}>
-                            <GoFileSubmodule />
-                          </CustomBox>
-                        </Tooltip>
-                      </Grid>
-                      <Grid item xs={12} sx={{ display: "flex", justifyContent: "center", alignItems: "center" }}>
-                        <CustomType>Prouki</CustomType>
-                      </Grid>
-                    </Grid>
-                  </Grid>
-                  <Grid item xs={6} lg={3} sx={{ margin: "10px 0px" }}>
-                    <Grid container spacing={2}>
-                      <Grid item xs={12} sx={{ display: "flex", justifyContent: "center", alignItems: "center" }}>
-                        <Tooltip title="Library" color="primary" placement="top" variant="solid" arrow sx={{ cursor: "pointer" }}>
-                          <CustomBox style={{ color: "#fff", fontSize: "55px" }}>
-                            <RiBook2Fill />
-                          </CustomBox>
-                        </Tooltip>
-                      </Grid>
-                      <Grid item xs={12} sx={{ display: "flex", justifyContent: "center", alignItems: "center" }}>
-                        <CustomType>Library</CustomType>
-                      </Grid>
-                    </Grid>
-                  </Grid>
-                  <Grid item xs={6} lg={3} sx={{ margin: "10px 0px" }}>
-                    <Grid container spacing={2}>
-                      <Grid item xs={12} sx={{ display: "flex", justifyContent: "center", alignItems: "center" }}>
-                        <Tooltip title="EReviuLK" color="primary" placement="top" variant="solid" arrow sx={{ cursor: "pointer" }}>
-                          <CustomBox style={{ color: "#fff", fontSize: "60px" }}>
-                            <HiDocumentReport />
-                          </CustomBox>
-                        </Tooltip>
-                      </Grid>
-                      <Grid item xs={12} sx={{ display: "flex", justifyContent: "center", alignItems: "center" }}>
-                        <CustomType>ERviuLK</CustomType>
-                      </Grid>
-                    </Grid>
-                  </Grid>
-                  <Grid item xs={6} lg={3} sx={{ margin: "10px 0px" }}>
-                    <Grid container spacing={2}>
-                      <Grid item xs={12} sx={{ display: "flex", justifyContent: "center", alignItems: "center" }}>
-                        <Tooltip title="Rules" color="primary" placement="top" variant="solid" arrow sx={{ cursor: "pointer" }}>
-                          <CustomBox style={{ color: "#fff", fontSize: "60px" }}>
-                            <RiPencilRuler2Fill />
-                          </CustomBox>
-                        </Tooltip>
-                      </Grid>
-                      <Grid item xs={12} sx={{ display: "flex", justifyContent: "center", alignItems: "center" }}>
-                        <CustomType>Rules</CustomType>
-                      </Grid>
-                    </Grid>
-                  </Grid>
-                </Grid>
-              </div>
+                  </Link>
+                </div>
+              ))}
             </div>
             {loaded && instanceRef.current && (
               <>
                 <Arrow left onClick={(e) => e.stopPropagation() || instanceRef.current?.prev()} disabled={currentSlide === 0} />
 
-                <Arrow onClick={(e) => e.stopPropagation() || instanceRef.current?.next()} disabled={currentSlide === instanceRef.current.track.details.slides.length - 1} />
+                <Arrow onClick={(e) => e.stopPropagation() || instanceRef.current?.next()} disabled={currentSlide === instanceRef.current.track.details - 1} />
               </>
             )}
           </div>

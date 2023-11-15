@@ -23,17 +23,17 @@ const MainApp = () => {
           <Route path="/" element={<Home />} />
           <Route path="/profil/visi" element={<Vision />} />
           <Route path="/profil/nilai-kemenkeu" element={<Values />} />
-          <Route path="/profil/organisasi" element={<Organ />} />
-          <Route path="/profil/organisasi/bsip" element={<OrgBsip />} />
-          <Route path="/profil/pejabat" element={<Placem />} />
+          <Route path="/organisasi" element={<Organ />} />
+          <Route path="/organisasi/bsip" element={<OrgBsip />} />
+          <Route path="/pejabat" element={<Placem />} />
           <Route path="/profil/pejabat/irjen" element={<ProIrjen />} />
           <Route path="/galeri" element={<Gallery />} />
           <Route path="/auditoria" element={<Audit />} />
           <Route path="/baca/:id" element={<Books />} />
-          <Route path="/laporan-kinerja" element={<Report />} />
+          <Route path="/laporan/kinerja" element={<Report />} />
           <Route path="/baca/lakin-itjen-2022" element={<Books2 />} />
           <Route path="/cari" element={<Search />} />
-          <Route path="/:category/:title" element={<Article />} />
+          <Route path="/artikel/:category/:title" element={<Article />} />
           <Route path="*" element={<NotFound />} />
         </Routes>
         <LiveChat />

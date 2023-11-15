@@ -9,6 +9,7 @@ import { styled } from "@mui/material/styles";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import { PopupNav, SearchNav } from "../../components";
 
+
 // Main Declaration
 const Navbar = () => {
   // MUI Styling CSS
@@ -49,17 +50,16 @@ const Navbar = () => {
     fontWeight: 500,
   }));
 
-
   // Main Code
   return (
     <Box sx={{ display: "flex", alignItems: "center" }}>
       <Box sx={{ display: { xs: "none", lg: "block" } }}>
-        <Link to="/" className="link">
-          <MenuButton variant="text">Beranda</MenuButton>
-        </Link>
         <PopupState variant="popover" popupId="demo-popup-menu">
           {(popupState) => (
             <React.Fragment>
+              <Link to="/" className="link">
+                <MenuButton variant="text">Beranda</MenuButton>
+              </Link>
               <MenuButton variant="text" {...bindTrigger(popupState)}>
                 Profil Instansi
               </MenuButton>
@@ -71,7 +71,7 @@ const Navbar = () => {
                 <Link to="/profil/nilai-kemenkeu" className="link">
                   <TypeItem onClick={popupState.close}>Nilai-Nilai Kemenkeu</TypeItem>
                 </Link>
-                <Link to="/profil/organisasi" className="link">
+                <Link to="/organisasi" className="link">
                   <TypeItem onClick={popupState.close}>Struktur Organisasi</TypeItem>
                 </Link>
                 <CustomItem>
@@ -92,7 +92,7 @@ const Navbar = () => {
                     </AccordionDetails>
                   </CustomAccor>
                 </CustomItem>
-                <Link to="/profil/pejabat" className="link">
+                <Link to="/pejabat" className="link">
                   <TypeItem onClick={popupState.close}>Profil Pejabat</TypeItem>
                 </Link>
               </Menu>

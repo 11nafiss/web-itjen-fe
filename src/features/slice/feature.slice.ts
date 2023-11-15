@@ -1,9 +1,12 @@
 import { PayloadAction, createSlice, combineReducers } from "@reduxjs/toolkit";
-import { createFeature, editFeature, deleteFeature, getFeatureData } from "../actions/feature.action";
+import { createFeature, editFeature, deleteFeature, getFeatureData, getFeatureSearchCount, getFeatureSearchAll, getFeatureAllCount, getFeatureAllTake } from "../actions/feature.action";
 import { FeatureData } from "../../models/feature.model";
 
 interface typeOfInitialState {
   dataFeature: FeatureData[];
+  searchKeyword: string;
+  dataPerPage: number;
+  currentPage: number;
   isLoading: boolean;
   isSuccess: boolean;
   errorMessage: string;
@@ -11,6 +14,9 @@ interface typeOfInitialState {
 
 const initialState: typeOfInitialState = {
   dataFeature: [],
+  searchKeyword: "",
+  dataPerPage: 5,
+  currentPage: 1,
   isLoading: false,
   isSuccess: false,
   errorMessage: "",
@@ -91,7 +97,20 @@ export const deleteFeatureSlice = createSlice({
 export const featureSlice = createSlice({
   name: "Feature",
   initialState,
-  reducers: {},
+  reducers: {
+    onNavigateNext: (state) => {
+      state.currentPage++;
+    },
+    onNavigatePrev: (state) => {
+      state.currentPage--;
+    },
+    onChangeDataPerPage: (state, action) => {
+      state.dataPerPage = action.payload;
+    },
+    onClickCurrentPage: (state, action) => {
+      state.currentPage = action.payload;
+    },
+  },
   extraReducers: (builder) => {
     builder.addCase(getFeatureData.pending, (state) => {
       state.isLoading = true;
@@ -110,8 +129,113 @@ export const featureSlice = createSlice({
   },
 });
 
+export const featureAllTakeSlice = createSlice({
+  name: "featureAllTake",
+  initialState,
+  reducers: {},
+  extraReducers: (builder) => {
+    builder.addCase(getFeatureAllTake.pending, (state) => {
+      state.isLoading = true;
+      state.errorMessage = "";
+    });
+
+    builder.addCase(getFeatureAllTake.fulfilled, (state, action: PayloadAction<FeatureData[]>) => {
+      state.dataFeature = action.payload;
+    });
+
+    builder.addCase(getFeatureAllTake.rejected, (state, { payload }) => {
+      if (payload) {
+        state.isSuccess = false;
+      }
+    });
+  },
+});
+
+export const featureAllCountSlice = createSlice({
+  name: "featureAllCountReducer",
+  initialState,
+  reducers: {},
+  extraReducers: (builder) => {
+    builder.addCase(getFeatureAllCount.pending, (state) => {
+      (state.isLoading = true), (state.errorMessage = "");
+      console.log("PENDING FEATURE....");
+    });
+
+    builder.addCase(getFeatureAllCount.fulfilled, (state, action: PayloadAction<FeatureData[]>) => {
+      state.dataFeature = action.payload;
+      console.log("Filled FEATURE");
+    });
+
+    builder.addCase(getFeatureAllCount.rejected, (state, { payload }) => {
+      if (payload) {
+        console.log("FAILED FEATURE");
+        state.isSuccess = false;
+      }
+    });
+  },
+});
+
+export const featureSearchAllSlice = createSlice({
+  name: "featureSearchReducer",
+  initialState,
+  reducers: {
+    setSearchKeyword: (state, action) => {
+      state.searchKeyword = action.payload;
+    },
+  },
+  extraReducers: (builder) => {
+    builder.addCase(getFeatureSearchAll.pending, (state) => {
+      (state.isLoading = true), (state.errorMessage = "");
+      console.log("PENDING FEATURE....");
+    });
+
+    builder.addCase(getFeatureSearchAll.fulfilled, (state, action: PayloadAction<FeatureData[]>) => {
+      state.dataFeature = action.payload;
+      console.log("Filled FEATURE");
+    });
+
+    builder.addCase(getFeatureSearchAll.rejected, (state, { payload }) => {
+      if (payload) {
+        console.log("FAILED FEATURE");
+        state.isSuccess = false;
+      }
+    });
+  },
+});
+
+export const featureSearchCountSlice = createSlice({
+  name: "featureSearchCountReducer",
+  initialState,
+  reducers: {},
+  extraReducers: (builder) => {
+    builder.addCase(getFeatureSearchCount.pending, (state) => {
+      (state.isLoading = true), (state.errorMessage = "");
+      console.log("PENDING FEATURE....");
+    });
+
+    builder.addCase(getFeatureSearchCount.fulfilled, (state, action: PayloadAction<FeatureData[]>) => {
+      state.dataFeature = action.payload;
+      console.log("Filled FEATURE");
+    });
+
+    builder.addCase(getFeatureSearchCount.rejected, (state, { payload }) => {
+      if (payload) {
+        console.log("FAILED FEATURE");
+        state.isSuccess = false;
+      }
+    });
+  },
+});
+
 const featureReducer = combineReducers({
+  createFeature: createFeatureSlice.reducer,
+  editFeature: editFeatureSlice.reducer,
+  deleteFeature: deleteFeatureSlice.reducer,
   featureAll: featureSlice.reducer,
+  featureAllTake: featureAllTakeSlice.reducer,
+  featureAllCount: featureAllCountSlice.reducer,
+  featureSearchAll: featureSearchAllSlice.reducer,
+  featureSearchCount: featureSearchCountSlice.reducer,
 });
 
 export default featureReducer;

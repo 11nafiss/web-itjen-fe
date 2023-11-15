@@ -17,7 +17,7 @@ const LiveAvatar = (props) => {
             style={{
                 ...styles.avatarHello,
                 ...{opacity: hovered ? '1' : '0'},
-                zIndex: "999",
+                zIndex: "999"
             }}
             >
                 Hubungi Kami

@@ -159,8 +159,8 @@ const Report = () => {
     }
   };
 
-  const handleCurrentPage = (_p) => {
-    dispatch(auditoriaSlice.actions.onClickCurrentPage(_p));
+  const handleCurrentPage = (index) => {
+    dispatch(auditoriaSlice.actions.onClickCurrentPage(index));
   };
 
 
@@ -243,13 +243,13 @@ const Report = () => {
             </Grid>
             <Stack spacing={2} sx={{ width: "100%", alignItems: "center" }}>
               <ThemeProvider theme={theme}>
-                <p>
-                  <span onClick={navigatePrev}><ArrowBackIcon /></span>
-                  {pages.map((_p) => (
-                    <span key={_p} onClick={() => handleCurrentPage.call(null, _p)}>{_p}</span>
+                <div className="pagination">
+                  <button onClick={navigatePrev} className="pagination-button"><ArrowBackIcon /></button>
+                  {pages.map((index) => (
+                    <button key={index} className="pagination-number" onClick={() => handleCurrentPage.call(null, index)}>{index}</button>
                     ))}
-                  <span onClick={navigateNext}><ArrowForwardIcon /></span>
-                </p>
+                  <button onClick={navigateNext} className="pagination-button"><ArrowForwardIcon /></button>
+                </div>
               </ThemeProvider>
             </Stack>
           </CustomContainer>

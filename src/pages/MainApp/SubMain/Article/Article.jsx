@@ -94,6 +94,9 @@ const ContentBox = styled(Box)(({ theme }) => ({
 // Main Declaration
 const Article = () => {
   const { title } = useParams();
+  const { category } = useParams();
+
+  console.log ("ini kategori artikel", category)
 
   const dispatch = useAppDispatch();
   useEffect(() => {

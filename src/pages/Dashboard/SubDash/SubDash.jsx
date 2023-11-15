@@ -11,6 +11,7 @@ import MenuDash from './MenuDash/MenuDash'
 import ReportDash from './ReportDash/ReportDash'
 import UserDash from './UserDash/UserDash'
 import CategoryDash from './CategoryDash/CategoryDash'
+import VitjenDash from './VitjenDash/VitjenDash'
 
 // Export Code
 export {
@@ -26,4 +27,5 @@ export {
     ReportDash,
     UserDash,
     CategoryDash,
+    VitjenDash,
 }

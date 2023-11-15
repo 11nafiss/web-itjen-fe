@@ -55,6 +55,7 @@ export const styles = {
     border: "2px solid #0D5CAB",
     color: "#fff",
     backgroundColor: "#0D5CAB",
+    cursor: "pointer",
   },
   bottomText: {
     position: "absolute",

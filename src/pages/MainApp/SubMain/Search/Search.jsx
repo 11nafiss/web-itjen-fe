@@ -14,8 +14,9 @@ import SearchIcon from "@mui/icons-material/Search";
 // Import Api
 import { useAppDispatch, useAppSelector } from "../../../../hooks/useTypedSelector";
 import { articleSearchSlice } from "../../../../features/slice/article.slice";
-import { getArticleNumber, getArticleSearch } from "../../../../features/actions/article.action";
+import { getArticleSearchCount, getArticleSearch } from "../../../../features/actions/article.action";
 import { BASE_URL } from "../../../../services/api";
+import { getCategory } from "../../../../features/actions/category.action";
 
 // Additional Code
 const theme = createTheme({
@@ -101,26 +102,29 @@ const Search = () => {
   const [searchInput, setSearchInput] = useState("");
 
   const dispatch = useAppDispatch();
+  const take = 6
 
   useEffect(() => {
     const page = searchParams.get("page") ?? 1;
     const keyword = searchParams.get("keyword");
     setSearchInput(keyword);
 
-    dispatch(getArticleSearch({ page, keyword }));
-    dispatch(getArticleNumber({ keyword }));
+    dispatch(getArticleSearch({ take, page, keyword }));
+    dispatch(getArticleSearchCount({ keyword }));
+    dispatch(getCategory());
   }, [dispatch, searchParams]);
 
-  const dataArticle = useAppSelector((state) => state.article.articleSearch.dataArticle);
-  const jumlahArticle = useAppSelector((state) => state.article.articleNumber.dataArticle);
+  const dataArticle = useAppSelector((state) => state.article.articleSearch.dataArticle );
+  const dataCategory = useAppSelector((state) => state.category.categoryAll.dataCategory);
+  const jumlahArticle = useAppSelector((state) => state.article.articleSearchCount.dataArticle);
 
   const handlePageChange = (event, value) => {
     const keyword = searchParams.get("keyword");
     let updatedSearchParams = new URLSearchParams(searchParams.toString());
     updatedSearchParams.set("page", value);
 
-    dispatch(getArticleSearch({ page: value, keyword }));
-    dispatch(getArticleNumber({ keyword }));
+    dispatch(getArticleSearch({ take, page: value, keyword }));
+    dispatch(getArticleSearchCount({ keyword }));
     setSearchParams(updatedSearchParams.toString());
   };
 
@@ -132,9 +136,19 @@ const Search = () => {
     setSearchParams(updatedSearchParams.toString());
 
     dispatch(articleSearchSlice.actions.setSearchKeyword(searchInput));
-    dispatch(getArticleSearch({ page, searchInput }));
-    dispatch(getArticleNumber({ searchInput }));
+    dispatch(getArticleSearch({ take, page, searchInput }));
+    dispatch(getArticleSearchCount({ searchInput }));
   }
+
+  const handleUrlCategory = (categoryId) => {
+    let category = null;
+    for(const obj of dataCategory) {
+      if (categoryId === obj.categoryId) {
+        category = obj.categoryName;
+      }
+    }
+    return category;
+  };
 
   // Main Code
   return (
@@ -218,7 +232,7 @@ const Search = () => {
                       </CardContent>
                       <CardOverflow variant="soft" sx={{ bgcolor: "background.level1", padding: "0px" }}>
                         <CardContent sx={{ width: "100%", padding: "0px" }}>
-                          <Link to={`/${obj.categoryId}/${obj.title.replace(/ /g, "-")}`} className="link">
+                          <Link to={`/Artikel/${handleUrlCategory(obj.categoryId)}/${obj.title.replace(/ /g, "-")}`} className="link">
                             <ClickButton variant="solid" size="lg">
                               Baca Artikel
                             </ClickButton>

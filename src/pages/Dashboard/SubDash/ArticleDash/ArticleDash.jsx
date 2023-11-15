@@ -1,7 +1,7 @@
 // Import Library
 import { useEffect, useState } from "react";
-import { Link, useSearchParams } from "react-router-dom";
-import { Grid, Box } from "@mui/material";
+import { Link, useSearchParams, useNavigate } from "react-router-dom";
+import { Grid, Box, Pagination, PaginationItem } from "@mui/material";
 import { Button, AspectRatio, IconButton, Card, CardOverflow, Divider, Typography, Input, FormControl } from "@mui/joy";
 import { styled } from "@mui/material/styles";
 
@@ -13,11 +13,15 @@ import { formatDate } from "../../../../utils/custom-format-date";
 import DeleteIcon from "@mui/icons-material/Delete";
 import EditIcon from "@mui/icons-material/Edit";
 import { FaSearch } from "react-icons/fa";
+import ArrowBackIcon from "@mui/icons-material/ArrowBack";
+import ArrowForwardIcon from "@mui/icons-material/ArrowForward";
+import { LoadingOutlined } from "@ant-design/icons";
 
 // Import Api
 import { useAppDispatch, useAppSelector } from "../../../../hooks/useTypedSelector";
-import { getArticleAll, deleteArticle } from "../../../../features/actions/article.action";
+import { getArticleAllTake, getArticlePublished, getArticleAllCount, getArticleSearchAll, getArticleSearchCount, deleteArticle } from "../../../../features/actions/article.action";
 import { BASE_URL } from "../../../../services/api";
+import { articleSearchSlice } from "../../../../features/slice/article.slice";
 
 // MUI Styling CSS
 const CustomBox = styled(Box)(() => ({
@@ -45,22 +49,82 @@ const GridFlex = styled(Grid)(() => ({
 
 // Main Declaration
 const ArticleDash = () => {
-  const [searchParams] = useSearchParams();
+  const [searchParams, setSearchParams] = useSearchParams();
   const [searchInput, setSearchInput] = useState("");
+  const [loading, setLoading] = useState(false);
   const dispatch = useAppDispatch();
+  const navigate = useNavigate();
+  const take = 8;
 
+  const dataSearch = useAppSelector((state) => state.article.articleSearchAll.dataArticle);
+  const isLoading = useAppSelector((state) => state.article.articleAll.isLoading);
   const dataArticle = useAppSelector((state) => state.article.articleAll.dataArticle);
+  const jumlahArticle = useAppSelector((state) => state.article.articleAllCount.dataArticle);
+  const pageCount = jumlahArticle / take;
+
 
   useEffect(() => {
-    dispatch(getArticleAll());
+    const page = searchParams.get("page") ?? 1;
+    const keyword = searchParams.get("keyword");
+    dispatch(getArticleSearchAll({ take, page, keyword }));
+    dispatch(getArticleAllTake({ take, page }));
+    dispatch(getArticleAllCount());
   }, [dispatch, searchParams]);
 
-  
+
+  const handlePageChange = (event, value) => {
+    let updatedSearchParams = new URLSearchParams(searchParams.toString());
+    updatedSearchParams.set("page", value);
+
+    dispatch(getArticleAllTake({ take, page: value }));
+    dispatch(getArticleAllCount());
+  };
 
   function handleSubmit(event) {
     event.preventDefault();
-    console.log(searchInput);
+    const page = searchParams.get("page") ?? 1;
+    let updatedSearchParams = new URLSearchParams(searchParams.toString());
+    updatedSearchParams.set("keyword", searchInput);
+
+    dispatch(articleSearchSlice.actions.setSearchKeyword(searchInput));
+    dispatch(getArticleSearchAll({ take, page, keyword: searchInput }));
+    dispatch(getArticleSearchCount({ searchInput }));
+    setSearchParams(updatedSearchParams.toString());
+
+    if (searchInput === "" || searchInput == null) {
+      navigate("/dashboard/artikel?page=1");
+      dispatch(getArticleAllCount());
+    }
   }
+
+  function FetchArticleByPublish(published) {
+    const keyword = searchParams.get("keyword");
+    const page = searchParams.get("page") ?? 1;
+    dispatch(getArticlePublished({ take, page, published: published }));
+    dispatch(getArticleSearchCount({ keyword }));
+    setSearchInput("");
+  }
+
+  function FetchArticleAll() {
+    navigate("/dashboard/artikel?page=1");
+    const page = searchParams.get("page") ?? 1;
+    dispatch(getArticleAllTake({ take, page }));
+    dispatch(getArticleAllCount());
+    setSearchInput("");
+  }
+
+  const handleDeleteArticle = (id) => {
+    const confirmation = confirm("Apakah anda yakin untuk menghapus data ini?");
+
+    navigate(0);
+
+    setLoading(true);
+
+    if (confirmation) {
+      dispatch(deleteArticle(id));
+      setLoading(false);
+    }
+  };
 
   // Main Code
   return (
@@ -88,27 +152,30 @@ const ArticleDash = () => {
                   <AddButton />
                 </Link>
                 <Button
+                  onClick={() => FetchArticleAll()}
                   color="success"
                   sx={{
                     height: "30px",
                     width: "100px",
-                    margin: "10px",
+                    marginLeft: "10px",
                   }}
                 >
-                  Published
+                  Semua
                 </Button>
                 <Button
+                  onClick={() => FetchArticleByPublish(false)}
                   color="neutral"
                   sx={{
                     height: "30px",
                     width: "100px",
+                    marginInline: "10px",
                   }}
                 >
                   Pending
                 </Button>
               </GridFlex>
               <GridFlex item xs={12} md={6} sx={{ justifyContent: { xs: "center", md: "right" } }}>
-                <form onSubmit={handleSubmit}>
+                <form onSubmit={handleSubmit} style={{ display: "flex", justifyContent: "right", width: "100%" }}>
                   <FormControl
                     sx={() => ({
                       display: "flex",
@@ -138,59 +205,132 @@ const ArticleDash = () => {
               </GridFlex>
               <GridFlex item xs={12} md={12} sx={{ justifyContent: { xs: "center", md: "left" }, height: "100%" }}>
                 <Box sx={{ height: "100%", paddingTop: "30px", display: "grid", gap: "30px", width: "100%", gridTemplateColumns: { xs: "1fr", md: "1fr 1fr 1fr 1fr" } }}>
-                  {dataArticle.map((obj, index) => (
-                    <Card key={index} variant="outlined" sx={{ width: 300, gap: "0px", height: "100%" }}>
-                      <CardOverflow>
-                        <AspectRatio ratio="16/9">
-                          <img src={`${BASE_URL}images/${obj.featuredImage}`} loading="lazy" alt="" />
-                        </AspectRatio>
-                        <IconButton
-                          aria-label="Like minimal photography"
-                          size="md"
-                          variant="solid"
-                          color="warning"
-                          sx={{
-                            position: "absolute",
-                            zIndex: 2,
-                            borderRadius: "50%",
-                            right: "4rem",
-                            bottom: 0,
-                            transform: "translateY(50%)",
-                          }}
-                        >
-                          <EditIcon />
-                        </IconButton>
-                        <IconButton
-                          onClick={() => dispatch(deleteArticle(obj.id))}
-                          aria-label="Like minimal photography"
-                          size="md"
-                          variant="solid"
-                          color="danger"
-                          sx={{
-                            position: "absolute",
-                            zIndex: 2,
-                            borderRadius: "50%",
-                            right: "1rem",
-                            bottom: 0,
-                            transform: "translateY(50%)",
-                          }}
-                        >
-                          <DeleteIcon />
-                        </IconButton>
-                      </CardOverflow>
-                      <Box sx={{ display: "flex", alignItems: "start", mt: "20px" }}>
-                        <Typography level="body3" sx={{ fontWeight: "md", color: "blue", fontSize: "14px" }}>
-                          {formatDate(obj.publishedAt)}
+                  {isLoading === true ? (
+                      <LoadingOutlined
+                        className="loadingIcon transition-5"
+                        style={{
+                          ...{
+                            zIndex: loading ? "10" : "-1",
+                            opacity: loading ? "0.33" : "0",
+                            fontSize: "82px",
+                            top: "calc(50% - 41px)",
+                            left: "calc(50% - 41px)",
+                          },
+                        }}
+                      />
+                  ) : isLoading === false }
+                  {dataSearch.length === 0 &&
+                    dataArticle.map((obj, index) => (
+                      <Card key={index} variant="outlined" sx={{ width: 300, gap: "0px", height: "100%" }}>
+                        <CardOverflow>
+                          <AspectRatio ratio="16/9">
+                            <img src={`${BASE_URL}images/${obj.featuredImage}`} loading="lazy" alt="" />
+                          </AspectRatio>
+                          <Link to={`/dashboard/artikel/edit/${obj.id}`}>
+                            <IconButton
+                              aria-label="Like minimal photography"
+                              size="md"
+                              variant="solid"
+                              color="warning"
+                              sx={{
+                                position: "absolute",
+                                zIndex: 2,
+                                borderRadius: "50%",
+                                right: "4rem",
+                                bottom: 0,
+                                transform: "translateY(50%)",
+                              }}
+                            >
+                              <EditIcon />
+                            </IconButton>
+                          </Link>
+                          <IconButton
+                            onClick={() => handleDeleteArticle(obj.id)}
+                            aria-label="Like minimal photography"
+                            size="md"
+                            variant="solid"
+                            color="danger"
+                            sx={{
+                              position: "absolute",
+                              zIndex: 2,
+                              borderRadius: "50%",
+                              right: "1rem",
+                              bottom: 0,
+                              transform: "translateY(50%)",
+                            }}
+                          >
+                            <DeleteIcon />
+                          </IconButton>
+                        </CardOverflow>
+                        <Box sx={{ display: "flex", alignItems: "start", mt: "35px" }}>
+                          <Typography level="body3" sx={{ fontWeight: "md", color: "blue", fontSize: "14px" }}>
+                            {formatDate(obj.publishedAt)}
+                          </Typography>
+                        </Box>
+                        <Typography level="h2" sx={{ fontSize: "14px", my: "10px" }}>
+                          {obj.title}
                         </Typography>
-                      </Box>
-                      <Typography level="h2" sx={{ fontSize: "16px", my: "10px" }}>
-                        {obj.title}
-                      </Typography>
-                    </Card>
-                  ))}
+                      </Card>
+                    ))}
+                  {dataSearch.length !== 0 &&
+                    dataSearch.map((obj, index) => (
+                      <Card key={index} variant="outlined" sx={{ width: 300, gap: "0px", height: "100%" }}>
+                        <CardOverflow>
+                          <AspectRatio ratio="16/9">
+                            <img src={`${BASE_URL}images/${obj.featuredImage}`} loading="lazy" alt="" />
+                          </AspectRatio>
+                          <Link to={`/dashboard/artikel/edit/${obj.id}`}>
+                            <IconButton
+                              aria-label="Like minimal photography"
+                              size="md"
+                              variant="solid"
+                              color="warning"
+                              sx={{
+                                position: "absolute",
+                                zIndex: 2,
+                                borderRadius: "50%",
+                                right: "4rem",
+                                bottom: 0,
+                                transform: "translateY(50%)",
+                              }}
+                            >
+                              <EditIcon />
+                            </IconButton>
+                          </Link>
+                          <IconButton
+                            onClick={() => handleDeleteArticle(obj.id)}
+                            aria-label="Like minimal photography"
+                            size="md"
+                            variant="solid"
+                            color="danger"
+                            sx={{
+                              position: "absolute",
+                              zIndex: 2,
+                              borderRadius: "50%",
+                              right: "1rem",
+                              bottom: 0,
+                              transform: "translateY(50%)",
+                            }}
+                          >
+                            <DeleteIcon />
+                          </IconButton>
+                        </CardOverflow>
+                        <Box sx={{ display: "flex", alignItems: "start", mt: "35px" }}>
+                          <Typography level="body3" sx={{ fontWeight: "md", color: "blue", fontSize: "14px" }}>
+                            {formatDate(obj.publishedAt)}
+                          </Typography>
+                        </Box>
+                        <Typography level="h2" sx={{ fontSize: "14px", my: "10px" }}>
+                          {obj.title}
+                        </Typography>
+                      </Card>
+                    ))}
                 </Box>
               </GridFlex>
             </SpaceGrid>
+              <div className="pagination">
+                <Pagination color="primary" count={pageCount} onChange={handlePageChange} renderItem={(item) => <PaginationItem slots={{ previous: ArrowBackIcon, next: ArrowForwardIcon }} {...item} />} />
+              </div>
           </CustomBox>
         </Grid>
       </Grid>

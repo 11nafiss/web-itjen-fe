@@ -176,3 +176,180 @@
 .ce-my-message-timestamp {
   color: #7a39e0 !important;
 }
+.pagination {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 16px;
+  margin: 30px 0px;
+}
+
+.pagination-button {
+  background-color: #fff;
+  border-width: 0px;
+  margin: 5px;
+  padding: 4px;
+  border-radius: 25px;
+  display: flex;
+  align-items: center;
+}
+
+.pagination-button:hover {
+  background-color: #e9e9e9;
+  cursor: pointer;
+}
+
+.pagination-number {
+  background-color: #fff;
+  border-width: 0px;
+  border-radius: 25px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 30px;
+  height: 30px;
+  padding: 5px;
+}
+
+.pagination-number:hover {
+  background-color: #e9e9e9;
+  cursor: pointer;
+}
+
+.pagination-number:visited {
+  background-color: #08347C;
+  cursor: pointer;
+}
+
+.arrowVisual {
+  width: 40px;
+  height: 40px;
+  position: absolute;
+  top: 60%;
+  transform: translateY(-50%);
+  -webkit-transform: translateY(-50%);
+  fill: #fff;
+  cursor: pointer;
+  background-color: #08245c;
+  border-radius: 50%;
+  padding: 7px;
+  margin: 15px -13px;
+  @media only screen and (max-width: 1200px) {
+    top: 50%;
+    margin: 5px 10px;
+  }
+}
+
+.arrowVisual:hover {
+  fill: #08245c;
+  cursor: pointer;
+  background-color: #fff;
+}
+
+.arrowVisual--mid {
+  top: 48%;
+}
+
+.arrowVisual--left {
+  top: 77%;
+  right: 50px;
+  rotate: 180deg;
+}
+
+.arrowVisual--right {
+  top: 85%;
+  right: 50px;
+}
+
+.arrowVisual--disabled {
+  fill: rgba(255, 255, 255, 0.5);
+}
+
+[class^="number-slide"],
+[class*=" number-slide"] {
+  background: grey;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 50px;
+  color: #fff;
+  font-weight: 500;
+  height: 200px;
+  max-height: 100vh;
+}
+
+.number-slide1 {
+  background: rgb(64, 175, 255);
+  background: linear-gradient(
+    128deg,
+    rgba(64, 175, 255, 1) 0%,
+    rgba(63, 97, 255, 1) 100%
+  );
+}
+
+.number-slide2 {
+  background: rgb(255, 75, 64);
+  background: linear-gradient(
+    128deg,
+    rgba(255, 154, 63, 1) 0%,
+    rgba(255, 75, 64, 1) 100%
+  );
+}
+
+.number-slide3 {
+  background: rgb(182, 255, 64);
+  background: linear-gradient(
+    128deg,
+    rgba(182, 255, 64, 1) 0%,
+    rgba(63, 255, 71, 1) 100%
+  );
+  background: linear-gradient(
+    128deg,
+    rgba(189, 255, 83, 1) 0%,
+    rgba(43, 250, 82, 1) 100%
+  );
+}
+
+.number-slide4 {
+  background: rgb(64, 255, 242);
+  background: linear-gradient(
+    128deg,
+    rgba(64, 255, 242, 1) 0%,
+    rgba(63, 188, 255, 1) 100%
+  );
+}
+
+.number-slide5 {
+  background: rgb(255, 64, 156);
+  background: linear-gradient(
+    128deg,
+    rgba(255, 64, 156, 1) 0%,
+    rgba(255, 63, 63, 1) 100%
+  );
+}
+
+.number-slide6 {
+  background: rgb(64, 76, 255);
+  background: linear-gradient(
+    128deg,
+    rgba(64, 76, 255, 1) 0%,
+    rgba(174, 63, 255, 1) 100%
+  );
+}
+
+.loadingDiv {
+  position: absolute;
+  height: 100%;
+  width: 100%;
+  text-align: center;
+  background-color: white;
+}
+
+.loadingIcon {
+  color: #7a39e0;
+  position: absolute;
+  top: calc(50% - 51px);
+  left: calc(50% - 51px);
+  font-weight: 600;
+}

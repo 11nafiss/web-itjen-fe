@@ -1,11 +1,12 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
-import { BASE_URL } from "../../services/api";
+import { BASE_URL, BASE_URL_API } from "../../services/api";
 import axios, { AxiosError } from "axios";
 import Cookies from "js-cookie";
 import { UserData } from "../../models/user.model";
 import { userService } from "../../services/user.service";
 
 const urlUser = BASE_URL + "user";
+const urlPengguna = BASE_URL_API + "pengguna";
 const token = Cookies.get("access_token");
 
 export const createUser = createAsyncThunk<UserData[], any>("user/createUser", async ({ username, password, email }) => {
@@ -13,7 +14,6 @@ export const createUser = createAsyncThunk<UserData[], any>("user/createUser", a
   const response = await axios.post(urlUser + url, {
     headers: {
       "Content-Type": "application/json",
-      Authorization: `Bearer ${token}`,
     },
     body: JSON.stringify({
       username,
@@ -27,10 +27,9 @@ export const createUser = createAsyncThunk<UserData[], any>("user/createUser", a
 });
 
 export const deleteUser = createAsyncThunk<UserData[], any>("user/deleteUser", async (id) => {
-  const response = await axios.delete(urlUser + "/" + id, {
+  const response = await axios.delete(urlPengguna + "/" + id, {
     headers: {
       "Content-Type": "application/json",
-      Authorization: `Bearer ${token}`,
     },
   });
 
@@ -39,15 +38,16 @@ export const deleteUser = createAsyncThunk<UserData[], any>("user/deleteUser", a
 });
 
 export const getUserData = createAsyncThunk<UserData[], void, { rejectValue: AxiosError }>("user/fetchAllUser", async (_, { rejectWithValue }) => {
-  try {
-    const response = await userService.getUsers();
-    return response as UserData[];
-  } catch (error) {
-    if (error instanceof AxiosError) {
-      return rejectWithValue(error);
-    }
-    throw error;
-  }
+  
+  
+  const response = await axios.get(urlPengguna, {
+    headers: {
+      "Content-Type": "application/json",
+    },
+  });
+
+  const data: UserData[] = await response.data;
+  return data;
 });
 
 export const loginUser = createAsyncThunk<UserData, any, { rejectValue: AxiosError }>("user/loginUser", async (userCredentials, { rejectWithValue }) => {
@@ -60,5 +60,61 @@ export const loginUser = createAsyncThunk<UserData, any, { rejectValue: AxiosErr
   });
 
   const data: UserData = response.data;
+  return data;
+});
+
+export const getUserAllTake = createAsyncThunk<UserData[], any, { rejectValue: AxiosError }>("User/getUserAllTake", async (params, thunkAPI) => {
+  const take = params.take;
+  const skip = params.page * params.take - params.take;
+  const newUrl = `/${take}/${skip}`;
+  
+  const response = await axios.get(urlPengguna + newUrl, {
+    headers: {
+      "Content-Type": "application/json",
+    },
+  });
+
+  const data: UserData[] = await response.data;
+  return data;
+});
+
+export const getUserAllCount = createAsyncThunk<UserData[], any, { rejectValue: AxiosError }>("User/getUserAllCount", async (params) => {
+  const newUrl = `/jumlahall`;
+
+  const response = await axios.get(urlPengguna + newUrl, {
+    headers: {
+      "Content-Type": "application/json",
+    },
+  });
+
+  const data: UserData[] = response.data;
+  return data;
+});
+
+export const getUserSearchAll = createAsyncThunk<UserData[], any, { rejectValue: AxiosError }>("User/getUserSearch", async (params, thunkAPI) => {
+  const take = params.take;
+  const skip = params.page * params.take - params.take;
+  const UserSearchUrl = `/search/${params.keyword}/${take}/${skip}`;
+
+  const responses = await axios.get(urlPengguna + UserSearchUrl, {
+    headers: {
+      "Content-Type": "application/json",
+    },
+  });
+
+  const User: UserData[] = responses.data;
+  return User;
+});
+
+export const getUserSearchCount = createAsyncThunk<UserData[], any, { rejectValue: AxiosError }>("User/getUserSearchCount", async (params) => {
+  const UserCountUrl = `/jumlahsearch/${params.keyword}`;
+
+  const response = await axios.get(urlPengguna + UserCountUrl, {
+    headers: {
+      "Content-Type": "application/json",
+    },
+  });
+
+  const data: UserData[] = response.data;
   return data;
 });

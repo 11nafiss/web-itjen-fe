@@ -1,6 +1,7 @@
 // Import Code
-import Navbar from './Navbar/navbar'
+import Navbar from './Navbar2/navbar'
 import DrawerBar from './DrawerBar/drawerBar'
+import VisualBar from './VisualBar/visualbar'
 import CardSlider from './CardSlider/cardslider'
 import Trending from './Trending/trending'
 import Reader2 from './Reader2/reader'
@@ -17,6 +18,7 @@ import RichText from './RichText2/richtext'
 export { 
     DrawerBar, 
     Navbar,
+    VisualBar,
     CardSlider,
     Trending,
     Reader2,
