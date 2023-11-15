@@ -57,10 +57,10 @@ const ArticleDash = () => {
   const take = 8;
 
   const dataSearch = useAppSelector((state) => state.article.articleSearchAll.dataArticle);
-  const isLoading = useAppSelector((state) => state.article.articleAll.isLoading);
-  const dataArticle = useAppSelector((state) => state.article.articleAll.dataArticle);
+  const isLoading = useAppSelector((state) => state.article.articleAllTake.isLoading);
+  const dataArticle = useAppSelector((state) => state.article.articleAllTake.dataArticle);
   const jumlahArticle = useAppSelector((state) => state.article.articleAllCount.dataArticle);
-  const pageCount = jumlahArticle / take;
+  const pageCount = Math.ceil(jumlahArticle / take);
 
 
   useEffect(() => {

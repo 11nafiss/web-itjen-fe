@@ -102,7 +102,7 @@ const Search = () => {
   const [searchInput, setSearchInput] = useState("");
 
   const dispatch = useAppDispatch();
-  const take = 6
+  const take = 6;
 
   useEffect(() => {
     const page = searchParams.get("page") ?? 1;
@@ -114,7 +114,7 @@ const Search = () => {
     dispatch(getCategory());
   }, [dispatch, searchParams]);
 
-  const dataArticle = useAppSelector((state) => state.article.articleSearch.dataArticle );
+  const dataArticle = useAppSelector((state) => state.article.articleSearch.dataArticle);
   const dataCategory = useAppSelector((state) => state.category.categoryAll.dataCategory);
   const jumlahArticle = useAppSelector((state) => state.article.articleSearchCount.dataArticle);
 
@@ -142,12 +142,16 @@ const Search = () => {
 
   const handleUrlCategory = (categoryId) => {
     let category = null;
-    for(const obj of dataCategory) {
+    for (const obj of dataCategory) {
       if (categoryId === obj.categoryId) {
         category = obj.categoryName;
       }
     }
-    return category;
+    if (category !== null) {
+      return category.replace(/ /g, "-");
+    } else {
+      return category;
+    }
   };
 
   // Main Code
@@ -197,12 +201,12 @@ const Search = () => {
           <CustomContainer>
             <SubText>Hasil Pencarian</SubText>
             {dataArticle.length === 0 ? (
-              <div>Data Tidak Ditemukan</div>
+              <div style={{ display: "flex", justifyContent: "center" }}>Data Tidak Ditemukan</div>
             ) : (
               <Grid container spacing={{ xs: 3, md: 4 }} column={{ xs: 4, sm: 8, md: 12 }} sx={{ justifyContent: "center" }}>
                 {dataArticle.map((obj, index) => (
                   <GridCenter item key={index} xs={12} sm={6} md={4}>
-                    <Card variant="outlined" sx={{ width: "270px", maxWidth: "100%", height: "330px", borderRadius: "20px", boxShadow: "lg", gap: "5px" }}>
+                    <Card variant="outlined" sx={{ width: "270px", maxWidth: "100%", height: "360px", borderRadius: "20px", boxShadow: "lg", gap: "5px" }}>
                       <CardOverflow>
                         <AspectRatio ratio="16/9">
                           <img src={`${BASE_URL}images/${obj.featuredImage}`} loading="lazy" alt="" />
@@ -232,7 +236,7 @@ const Search = () => {
                       </CardContent>
                       <CardOverflow variant="soft" sx={{ bgcolor: "background.level1", padding: "0px" }}>
                         <CardContent sx={{ width: "100%", padding: "0px" }}>
-                          <Link to={`/Artikel/${handleUrlCategory(obj.categoryId)}/${obj.title.replace(/ /g, "-")}`} className="link">
+                          <Link to={`/artikel/${handleUrlCategory(obj.categoryId)}/${obj.title.replace(/ /g, "-")}`} className="link">
                             <ClickButton variant="solid" size="lg">
                               Baca Artikel
                             </ClickButton>
@@ -245,7 +249,7 @@ const Search = () => {
                 <GridCenter item xs={12}>
                   <Stack spacing={2}>
                     <ThemeProvider theme={theme}>
-                      <Pagination color="primary" count={Math.ceil(jumlahArticle / 6)} onChange={handlePageChange} renderItem={(item) => <PaginationItem slots={{ previous: ArrowBackIcon, next: ArrowForwardIcon }} {...item} />} />
+                      <Pagination color="primary" count={Math.ceil(jumlahArticle / take)} onChange={handlePageChange} renderItem={(item) => <PaginationItem slots={{ previous: ArrowBackIcon, next: ArrowForwardIcon }} {...item} />} />
                     </ThemeProvider>
                   </Stack>
                 </GridCenter>

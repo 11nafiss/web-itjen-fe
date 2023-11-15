@@ -153,7 +153,11 @@ const Updates = () => {
         category = obj.categoryName;
       }
     }
-    return category;
+    if(category !== null) {
+      return category.replace(/ /g, "-")
+    } else {
+      return category
+    }
   };
 
   // MUI Styling CSS
@@ -225,7 +229,7 @@ const Updates = () => {
               <div ref={sliderRef} className="keen-slider" style={{ height: "370px" }}>
                 {dataArticle.map((obj) => (
                   <div key={obj.id} className="keen-slider__slide" style={{ display: "flex", justifyContent: "center" }}>
-                    <Card variant="outlined" sx={{ width: "270px", maxWidth: "100%", maxHeight: "360px", borderRadius: "20px", boxShadow: "lg", gap: "5px" }}>
+                    <Card variant="outlined" sx={{ width: "270px", maxWidth: "100%", height: "360px", borderRadius: "20px", boxShadow: "lg", gap: "5px" }}>
                       <CardOverflow>
                         <AspectRatio ratio="16/9">
                           <img src={`${BASE_URL}images/${obj.featuredImage}`} loading="lazy" alt="" />
@@ -255,7 +259,7 @@ const Updates = () => {
                       </CardContent>
                       <CardOverflow variant="soft" sx={{ bgcolor: "background.level1", padding: "0px" }}>
                         <CardContent sx={{ width: "100%", padding: "0px" }}>
-                          <Link to={`/Artikel/${handleUrlCategory(obj.categoryId)}/` + obj.title.replace(/ /g, "-")} className="link">
+                          <Link to={`/artikel/${handleUrlCategory(obj.categoryId)}/${obj.title.replace(/ /g, "-")}`} className="link">
                             <ClickButton variant="solid" size="lg">
                               Baca Artikel
                             </ClickButton>

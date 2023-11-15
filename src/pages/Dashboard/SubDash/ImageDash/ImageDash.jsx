@@ -68,7 +68,7 @@ const ImageDash = () => {
   const isLoading = useAppSelector((state) => state.image.imageAllTake.isLoading);
   const dataImage = useAppSelector((state) => state.image.imageAllTake.dataImage);
   const jumlahImage = useAppSelector((state) => state.image.imageAllCount.dataImage);
-  const pageCount = jumlahImage/take;
+  const pageCount = Math.ceil(jumlahImage/take);
 
   useEffect(() => {
     const page = searchParams.get("page") ?? 1;

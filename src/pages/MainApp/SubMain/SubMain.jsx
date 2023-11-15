@@ -11,6 +11,7 @@ import Books from './Books/Books'
 import Books2 from './Books2/Books2'
 import Article from './Article/Article'
 import Report from './Report/Report'
+import News from './News/News'
 
 // Export Code
 export {
@@ -26,4 +27,5 @@ export {
     Books2,
     Article,
     Report,
+    News,
 }

@@ -1,5 +1,22 @@
 import { ArticleData } from "../../models/article.model";
-import { createArticle, editArticle, deleteArticle, getArticleByCategory, getArticleAllTake, getArticleTopNews, getArticleSearch, getArticleTitle, getArticleSearchCount, getArticlePublished, getArticleSearchAll, getArticleById, getArticlePublishedCount, getArticleAllCount } from "../actions/article.action";
+import {
+  createArticle,
+  editArticle,
+  deleteArticle,
+  getArticleByCategory,
+  getArticleAllTake,
+  getArticleTopNews,
+  getArticleSearch,
+  getArticleTitle,
+  getArticleSearchCount,
+  getArticlePublished,
+  getArticleSearchAll,
+  getArticleById,
+  getArticlePublishedCount,
+  getArticleAllCount,
+  getArticleTypeCount,
+  getArticleTypeAll,
+} from "../actions/article.action";
 import { PayloadAction, createSlice, combineReducers } from "@reduxjs/toolkit";
 
 interface typeOfInitialState {
@@ -144,7 +161,7 @@ export const articleTitleSlice = createSlice({
   },
 });
 
-export const articleAllSlice = createSlice({
+export const articleAllTakeSlice = createSlice({
   name: "articleAllReducer",
   initialState,
   reducers: {
@@ -229,7 +246,6 @@ export const articleByIdSlice = createSlice({
   },
 });
 
-
 export const articlePublishedSlice = createSlice({
   name: "articlePublishedReducer",
   initialState,
@@ -305,8 +321,6 @@ export const articleSearchSlice = createSlice({
     });
   },
 });
-
-
 
 export const articleTopNewsSlice = createSlice({
   name: "articleTopNewsReducer",
@@ -384,13 +398,61 @@ export const articleSearchCountSlice = createSlice({
   },
 });
 
+export const articleTypeAllSlice = createSlice({
+  name: "articleTypeReducer",
+  initialState,
+  reducers: {},
+  extraReducers: (builder) => {
+    builder.addCase(getArticleTypeAll.pending, (state) => {
+      (state.isLoading = true), (state.errorMessage = "");
+      console.log("PENDING ARTIKEL....");
+    });
+
+    builder.addCase(getArticleTypeAll.fulfilled, (state, action: PayloadAction<ArticleData[]>) => {
+      state.dataArticle = action.payload;
+      console.log("Filled ARTIKEL");
+    });
+
+    builder.addCase(getArticleTypeAll.rejected, (state, { payload }) => {
+      if (payload) {
+        console.log("FAILED ARTIKEL");
+        state.isSuccess = false;
+      }
+    });
+  },
+});
+
+export const articleTypeCountSlice = createSlice({
+  name: "articleTypeCountReducer",
+  initialState,
+  reducers: {},
+  extraReducers: (builder) => {
+    builder.addCase(getArticleTypeCount.pending, (state) => {
+      (state.isLoading = true), (state.errorMessage = "");
+      console.log("PENDING ARTIKEL....");
+    });
+
+    builder.addCase(getArticleTypeCount.fulfilled, (state, action: PayloadAction<ArticleData[]>) => {
+      state.dataArticle = action.payload;
+      console.log("Filled ARTIKEL");
+    });
+
+    builder.addCase(getArticleTypeCount.rejected, (state, { payload }) => {
+      if (payload) {
+        console.log("FAILED ARTIKEL");
+        state.isSuccess = false;
+      }
+    });
+  },
+});
+
 const articleReducer = combineReducers({
   createArticle: createArticleSlice.reducer,
   editArticle: editArticleSlice.reducer,
   deleteArticle: deleteArticleSlice.reducer,
   articleCategory: articleByCategorySlice.reducer,
   articleTitle: articleTitleSlice.reducer,
-  articleAll: articleAllSlice.reducer,
+  articleAllTake: articleAllTakeSlice.reducer,
   articleAllCount: articleAllCountSlice.reducer,
   articleId: articleByIdSlice.reducer,
   articlePublished: articlePublishedSlice.reducer,
@@ -398,6 +460,8 @@ const articleReducer = combineReducers({
   articleSearch: articleSearchSlice.reducer,
   articleSearchAll: articleSearchAllSlice.reducer,
   articleSearchCount: articleSearchCountSlice.reducer,
+  articleTypeAll: articleTypeAllSlice.reducer,
+  articleTypeCount: articleTypeCountSlice.reducer,
   articleTopNews: articleTopNewsSlice.reducer,
 });
 

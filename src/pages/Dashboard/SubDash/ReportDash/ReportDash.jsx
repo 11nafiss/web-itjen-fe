@@ -69,7 +69,7 @@ const ReportDash = () => {
   const isLoading = useAppSelector((state) => state.report.reportAllTake.isLoading);
   const dataReport = useAppSelector((state) => state.report.reportAllTake.dataReport);
   const jumlahReport = useAppSelector((state) => state.report.reportAllCount.dataReport);
-  const pageCount = jumlahReport/take;
+  const pageCount = Math.ceil(jumlahReport/take)
 
 
   useEffect(() => {

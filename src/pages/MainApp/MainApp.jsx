@@ -6,7 +6,7 @@ import { Footer, Header, LiveChat } from "../../components/components";
 
 // Import MainApp Pages
 import NotFound from "../NotFound/NotFound";
-import { Home, Vision, Organ, Values, Placem, Gallery, Audit, Books, Article, Search, Report, Books2 } from "./SubMain/SubMain";
+import { News, Home, Vision, Organ, Values, Placem, Gallery, Audit, Books, Article, Search, Report, Books2 } from "./SubMain/SubMain";
 import { OrgBsip, ProIrjen } from "./SubContent/SubContent";
 
 // Main Declaration
@@ -26,13 +26,14 @@ const MainApp = () => {
           <Route path="/organisasi" element={<Organ />} />
           <Route path="/organisasi/bsip" element={<OrgBsip />} />
           <Route path="/pejabat" element={<Placem />} />
-          <Route path="/profil/pejabat/irjen" element={<ProIrjen />} />
+          <Route path="/pejabat/irjen" element={<ProIrjen />} />
           <Route path="/galeri" element={<Gallery />} />
           <Route path="/auditoria" element={<Audit />} />
-          <Route path="/baca/:id" element={<Books />} />
-          <Route path="/laporan/kinerja" element={<Report />} />
-          <Route path="/baca/lakin-itjen-2022" element={<Books2 />} />
+          <Route path="/baca/auditoria/:id" element={<Books />} />
+          <Route path="/laporan/:jenis" element={<Report />} />
+          <Route path="/baca/laporan/:id" element={<Books2 />} />
           <Route path="/cari" element={<Search />} />
+          <Route path="/artikel/:category" element={<News />} />
           <Route path="/artikel/:category/:title" element={<Article />} />
           <Route path="*" element={<NotFound />} />
         </Routes>

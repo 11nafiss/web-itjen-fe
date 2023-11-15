@@ -1,5 +1,5 @@
 import { PayloadAction, createSlice, combineReducers } from "@reduxjs/toolkit";
-import { createReport, editReport, deleteReport, getReportData, getReportAllTake, getReportSearchCount, getReportSearchAll, getReportAllCount } from "../actions/report.action";
+import { createReport, editReport, deleteReport, getReportData, getReportAllTake, getReportSearchCount, getReportSearchAll, getReportAllCount, getReportTypeAll, getReportTypeCount } from "../actions/report.action";
 import { ReportData } from "../../models/report.models";
 
 interface typeOfInitialState {
@@ -227,6 +227,54 @@ export const reportSearchCountSlice = createSlice({
   },
 });
 
+export const reportTypeAllSlice = createSlice({
+  name: "reportTypeReducer",
+  initialState,
+  reducers: {},
+  extraReducers: (builder) => {
+    builder.addCase(getReportTypeAll.pending, (state) => {
+      (state.isLoading = true), (state.errorMessage = "");
+      console.log("PENDING REPORT....");
+    });
+
+    builder.addCase(getReportTypeAll.fulfilled, (state, action: PayloadAction<ReportData[]>) => {
+      state.dataReport = action.payload;
+      console.log("Filled REPORT");
+    });
+
+    builder.addCase(getReportTypeAll.rejected, (state, { payload }) => {
+      if (payload) {
+        console.log("FAILED REPORT");
+        state.isSuccess = false;
+      }
+    });
+  },
+});
+
+export const reportTypeCountSlice = createSlice({
+  name: "reportTypeCountReducer",
+  initialState,
+  reducers: {},
+  extraReducers: (builder) => {
+    builder.addCase(getReportTypeCount.pending, (state) => {
+      (state.isLoading = true), (state.errorMessage = "");
+      console.log("PENDING REPORT....");
+    });
+
+    builder.addCase(getReportTypeCount.fulfilled, (state, action: PayloadAction<ReportData[]>) => {
+      state.dataReport = action.payload;
+      console.log("Filled REPORT");
+    });
+
+    builder.addCase(getReportTypeCount.rejected, (state, { payload }) => {
+      if (payload) {
+        console.log("FAILED REPORT");
+        state.isSuccess = false;
+      }
+    });
+  },
+});
+
 const reportReducer = combineReducers({
   createReport: createReportSlice.reducer,
   editReport: editReportSlice.reducer,
@@ -236,6 +284,8 @@ const reportReducer = combineReducers({
   reportAllCount: reportAllCountSlice.reducer,
   reportSearchAll: reportSearchAllSlice.reducer,
   reportSearchCount: reportSearchCountSlice.reducer,
+  reportTypeAll: reportTypeAllSlice.reducer,
+  reportTypeCount: reportTypeCountSlice.reducer,
 });
 
 export default reportReducer;

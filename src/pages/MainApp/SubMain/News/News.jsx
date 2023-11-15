@@ -1,9 +1,9 @@
 // Import Library
-import { useEffect } from "react";
-import { Link, useSearchParams } from "react-router-dom";
+import { useCallback, useEffect } from "react";
+import { Link, useParams, useSearchParams } from "react-router-dom";
 import { Pagination, PaginationItem, Stack, Grid, Container, Box, Typography, Button } from "@mui/material";
-import { Autocomplete, FormControl, AspectRatio, Card, CardOverflow, CardContent } from "@mui/joy";
 import { styled } from "@mui/material/styles";
+import { AspectRatio, Card, CardOverflow, CardContent } from "@mui/joy";
 import { formatDate } from "../../../../utils/custom-format-date";
 
 // Import Assets
@@ -12,9 +12,8 @@ import ArrowForwardIcon from "@mui/icons-material/ArrowForward";
 
 // Import Api
 import { useAppDispatch, useAppSelector } from "../../../../hooks/useTypedSelector";
-import { getAuditoriaAllCount, getAuditoriaAllTake } from "../../../../features/actions/auditoria.action";
+import { getArticleTypeAll, getArticleTypeCount } from "../../../../features/actions/article.action";
 import { BASE_URL } from "../../../../services/api";
-
 
 // MUI Styling CSS
 const Background = styled(Box)(() => ({
@@ -84,63 +83,59 @@ const CustomTitle = styled(Typography)(({ theme }) => ({
   },
 }));
 
-const FilterBox = styled(Box)(({ theme }) => ({
-  display: "flex",
-  alignItems: "center",
-  padding: "20px",
-  backgroundColor: "#ECBC2A",
-  color: "#252525",
-  height: "80px",
-  margin: "0px 25px 25px 25px",
-  width: "100%",
-  borderWidth: "0px",
-  borderColor: "#252525",
-  borderRadius: "50px",
-  [theme.breakpoints.down("md")]: {
-    justifyContent: "center",
-    margin: "0px",
-    height: "250px",
-  },
-}));
-
-const FilterText = styled(Typography)(() => ({
-  fontSize: "18px",
-  fontWeight: "700",
-  textTransform: "capitalize",
-}));
-
-const FilterButton = styled(Button)(() => ({
-  backgroundColor: "#252525",
-  color: "#fff",
-  borderRadius: "50px",
-  fontSize: "14px",
-  fontWeight: "600",
-  "&:hover": {
-    backgroundColor: "#0D5CAB",
-  },
-}));
-
 // Main Declaration
-const Report = () => {
+const News = () => {
+  const { category } = useParams();
+  const type = category.split("-").join(" ");
   const [searchParams] = useSearchParams();
   const dispatch = useAppDispatch();
   const take = 6;
+  const dataArticle = useAppSelector((state) => state.article.articleTypeAll.dataArticle);
+  const dataCategory = useAppSelector((state) => state.category.categoryAll.dataCategory);
+  const jumlahArticle = useAppSelector((state) => state.article.articleTypeCount.dataArticle);
+  const pageCount = Math.ceil(jumlahArticle / take);
+
+  const handleTypeArticle = useCallback(
+    (e) => {
+      let categoryId = null;
+      for (const obj of dataCategory) {
+        if (e === obj.categoryName) {
+          categoryId = obj.categoryId;
+        }
+      }
+      return categoryId;
+    },
+    [dataCategory]
+  );
+
+  console.log("ini ", handleTypeArticle(type));
+
   useEffect(() => {
     const page = searchParams.get("page") ?? 1;
-    dispatch(getAuditoriaAllTake({ take, page }));
-    dispatch(getAuditoriaAllCount());
-  }, [dispatch, searchParams]);
-
-  const dataAuditoria = useAppSelector((state) => state.auditoria.auditoriaAllTake.dataAuditoria);
-  const jumlahAuditoria = useAppSelector((state) => state.auditoria.auditoriaAllCount.dataAuditoria);
-  const pageCount = Math.ceil(jumlahAuditoria / take)
+    dispatch(getArticleTypeAll({ take, page, type: handleTypeArticle(type) }));
+    dispatch(getArticleTypeCount({ type: handleTypeArticle(type) }));
+  }, [dispatch, searchParams, handleTypeArticle, type]);
 
   const handlePageChange = (event, value) => {
     let updatedSearchParams = new URLSearchParams(searchParams.toString());
     updatedSearchParams.set("page", value);
 
-    dispatch(getAuditoriaAllTake({ take, page: value }));
-    dispatch(getAuditoriaAllCount());
+    dispatch(getArticleTypeAll({ take, page: value, type: handleTypeArticle(type) }));
+    dispatch(getArticleTypeCount({ type: handleTypeArticle(type) }));
+  };
+
+  const handleUrlCategory = (categoryId) => {
+    let category = null;
+    for (const obj of dataCategory) {
+      if (categoryId === obj.categoryId) {
+        category = obj.categoryName;
+      }
+    }
+    if (category !== null) {
+      return category.replace(/ /g, "-");
+    } else {
+      return category;
+    }
   };
 
   // Main Code
@@ -151,38 +146,21 @@ const Report = () => {
           <CustomContainer>
             <Grid container spacing={1}>
               <GridCenter item xs={12}>
-                <CustomTitle>Auditoria</CustomTitle>
+                <CustomTitle>{type}</CustomTitle>
               </GridCenter>
             </Grid>
           </CustomContainer>
         </Background>
         <BoxBg>
           <CustomContainer>
-            <SubText>Daftar Auditoria</SubText>
-            <FilterBox>
-              <Container maxWidth="lg">
-                <Grid container spacing={1}>
-                  <GridCenter item xs={12} md={5} sx={{ padding: "0px 10px" }}>
-                    <FilterText>Cari majalah berdasarkan waktu penerbitan</FilterText>
-                  </GridCenter>
-                  <GridCenter item xs={12} md={4}>
-                    <FormControl>
-                      <Autocomplete placeholder="Pilih Tahun" options={tahun} sx={{ width: { xs: 350, md: 220, lg: 280 } }} />
-                    </FormControl>
-                  </GridCenter>
-                  <GridCenter item xs={12} md={3}>
-                    <FilterButton sx={{ width: { xs: 350, md: 190 } }}>Submit</FilterButton>
-                  </GridCenter>
-                </Grid>
-              </Container>
-            </FilterBox>
+            <SubText>Daftar Artikel</SubText>
             <Grid container spacing={{ xs: 3, md: 4 }} column={{ xs: 4, sm: 8, md: 12 }} sx={{ justifyContent: "center" }}>
-              {dataAuditoria.map((dataAuditoria) => (
-                <GridCenter item key={dataAuditoria.auditoriaId} xs={12} sm={6} md={4}>
+              {dataArticle.map((obj) => (
+                <GridCenter item key={obj.id} xs={12} sm={6} md={4}>
                   <Card variant="outlined" sx={{ width: "270px", maxWidth: "100%", height: "360px", borderRadius: "20px", boxShadow: "lg", gap: "5px" }}>
                     <CardOverflow>
                       <AspectRatio ratio="16/9">
-                        <img src={`${BASE_URL}images/${dataAuditoria.pathImage}`} loading="lazy" alt="" />
+                        <img src={`${BASE_URL}images/${obj.featuredImage}`} loading="lazy" alt="" />
                       </AspectRatio>
                     </CardOverflow>
                     <CardContent sx={{ display: "flex", textAlign: "center" }}>
@@ -195,7 +173,7 @@ const Report = () => {
                           margin: "10px 0px 10px 0px",
                         }}
                       >
-                        {formatDate(dataAuditoria.publishedAt)}
+                        {formatDate(obj.publishedAt)}
                       </Typography>
                       <Typography
                         sx={{
@@ -204,12 +182,12 @@ const Report = () => {
                           marginBottom: "2px",
                         }}
                       >
-                        {dataAuditoria.deskripsi}
+                        {obj.title}
                       </Typography>
                     </CardContent>
                     <CardOverflow variant="soft" sx={{ bgcolor: "background.level1", padding: "0px" }}>
                       <CardContent sx={{ width: "100%", padding: "0px" }}>
-                        <Link to={`/baca/lakin-itjen-2022`} className="link">
+                        <Link to={`/artikel/${handleUrlCategory(obj.categoryId)}/${obj.title.replace(/ /g, "-")}`} className="link">
                           <ClickButton variant="solid" size="lg">
                             Buka Halaman
                           </ClickButton>
@@ -233,7 +211,4 @@ const Report = () => {
 };
 
 // Export Code
-export default Report;
-
-// Array Data
-const tahun = [{ label: "Semua Tahun" }, { label: "2023" }, { label: "2022" }, { label: "2021" }, { label: "2020" }, { label: "2019" }];
+export default News;

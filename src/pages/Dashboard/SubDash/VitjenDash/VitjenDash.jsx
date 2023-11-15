@@ -68,7 +68,7 @@ const VitjenDash = () => {
   const isLoading = useAppSelector((state) => state.vitjen.vitjenAll.isLoading);
   const dataVitjen = useAppSelector((state) => state.vitjen.vitjenAll.dataVitjen);
   const jumlahVitjen = useAppSelector((state) => state.vitjen.vitjenAllCount.dataVitjen);
-  const pageCount = jumlahVitjen / take;
+  const pageCount = Math.ceil(jumlahVitjen / take)
 
   useEffect(() => {
     const page = searchParams.get("page") ?? 1;

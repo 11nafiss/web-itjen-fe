@@ -69,7 +69,7 @@ const AuditDash = () => {
   const isLoading = useAppSelector((state) => state.auditoria.auditoriaAllTake.isLoading);
   const dataAuditoria = useAppSelector((state) => state.auditoria.auditoriaAllTake.dataAuditoria);
   const jumlahAuditoria = useAppSelector((state) => state.auditoria.auditoriaAllCount.dataAuditoria);
-  const pageCount = jumlahAuditoria / take;
+  const pageCount = Math.ceil(jumlahAuditoria / take);
 
   useEffect(() => {
     const page = searchParams.get("page") ?? 1;

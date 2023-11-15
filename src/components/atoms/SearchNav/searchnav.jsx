@@ -59,7 +59,7 @@ const SearchNav = () => {
       <StyledInputBase
         value={keyword}
         onChange={(e) => dispatch(articleSearchSlice.actions.setSearchKeyword(e.target.value))}
-        placeholder="Search…"
+        placeholder="Cari…"
         inputProps={{ "aria-label": "search" }}
         onKeyDown={(ev) => {
           if (ev.key === "Enter") {

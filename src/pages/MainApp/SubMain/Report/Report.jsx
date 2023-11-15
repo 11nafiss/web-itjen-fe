@@ -1,31 +1,19 @@
 // Import Library
 import { useEffect } from "react";
-import { Link } from "react-router-dom";
+import { Link, useParams, useSearchParams } from "react-router-dom";
 import { Pagination, PaginationItem, Stack, Grid, Container, Box, Typography, Button } from "@mui/material";
-import { styled, createTheme, ThemeProvider } from "@mui/material/styles";
+import { styled } from "@mui/material/styles";
 import { AspectRatio, Card, CardOverflow, CardContent } from "@mui/joy";
-// import { formatDate } from "../../../../utils/custom-format-date";
+import { formatDate } from "../../../../utils/custom-format-date";
 
 // Import Assets
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import ArrowForwardIcon from "@mui/icons-material/ArrowForward";
 
-// Import Assets
-import { Report1 } from "../../../../assets/assets";
-
 // Import Api
-import { useAppDispatch } from "../../../../hooks/useTypedSelector";
-import { getArticlePublished } from "../../../../features/actions/article.action";
-
-// Additional Code
-const theme = createTheme({
-  palette: {
-    primary: {
-      main: "#08347C",
-      contrastText: "#fff",
-    },
-  },
-});
+import { useAppDispatch, useAppSelector } from "../../../../hooks/useTypedSelector";
+import { getReportTypeAll, getReportTypeCount } from "../../../../features/actions/report.action";
+import { BASE_URL } from "../../../../services/api";
 
 // MUI Styling CSS
 const Background = styled(Box)(() => ({
@@ -97,11 +85,27 @@ const CustomTitle = styled(Typography)(({ theme }) => ({
 
 // Main Declaration
 const Report = () => {
+  const { jenis } = useParams();
+  const [searchParams] = useSearchParams();
   const dispatch = useAppDispatch();
+  const take = 6;
   useEffect(() => {
-    dispatch(getArticlePublished());
-  }, [dispatch]);
+    const page = searchParams.get("page") ?? 1;
+    dispatch(getReportTypeAll({ take, page, jenis }));
+    dispatch(getReportTypeCount());
+  }, [dispatch, searchParams, jenis]);
 
+  const dataReport = useAppSelector((state) => state.report.reportTypeAll.dataReport);
+  const jumlahReport = useAppSelector((state) => state.report.reportAllCount.dataReport);
+  const pageCount = Math.ceil(jumlahReport / take);
+
+  const handlePageChange = (event, value) => {
+    let updatedSearchParams = new URLSearchParams(searchParams.toString());
+    updatedSearchParams.set("page", value);
+
+    dispatch(getReportTypeAll({ take, page: value, jenis }));
+    dispatch(getReportTypeCount());
+  };
 
   // Main Code
   return (
@@ -111,7 +115,7 @@ const Report = () => {
           <CustomContainer>
             <Grid container spacing={1}>
               <GridCenter item xs={12}>
-                <CustomTitle>Laporan Kinerja</CustomTitle>
+                <CustomTitle>Laporan { jenis }</CustomTitle>
               </GridCenter>
             </Grid>
           </CustomContainer>
@@ -120,251 +124,53 @@ const Report = () => {
           <CustomContainer>
             <SubText>Daftar Laporan</SubText>
             <Grid container spacing={{ xs: 3, md: 4 }} column={{ xs: 4, sm: 8, md: 12 }} sx={{ justifyContent: "center" }}>
-              <GridCenter item xs={12} sm={6} md={4}>
-                <Card variant="outlined" sx={{ width: "270px", maxWidth: "100%", height: "330px", maxHeight: "330px", borderRadius: "20px", boxShadow: "lg", gap: "5px" }}>
-                  <CardOverflow >
-                      <AspectRatio ratio="16/9" >
-                        <img src={Report1} loading="lazy" alt="" />
+              {dataReport.map((obj) => (
+                <GridCenter item key={obj.laporanId} xs={12} sm={6} md={4}>
+                  <Card variant="outlined" sx={{ width: "270px", maxWidth: "100%", height: "360px", borderRadius: "20px", boxShadow: "lg", gap: "5px" }}>
+                    <CardOverflow>
+                      <AspectRatio ratio="16/9">
+                        <img src={`${BASE_URL}images/${obj.pathImage}`} loading="lazy" alt="" />
                       </AspectRatio>
-                  </CardOverflow>
-                  <CardContent sx={{ display: "flex", textAlign: "center" }}>
-                    <Typography
-                      gutterBottom
-                      sx={{
-                        fontSize: "14px",
-                        color: "#0D5CAB",
-                        fontWeight: "500",
-                        margin: "10px 0px 10px 0px",
-                      }}
-                    >
-                      22 Oktober 2023
-                    </Typography>
-                    <Typography
-                      sx={{
-                        fontSize: "14px",
-                        fontWeight: "600",
-                        marginBottom: "2px",
-                      }}
-                    >
-                      Lakin Itjen 2022
-                    </Typography>
-                  </CardContent>
-                  <CardOverflow variant="soft" sx={{ bgcolor: "background.level1", padding: "0px" }}>
-                    <CardContent sx={{ width: "100%", padding: "0px" }}>
-                      <Link to={`/baca/lakin-itjen-2022`} className="link">
-                        <ClickButton variant="solid" size="lg">
-                          Baca laporan
-                        </ClickButton>
-                      </Link>
+                    </CardOverflow>
+                    <CardContent sx={{ display: "flex", textAlign: "center" }}>
+                      <Typography
+                        gutterBottom
+                        sx={{
+                          fontSize: "14px",
+                          color: "#0D5CAB",
+                          fontWeight: "500",
+                          margin: "10px 0px 10px 0px",
+                        }}
+                      >
+                        {formatDate(obj.publishedAt)}
+                      </Typography>
+                      <Typography
+                        sx={{
+                          fontSize: "14px",
+                          fontWeight: "600",
+                          marginBottom: "2px",
+                        }}
+                      >
+                        {obj.judul}
+                      </Typography>
                     </CardContent>
-                  </CardOverflow>
-                </Card>
-              </GridCenter>
-              <GridCenter item xs={12} sm={6} md={4}>
-                <Card variant="outlined" sx={{ width: "270px", maxWidth: "100%", height: "330px", borderRadius: "20px", boxShadow: "lg", gap: "5px" }}>
-                  <CardOverflow>
-                    <AspectRatio ratio="16/9">
-                      <img src={Report1} loading="lazy" alt="" />
-                    </AspectRatio>
-                  </CardOverflow>
-                  <CardContent sx={{ display: "flex", textAlign: "center" }}>
-                    <Typography
-                      gutterBottom
-                      sx={{
-                        fontSize: "14px",
-                        color: "#0D5CAB",
-                        fontWeight: "500",
-                        margin: "10px 0px 10px 0px",
-                      }}
-                    >
-                      22 Oktober 2023
-                    </Typography>
-                    <Typography
-                      sx={{
-                        fontSize: "14px",
-                        fontWeight: "600",
-                        marginBottom: "2px",
-                      }}
-                    >
-                      Lakin Itjen 2022
-                    </Typography>
-                  </CardContent>
-                  <CardOverflow variant="soft" sx={{ bgcolor: "background.level1", padding: "0px" }}>
-                    <CardContent sx={{ width: "100%", padding: "0px" }}>
-                      <Link to={`/baca/lakin-itjen-2022`} className="link">
-                        <ClickButton variant="solid" size="lg">
-                          Baca laporan
-                        </ClickButton>
-                      </Link>
-                    </CardContent>
-                  </CardOverflow>
-                </Card>
-              </GridCenter>
-              <GridCenter item xs={12} sm={6} md={4}>
-                <Card variant="outlined" sx={{ width: "270px", maxWidth: "100%", height: "330px", borderRadius: "20px", boxShadow: "lg", gap: "5px" }}>
-                  <CardOverflow>
-                    <AspectRatio ratio="16/9">
-                      <img src={Report1} loading="lazy" alt="" />
-                    </AspectRatio>
-                  </CardOverflow>
-                  <CardContent sx={{ display: "flex", textAlign: "center" }}>
-                    <Typography
-                      gutterBottom
-                      sx={{
-                        fontSize: "14px",
-                        color: "#0D5CAB",
-                        fontWeight: "500",
-                        margin: "10px 0px 10px 0px",
-                      }}
-                    >
-                      22 Oktober 2023
-                    </Typography>
-                    <Typography
-                      sx={{
-                        fontSize: "14px",
-                        fontWeight: "600",
-                        marginBottom: "2px",
-                      }}
-                    >
-                      Lakin Itjen 2022
-                    </Typography>
-                  </CardContent>
-                  <CardOverflow variant="soft" sx={{ bgcolor: "background.level1", padding: "0px" }}>
-                    <CardContent sx={{ width: "100%", padding: "0px" }}>
-                      <Link to={`/baca/lakin-itjen-2022`} className="link">
-                        <ClickButton variant="solid" size="lg">
-                          Baca laporan
-                        </ClickButton>
-                      </Link>
-                    </CardContent>
-                  </CardOverflow>
-                </Card>
-              </GridCenter>
-              <GridCenter item xs={12} sm={6} md={4}>
-                <Card variant="outlined" sx={{ width: "270px", maxWidth: "100%", height: "330px", borderRadius: "20px", boxShadow: "lg", gap: "5px" }}>
-                  <CardOverflow>
-                    <AspectRatio ratio="16/9">
-                      <img src={Report1} loading="lazy" alt="" />
-                    </AspectRatio>
-                  </CardOverflow>
-                  <CardContent sx={{ display: "flex", textAlign: "center" }}>
-                    <Typography
-                      gutterBottom
-                      sx={{
-                        fontSize: "14px",
-                        color: "#0D5CAB",
-                        fontWeight: "500",
-                        margin: "10px 0px 10px 0px",
-                      }}
-                    >
-                      22 Oktober 2023
-                    </Typography>
-                    <Typography
-                      sx={{
-                        fontSize: "14px",
-                        fontWeight: "600",
-                        marginBottom: "2px",
-                      }}
-                    >
-                      Lakin Itjen 2022
-                    </Typography>
-                  </CardContent>
-                  <CardOverflow variant="soft" sx={{ bgcolor: "background.level1", padding: "0px" }}>
-                    <CardContent sx={{ width: "100%", padding: "0px" }}>
-                      <Link to={`/baca/lakin-itjen-2022`} className="link">
-                        <ClickButton variant="solid" size="lg">
-                          Baca laporan
-                        </ClickButton>
-                      </Link>
-                    </CardContent>
-                  </CardOverflow>
-                </Card>
-              </GridCenter>
-              <GridCenter item xs={12} sm={6} md={4}>
-                <Card variant="outlined" sx={{ width: "270px", maxWidth: "100%", height: "330px", borderRadius: "20px", boxShadow: "lg", gap: "5px" }}>
-                  <CardOverflow>
-                    <AspectRatio ratio="16/9">
-                      <img src={Report1} loading="lazy" alt="" />
-                    </AspectRatio>
-                  </CardOverflow>
-                  <CardContent sx={{ display: "flex", textAlign: "center" }}>
-                    <Typography
-                      gutterBottom
-                      sx={{
-                        fontSize: "14px",
-                        color: "#0D5CAB",
-                        fontWeight: "500",
-                        margin: "10px 0px 10px 0px",
-                      }}
-                    >
-                      22 Oktober 2023
-                    </Typography>
-                    <Typography
-                      sx={{
-                        fontSize: "14px",
-                        fontWeight: "600",
-                        marginBottom: "2px",
-                      }}
-                    >
-                      Lakin Itjen 2022
-                    </Typography>
-                  </CardContent>
-                  <CardOverflow variant="soft" sx={{ bgcolor: "background.level1", padding: "0px" }}>
-                    <CardContent sx={{ width: "100%", padding: "0px" }}>
-                      <Link to={`/baca/lakin-itjen-2022`} className="link">
-                        <ClickButton variant="solid" size="lg">
-                          Baca laporan
-                        </ClickButton>
-                      </Link>
-                    </CardContent>
-                  </CardOverflow>
-                </Card>
-              </GridCenter>
-              <GridCenter item xs={12} sm={6} md={4}>
-                <Card variant="outlined" sx={{ width: "270px", maxWidth: "100%", height: "330px", borderRadius: "20px", boxShadow: "lg", gap: "5px" }}>
-                  <CardOverflow>
-                    <AspectRatio ratio="16/9">
-                      <img src={Report1} loading="lazy" alt="" />
-                    </AspectRatio>
-                  </CardOverflow>
-                  <CardContent sx={{ display: "flex", textAlign: "center" }}>
-                    <Typography
-                      gutterBottom
-                      sx={{
-                        fontSize: "14px",
-                        color: "#0D5CAB",
-                        fontWeight: "500",
-                        margin: "10px 0px 10px 0px",
-                      }}
-                    >
-                      22 Oktober 2023
-                    </Typography>
-                    <Typography
-                      sx={{
-                        fontSize: "14px",
-                        fontWeight: "600",
-                        marginBottom: "2px",
-                      }}
-                    >
-                      Lakin Itjen 2022
-                    </Typography>
-                  </CardContent>
-                  <CardOverflow variant="soft" sx={{ bgcolor: "background.level1", padding: "0px" }}>
-                    <CardContent sx={{ width: "100%", padding: "0px" }}>
-                      <Link to={`/baca/lakin-itjen-2022`} className="link">
-                        <ClickButton variant="solid" size="lg">
-                          Baca laporan
-                        </ClickButton>
-                      </Link>
-                    </CardContent>
-                  </CardOverflow>
-                </Card>
-              </GridCenter>
+                    <CardOverflow variant="soft" sx={{ bgcolor: "background.level1", padding: "0px" }}>
+                      <CardContent sx={{ width: "100%", padding: "0px" }}>
+                        <Link to={`/baca/lakin-itjen-2022`} className="link">
+                          <ClickButton variant="solid" size="lg">
+                            Buka Halaman
+                          </ClickButton>
+                        </Link>
+                      </CardContent>
+                    </CardOverflow>
+                  </Card>
+                </GridCenter>
+              ))}
             </Grid>
             <Stack spacing={2} sx={{ width: "100%", alignItems: "center" }}>
-              <ThemeProvider theme={theme}>
-                <Pagination color="primary" count={10} renderItem={(item) => <PaginationItem slots={{ previous: ArrowBackIcon, next: ArrowForwardIcon }} {...item} />} />
-              </ThemeProvider>
+              <div className="pagination">
+                <Pagination color="primary" count={pageCount} onChange={handlePageChange} renderItem={(item) => <PaginationItem slots={{ previous: ArrowBackIcon, next: ArrowForwardIcon }} {...item} />} />
+              </div>
             </Stack>
           </CustomContainer>
         </BoxBg>

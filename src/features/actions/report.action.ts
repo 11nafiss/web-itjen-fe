@@ -144,3 +144,31 @@ export const getReportSearchCount = createAsyncThunk<ReportData[], any, { reject
   const data: ReportData[] = response.data;
   return data;
 });
+
+export const getReportTypeAll = createAsyncThunk<ReportData[], any, { rejectValue: AxiosError }>("Report/getReportType", async (params, thunkAPI) => {
+  const take = params.take;
+  const skip = params.page * params.take - params.take;
+  const ReportTypeUrl = `/type/${params.jenis}/${take}/${skip}`;
+
+  const responses = await axios.get(urlReport + ReportTypeUrl, {
+    headers: {
+      "Content-Type": "application/json",
+    },
+  });
+
+  const Report: ReportData[] = responses.data;
+  return Report;
+});
+
+export const getReportTypeCount = createAsyncThunk<ReportData[], any, { rejectValue: AxiosError }>("Report/getReportTypeCount", async (params) => {
+  const ReportCountUrl = `/jumlahtype/${params.jenis}`;
+
+  const response = await axios.get(urlReport + ReportCountUrl, {
+    headers: {
+      "Content-Type": "application/json",
+    },
+  });
+
+  const data: ReportData[] = response.data;
+  return data;
+});

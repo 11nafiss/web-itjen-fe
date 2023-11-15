@@ -68,7 +68,7 @@ const BannerDash = () => {
   const isLoading = useAppSelector((state) => state.banner.bannerAllTake.isLoading);
   const dataBanner = useAppSelector((state) => state.banner.bannerAllTake.dataBanner);
   const jumlahBanner = useAppSelector((state) => state.banner.bannerAllCount.dataBanner);
-  const pageCount = jumlahBanner / take;
+  const pageCount = Math.ceil(jumlahBanner / take);
 
   useEffect(() => {
     const page = searchParams.get("page") ?? 1;

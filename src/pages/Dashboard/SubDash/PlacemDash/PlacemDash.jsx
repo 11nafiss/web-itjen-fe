@@ -68,7 +68,7 @@ const PlacemDash = () => {
   const isLoading = useAppSelector((state) => state.placem.placemAllTake.isLoading);
   const dataPlacem = useAppSelector((state) => state.placem.placemAllTake.dataPlacem);
   const jumlahPlacem = useAppSelector((state) => state.placem.placemAllCount.dataPlacem);
-  const pageCount = jumlahPlacem/take;
+  const pageCount = Math.ceil(jumlahPlacem/take);
 
   useEffect(() => {
     const page = searchParams.get("page") ?? 1;

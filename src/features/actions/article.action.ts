@@ -218,4 +218,32 @@ export const getArticleSearch = createAsyncThunk<ArticleData[], any, { rejectVal
   return publishedData;
 });
 
+export const getArticleTypeAll = createAsyncThunk<ArticleData[], any, { rejectValue: AxiosError }>("article/getArticleType", async (params, thunkAPI) => {
+  const take = params.take;
+  const skip = params.page * params.take - params.take;
+  const articleTypeUrl = `/type/${params.type}/${take}/${skip}`;
+
+  const responses = await axios.get(urlArticle + articleTypeUrl, {
+    headers: {
+      "Content-Type": "application/json",
+    },
+  });
+
+  const article: ArticleData[] = responses.data;
+  return article;
+});
+
+export const getArticleTypeCount = createAsyncThunk<ArticleData[], any, { rejectValue: AxiosError }>("article/getArticleNumber", async (params) => {
+  const articleCountUrl = `/jumlahtype/${params.type}`;
+
+  const response = await axios.get(urlArticle + articleCountUrl, {
+    headers: {
+      "Content-Type": "application/json",
+    },
+  });
+
+  const data: ArticleData[] = response.data;
+  return data;
+});
+
 
