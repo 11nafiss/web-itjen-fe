@@ -98,7 +98,7 @@ const Auditoria = () => {
                 Auditoria adalah majalah internal resmi Inspektorat Jenderal kementerian Keuangan. Memberikan informasi seputar pengawasan disektor pemerintahan didukung oleh penulis dan praktisi yang kredibel pada bidangnya.
               </CustomText>
               <Box sx={{ display: "flex", justifyContent: { xs: "center", md: "start" } }}>
-                <Link to={`/baca/${obj.judul}`} className="link">
+                <Link to={`/baca/auditoria/${obj.auditoriaId}`} className="link">
                   <ButtonAudit variant="outlined" sx={{ marginRight: "10px" }}>
                     <ButtonText>{obj.judul}</ButtonText>
                     <IconBox>

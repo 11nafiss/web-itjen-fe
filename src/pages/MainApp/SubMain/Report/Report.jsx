@@ -126,7 +126,7 @@ const Report = () => {
             <Grid container spacing={{ xs: 3, md: 4 }} column={{ xs: 4, sm: 8, md: 12 }} sx={{ justifyContent: "center" }}>
               {dataReport.map((obj) => (
                 <GridCenter item key={obj.laporanId} xs={12} sm={6} md={4}>
-                  <Card variant="outlined" sx={{ width: "270px", maxWidth: "100%", height: "360px", borderRadius: "20px", boxShadow: "lg", gap: "5px" }}>
+                  <Card variant="outlined" sx={{ width: "270px", maxWidth: "100%", height: "380px", borderRadius: "20px", boxShadow: "lg", gap: "5px" }}>
                     <CardOverflow>
                       <AspectRatio ratio="16/9">
                         <img src={`${BASE_URL}images/${obj.pathImage}`} loading="lazy" alt="" />
@@ -156,7 +156,7 @@ const Report = () => {
                     </CardContent>
                     <CardOverflow variant="soft" sx={{ bgcolor: "background.level1", padding: "0px" }}>
                       <CardContent sx={{ width: "100%", padding: "0px" }}>
-                        <Link to={`/baca/lakin-itjen-2022`} className="link">
+                        <Link to={`/baca/laporan/${obj.laporanId}`} className="link">
                           <ClickButton variant="solid" size="lg">
                             Buka Halaman
                           </ClickButton>

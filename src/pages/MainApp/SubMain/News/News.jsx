@@ -1,5 +1,5 @@
 // Import Library
-import { useCallback, useEffect } from "react";
+import { useEffect } from "react";
 import { Link, useParams, useSearchParams } from "react-router-dom";
 import { Pagination, PaginationItem, Stack, Grid, Container, Box, Typography, Button } from "@mui/material";
 import { styled } from "@mui/material/styles";
@@ -95,26 +95,25 @@ const News = () => {
   const jumlahArticle = useAppSelector((state) => state.article.articleTypeCount.dataArticle);
   const pageCount = Math.ceil(jumlahArticle / take);
 
-  const handleTypeArticle = useCallback(
-    (e) => {
-      let categoryId = null;
-      for (const obj of dataCategory) {
-        if (e === obj.categoryName) {
-          categoryId = obj.categoryId;
-        }
+  const handleTypeArticle = (e) => {
+    let categoryId = null;
+    for (const obj of dataCategory) {
+      if (e === obj.categoryName) {
+        categoryId = obj.categoryId;
       }
-      return categoryId;
-    },
-    [dataCategory]
-  );
+    }
+    return categoryId;
+  };
 
-  console.log("ini ", handleTypeArticle(type));
+  const newType = handleTypeArticle(type);
+
+  console.log("ini ", newType);
 
   useEffect(() => {
     const page = searchParams.get("page") ?? 1;
-    dispatch(getArticleTypeAll({ take, page, type: handleTypeArticle(type) }));
-    dispatch(getArticleTypeCount({ type: handleTypeArticle(type) }));
-  }, [dispatch, searchParams, handleTypeArticle, type]);
+    dispatch(getArticleTypeAll({ take, page, type: newType }));
+    dispatch(getArticleTypeCount({ type: newType }));
+  }, [dispatch, searchParams, newType, type]);
 
   const handlePageChange = (event, value) => {
     let updatedSearchParams = new URLSearchParams(searchParams.toString());
@@ -157,7 +156,7 @@ const News = () => {
             <Grid container spacing={{ xs: 3, md: 4 }} column={{ xs: 4, sm: 8, md: 12 }} sx={{ justifyContent: "center" }}>
               {dataArticle.map((obj) => (
                 <GridCenter item key={obj.id} xs={12} sm={6} md={4}>
-                  <Card variant="outlined" sx={{ width: "270px", maxWidth: "100%", height: "360px", borderRadius: "20px", boxShadow: "lg", gap: "5px" }}>
+                  <Card variant="outlined" sx={{ width: "270px", maxWidth: "100%", height: "380px", borderRadius: "20px", boxShadow: "lg", gap: "5px" }}>
                     <CardOverflow>
                       <AspectRatio ratio="16/9">
                         <img src={`${BASE_URL}images/${obj.featuredImage}`} loading="lazy" alt="" />

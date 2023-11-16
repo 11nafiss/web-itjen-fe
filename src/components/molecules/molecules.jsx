@@ -1,33 +1,10 @@
 // Import Code
-import Navbar from './Navbar2/navbar'
-import DrawerBar from './DrawerBar/drawerBar'
-import VisualBar from './VisualBar/visualbar'
-import CardSlider from './CardSlider/cardslider'
-import Trending from './Trending/trending'
-import Reader2 from './Reader2/reader'
-import Reader3 from './Reader3/reader'
-import FilterFind from './FilterFind/filterfind'
-import CardList2 from './CardList2/cardlist2'
-import CardList3 from './CardList3/cardlist3'
-import ImagesList from './ImagesList/imageslist'
-import LiveAvatar from './LiveAvatar/liveavatar'
-import SupportBar from './SupportBar/supportbar'
-import RichText from './RichText2/richtext'
+import Navbar from "./Navbar2/navbar";
+import DrawerBar from "./DrawerBar/drawerBar";
+import VisualBar from "./VisualBar/visualbar";
+import Trending from "./Trending/trending";
+import LiveAvatar from "./LiveAvatar/liveavatar";
+import SupportBar from "./SupportBar/supportbar";
 
 // Export Code
-export { 
-    DrawerBar, 
-    Navbar,
-    VisualBar,
-    CardSlider,
-    Trending,
-    Reader2,
-    Reader3,
-    FilterFind,
-    CardList2,
-    CardList3,
-    ImagesList,
-    LiveAvatar,
-    SupportBar,
-    RichText,
-}
+export { DrawerBar, Navbar, VisualBar, Trending, LiveAvatar, SupportBar };

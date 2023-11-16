@@ -172,3 +172,16 @@ export const getReportTypeCount = createAsyncThunk<ReportData[], any, { rejectVa
   const data: ReportData[] = response.data;
   return data;
 });
+
+export const getReportById = createAsyncThunk<ReportData[], any, { rejectValue: AxiosError }>("report/getReportById", async (params) => {
+  const newUrl = `/${params.id}`;
+
+  const response = await axios.get(urlReport + newUrl, {
+    headers: {
+      "Content-Type": "application/json",
+    },
+  });
+
+  const data: ReportData[] = response.data;
+  return data;
+});

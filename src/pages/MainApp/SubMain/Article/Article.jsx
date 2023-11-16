@@ -12,6 +12,7 @@ import { formatDate } from "../../../../utils/custom-format-date";
 
 // Import Assets
 import { HiShare } from "react-icons/hi";
+import { Juanda } from "../../../../assets/assets";
 
 // Import Components
 import { Trending } from "../../../../components/components";
@@ -117,7 +118,7 @@ const Article = () => {
                 <Grid container spacing={0}>
                   <GridCenter item xs={12}>
                     <Box style={{ maxWidth: "1600px", maxHeight: "900px", padding: "0" }}>
-                      <img src={`${BASE_URL}images/${dataArticle.featuredImage}`} style={{ width: "100%", height: "100%", objectFit: "cover" }} />
+                      <img src={dataArticle.featuredImage === null ? Juanda : `${BASE_URL}images/${dataArticle.featuredImage}`} style={{ width: "100%", height: "100%", objectFit: "cover" }} />
                     </Box>
                   </GridCenter>
                   <GridCenter item xs={12}>

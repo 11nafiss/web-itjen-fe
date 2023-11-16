@@ -1,5 +1,5 @@
 import { PayloadAction, createSlice, combineReducers } from "@reduxjs/toolkit";
-import { createReport, editReport, deleteReport, getReportData, getReportAllTake, getReportSearchCount, getReportSearchAll, getReportAllCount, getReportTypeAll, getReportTypeCount } from "../actions/report.action";
+import { createReport, editReport, deleteReport, getReportData, getReportAllTake, getReportSearchCount, getReportSearchAll, getReportAllCount, getReportTypeAll, getReportTypeCount, getReportById } from "../actions/report.action";
 import { ReportData } from "../../models/report.models";
 
 interface typeOfInitialState {
@@ -275,6 +275,30 @@ export const reportTypeCountSlice = createSlice({
   },
 });
 
+export const reportByIdSlice = createSlice({
+  name: "reportByIdReducer",
+  initialState,
+  reducers: {},
+  extraReducers: (builder) => {
+    builder.addCase(getReportById.pending, (state) => {
+      (state.isLoading = true), (state.errorMessage = "");
+      console.log("PENDING REPORT....");
+    });
+
+    builder.addCase(getReportById.fulfilled, (state, action: PayloadAction<ReportData[]>) => {
+      state.dataReport = action.payload;
+      console.log("Filled REPORT");
+    });
+
+    builder.addCase(getReportById.rejected, (state, { payload }) => {
+      if (payload) {
+        console.log("FAILED REPORT");
+        state.isSuccess = false;
+      }
+    });
+  },
+});
+
 const reportReducer = combineReducers({
   createReport: createReportSlice.reducer,
   editReport: editReportSlice.reducer,
@@ -286,6 +310,7 @@ const reportReducer = combineReducers({
   reportSearchCount: reportSearchCountSlice.reducer,
   reportTypeAll: reportTypeAllSlice.reducer,
   reportTypeCount: reportTypeCountSlice.reducer,
+  reportId: reportByIdSlice.reducer,
 });
 
 export default reportReducer;

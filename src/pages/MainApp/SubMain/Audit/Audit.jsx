@@ -177,12 +177,12 @@ const Report = () => {
               </Container>
             </FilterBox>
             <Grid container spacing={{ xs: 3, md: 4 }} column={{ xs: 4, sm: 8, md: 12 }} sx={{ justifyContent: "center" }}>
-              {dataAuditoria.map((dataAuditoria) => (
-                <GridCenter item key={dataAuditoria.auditoriaId} xs={12} sm={6} md={4}>
-                  <Card variant="outlined" sx={{ width: "270px", maxWidth: "100%", height: "360px", borderRadius: "20px", boxShadow: "lg", gap: "5px" }}>
+              {dataAuditoria.map((obj) => (
+                <GridCenter item key={obj.auditoriaId} xs={12} sm={6} md={4}>
+                  <Card variant="outlined" sx={{ width: "270px", maxWidth: "100%", height: "380px", borderRadius: "20px", boxShadow: "lg", gap: "5px" }}>
                     <CardOverflow>
                       <AspectRatio ratio="16/9">
-                        <img src={`${BASE_URL}images/${dataAuditoria.pathImage}`} loading="lazy" alt="" />
+                        <img src={`${BASE_URL}images/${obj.pathImage}`} loading="lazy" alt="" />
                       </AspectRatio>
                     </CardOverflow>
                     <CardContent sx={{ display: "flex", textAlign: "center" }}>
@@ -195,7 +195,7 @@ const Report = () => {
                           margin: "10px 0px 10px 0px",
                         }}
                       >
-                        {formatDate(dataAuditoria.publishedAt)}
+                        {formatDate(obj.publishedAt)}
                       </Typography>
                       <Typography
                         sx={{
@@ -204,12 +204,12 @@ const Report = () => {
                           marginBottom: "2px",
                         }}
                       >
-                        {dataAuditoria.deskripsi}
+                        {obj.deskripsi}
                       </Typography>
                     </CardContent>
                     <CardOverflow variant="soft" sx={{ bgcolor: "background.level1", padding: "0px" }}>
                       <CardContent sx={{ width: "100%", padding: "0px" }}>
-                        <Link to={`/baca/lakin-itjen-2022`} className="link">
+                        <Link to={`/baca/auditoria/${obj.auditoriaId}`} className="link">
                           <ClickButton variant="solid" size="lg">
                             Buka Halaman
                           </ClickButton>

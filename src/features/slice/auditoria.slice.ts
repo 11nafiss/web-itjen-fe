@@ -1,5 +1,5 @@
 import { PayloadAction, createSlice, combineReducers } from "@reduxjs/toolkit";
-import { createAuditoria, editAuditoria, deleteAuditoria, getAuditoriaData, getAuditoriaAllTake, getAuditoriaSearchAll, getAuditoriaSearchCount, getAuditoriaAllCount } from "../actions/auditoria.action";
+import { createAuditoria, editAuditoria, deleteAuditoria, getAuditoriaData, getAuditoriaAllTake, getAuditoriaSearchAll, getAuditoriaSearchCount, getAuditoriaAllCount, getAuditoriaById } from "../actions/auditoria.action";
 import { AuditoriaData } from "../../models/auditoria.model";
 
 interface typeOfInitialState {
@@ -227,6 +227,30 @@ export const auditoriaSearchCountSlice = createSlice({
   },
 });
 
+export const auditoriaByIdSlice = createSlice({
+  name: "auditoriaByIdReducer",
+  initialState,
+  reducers: {},
+  extraReducers: (builder) => {
+    builder.addCase(getAuditoriaById.pending, (state) => {
+      (state.isLoading = true), (state.errorMessage = "");
+      console.log("PENDING REPORT....");
+    });
+
+    builder.addCase(getAuditoriaById.fulfilled, (state, action: PayloadAction<AuditoriaData[]>) => {
+      state.dataAuditoria = action.payload;
+      console.log("Filled REPORT");
+    });
+
+    builder.addCase(getAuditoriaById.rejected, (state, { payload }) => {
+      if (payload) {
+        console.log("FAILED REPORT");
+        state.isSuccess = false;
+      }
+    });
+  },
+});
+
 const auditoriaReducer = combineReducers({
   createAuditoria: createAuditoriaSlice.reducer,
   editAuditoria: editAuditoriaSlice.reducer,
@@ -236,6 +260,7 @@ const auditoriaReducer = combineReducers({
   auditoriaAllCount: auditoriaAllCountSlice.reducer,
   auditoriaSearchAll: auditoriaSearchAllSlice.reducer,
   auditoriaSearchCount: auditoriaSearchCountSlice.reducer,
+  auditoriaId: auditoriaByIdSlice.reducer,
 });
 
 export default auditoriaReducer;

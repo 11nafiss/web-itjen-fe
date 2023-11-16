@@ -142,3 +142,17 @@ export const getAuditoriaSearchCount = createAsyncThunk<AuditoriaData[], any, { 
   const data: AuditoriaData[] = response.data;
   return data;
 });
+
+export const getAuditoriaById = createAsyncThunk<AuditoriaData[], any, { rejectValue: AxiosError }>("Auditoria/getAuditoriaById", async (params) => {
+  const newUrl = `/${params.id}`;
+
+  const response = await axios.get(urlAuditoria + newUrl, {
+    headers: {
+      "Content-Type": "application/json",
+    },
+  });
+
+  const data: AuditoriaData[] = response.data;
+  return data;
+});
+

@@ -375,7 +375,7 @@ const CrArticle = (mode) => {
                         fontSize: "16px",
                       }}
                     >
-                      {isLoading ? "Submit" : "Loading..."}
+                      Submit
                     </Button>
                     {errorMessage && <FormHelperText sx={(theme) => ({ color: theme.vars.palette.danger[400] })}>Upload Article Gagal</FormHelperText>}
                   </Box>

@@ -75,7 +75,7 @@ const MenuGroup = styled(ButtonGroup)(({ theme }) => ({
   borderRadius: "12px",
   borderWidth: "0px",
   borderColor: "#08245C",
-  height: "360px",
+  height: "380px",
   overflow: "hidden",
 
   [theme.breakpoints.down("md")]: {
@@ -226,10 +226,10 @@ const Updates = () => {
         <Grid item xs={12} md={9}>
           <Box>
             <div className="navigation-wrapper">
-              <div ref={sliderRef} className="keen-slider" style={{ height: "370px" }}>
+              <div ref={sliderRef} className="keen-slider" style={{ height: "400px" }}>
                 {dataArticle.map((obj) => (
                   <div key={obj.id} className="keen-slider__slide" style={{ display: "flex", justifyContent: "center" }}>
-                    <Card variant="outlined" sx={{ width: "270px", maxWidth: "100%", height: "360px", borderRadius: "20px", boxShadow: "lg", gap: "5px" }}>
+                    <Card variant="outlined" sx={{ width: "270px", maxWidth: "100%", height: "380px", borderRadius: "20px", boxShadow: "lg", gap: "5px" }}>
                       <CardOverflow>
                         <AspectRatio ratio="16/9">
                           <img src={`${BASE_URL}images/${obj.featuredImage}`} loading="lazy" alt="" />

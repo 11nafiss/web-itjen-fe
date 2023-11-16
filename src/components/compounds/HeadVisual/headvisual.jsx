@@ -1,14 +1,13 @@
 // Import Library
 import React from "react";
 import { Link } from "react-router-dom";
-import { Container, AppBar, Box, CssBaseline, Toolbar, useScrollTrigger } from "@mui/material";
+import { Button, Container, AppBar, Box, CssBaseline, Toolbar, useScrollTrigger } from "@mui/material";
 import { styled } from "@mui/material/styles";
 
 // Import Assets
 import { Kemenkeu } from "../../../assets/assets";
-
-// Import Components
-import { VisualBar } from "../../molecules/molecules";
+import { FaListAlt } from "react-icons/fa";
+import { RiHomeSmileFill } from "react-icons/ri";
 
 function ElevationScroll(props) {
   const { children, window } = props;
@@ -69,9 +68,16 @@ const CustomText = styled(Box)(({ theme }) => ({
   },
 }));
 
+const MenuButton = styled(Button)(() => ({
+  color: "#08347C",
+  background: "transparent",
+  textShadow: "0.5px 0.5px 1.5px #fff",
+  fontWeight: 700,
+  marginInline: "5px",
+}));
+
 // Main Declaration
 const HeadVisual = (props) => {
-
   // Main Code
   return (
     <CustomContainer>
@@ -83,7 +89,7 @@ const HeadVisual = (props) => {
               <Box sx={{ display: "flex", alignItems: "center" }}>
                 <Link to="/" className="link">
                   <LogoBox>
-                      <img src={Kemenkeu} style={{ width: "50px", height: "50px" }} />
+                    <img src={Kemenkeu} style={{ width: "50px", height: "50px" }} />
                     <LogoText>
                       <CustomText>Kementerian Keuangan</CustomText>
                       <CustomText>Inspektorat Jenderal</CustomText>
@@ -91,7 +97,26 @@ const HeadVisual = (props) => {
                   </LogoBox>
                 </Link>
               </Box>
-              <VisualBar />
+              <Box sx={{ display: "flex", alignItems: "center", marginRight: { xs: "10px", md: "65px" } }}>
+                <Box sx={{ display: "flex", alignItems: "center" }}>
+                  <Link to="/visual" className="link">
+                    <MenuButton variant="text" sx={{ fontSize: "16px", display: "flex", alignItems: "center" }}>
+                      <Box sx={{ fontSize: "30px", mt: "10px", mr: "10px" }}>
+                        <RiHomeSmileFill />
+                      </Box>
+                      Beranda
+                    </MenuButton>
+                  </Link>
+                  <Link to="/visual/semua" className="link">
+                    <MenuButton variant="text" sx={{ fontSize: "16px", display: "flex", alignItems: "center" }}>
+                      <Box sx={{ fontSize: "30px", mt: "10px", mr: "10px" }}>
+                        <FaListAlt />
+                      </Box>
+                      Lihat Semua
+                    </MenuButton>
+                  </Link>
+                </Box>
+              </Box>
             </Toolbar>
           </AppBar>
         </ElevationScroll>
@@ -99,7 +124,6 @@ const HeadVisual = (props) => {
     </CustomContainer>
   );
 };
-
 
 // Export Code
 export default HeadVisual;

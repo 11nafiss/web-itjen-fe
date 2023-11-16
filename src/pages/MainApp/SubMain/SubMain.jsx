@@ -7,8 +7,8 @@ import Placem from './Placem/Placem'
 import Gallery from './Gallery/Gallery'
 import Audit from './Audit/Audit'
 import Search from './Search/Search'
-import Books from './Books/Books'
-import Books2 from './Books2/Books2'
+import AuditBook from './AuditBook/AuditBook'
+import ReportBook from './ReportBook/ReportBook'
 import Article from './Article/Article'
 import Report from './Report/Report'
 import News from './News/News'
@@ -23,8 +23,8 @@ export {
     Gallery,
     Audit,
     Search,
-    Books,
-    Books2,
+    AuditBook,
+    ReportBook,
     Article,
     Report,
     News,

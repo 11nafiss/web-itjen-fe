@@ -206,7 +206,7 @@ const Search = () => {
               <Grid container spacing={{ xs: 3, md: 4 }} column={{ xs: 4, sm: 8, md: 12 }} sx={{ justifyContent: "center" }}>
                 {dataArticle.map((obj, index) => (
                   <GridCenter item key={index} xs={12} sm={6} md={4}>
-                    <Card variant="outlined" sx={{ width: "270px", maxWidth: "100%", height: "360px", borderRadius: "20px", boxShadow: "lg", gap: "5px" }}>
+                    <Card variant="outlined" sx={{ width: "270px", maxWidth: "100%", height: "380px", borderRadius: "20px", boxShadow: "lg", gap: "5px" }}>
                       <CardOverflow>
                         <AspectRatio ratio="16/9">
                           <img src={`${BASE_URL}images/${obj.featuredImage}`} loading="lazy" alt="" />
