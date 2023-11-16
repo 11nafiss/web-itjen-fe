@@ -1,5 +1,5 @@
 // Import Code
-import Navbar from "./Navbar2/navbar";
+import Navbar from "./Navbar/navbar";
 import DrawerBar from "./DrawerBar/drawerBar";
 import Trending from "./Trending/trending";
 import LiveAvatar from "./LiveAvatar/liveavatar";

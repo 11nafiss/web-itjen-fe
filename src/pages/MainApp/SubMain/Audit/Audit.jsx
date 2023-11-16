@@ -1,10 +1,14 @@
 // Import Library
 import { useEffect, useState } from "react";
-import { Link, useSearchParams } from "react-router-dom";
+import { Link, useNavigate, useSearchParams } from "react-router-dom";
 import { Pagination, PaginationItem, Stack, Grid, Container, Box, Typography, Button } from "@mui/material";
 import { Autocomplete, FormControl, AspectRatio, Card, CardOverflow, CardContent, AutocompleteOption } from "@mui/joy";
 import { styled } from "@mui/material/styles";
 import { formatDate } from "../../../../utils/custom-format-date";
+import { DemoContainer } from "@mui/x-date-pickers/internals/demo";
+import { AdapterMoment } from "@mui/x-date-pickers/AdapterMoment";
+import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
+import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 
 // Import Assets
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
@@ -12,7 +16,7 @@ import ArrowForwardIcon from "@mui/icons-material/ArrowForward";
 
 // Import Api
 import { useAppDispatch, useAppSelector } from "../../../../hooks/useTypedSelector";
-import { getAuditoriaAllCount, getAuditoriaAllTake } from "../../../../features/actions/auditoria.action";
+import { getAuditoriaAllCount, getAuditoriaAllTake, getAuditoriaTahunAll, getAuditoriaTahunCount } from "../../../../features/actions/auditoria.action";
 import { BASE_URL } from "../../../../services/api";
 import moment from "moment";
 
@@ -99,7 +103,7 @@ const FilterBox = styled(Box)(({ theme }) => ({
   [theme.breakpoints.down("md")]: {
     justifyContent: "center",
     margin: "0px",
-    height: "250px",
+    height: "300px",
   },
 }));
 
@@ -124,15 +128,12 @@ const FilterButton = styled(Button)(() => ({
 const Report = () => {
   const [searchParams] = useSearchParams();
   const dispatch = useAppDispatch();
-  const [publishedAt, setPublishedAt] = useState(null)
+  const navigate = useNavigate();
+  const [publishedAt, setPublishedAt] = useState(moment());
   const take = 6;
-  useEffect(() => {
-    const page = searchParams.get("page") ?? 1;
-    dispatch(getAuditoriaAllTake({ take, page }));
-    dispatch(getAuditoriaAllCount());
-  }, [dispatch, searchParams]);
 
   const dataAuditoria = useAppSelector((state) => state.auditoria.auditoriaAllTake.dataAuditoria);
+  const dataTahun = useAppSelector((state) => state.auditoria.auditoriaTahunAll.dataAuditoria);
   const jumlahAuditoria = useAppSelector((state) => state.auditoria.auditoriaAllCount.dataAuditoria);
   const pageCount = Math.ceil(jumlahAuditoria / take);
 
@@ -144,10 +145,34 @@ const Report = () => {
     dispatch(getAuditoriaAllCount());
   };
 
-  const handleChange = (event, newValue) => {
-    setPublishedAt(newValue);
-    console.log(newValue);
+  const handleSubmit = (e) => {
+    e.preventDefault();
+
+    let year = moment(publishedAt).format("YYYY");
+
+    // for (const obj of dataTahun) {
+    //   if (year === obj.tahunItem) {
+    //     return year
+    //   } else {
+    //     alert('Data Tidak Ditemukan')
+    //     window.alert = ""
+    //   }
+    // }
+
+    dispatch(getAuditoriaTahunAll({ tahun: year }));
+    dispatch(getAuditoriaTahunCount({ tahun: year }));
   };
+
+  const handleAll = (e) => {
+    e.preventDefault();
+    navigate(0);
+  };
+
+  useEffect(() => {
+    const page = 1;
+    dispatch(getAuditoriaAllTake({ take, page }));
+    dispatch(getAuditoriaAllCount());
+  }, [dispatch, publishedAt]);
 
   // Main Code
   return (
@@ -167,75 +192,132 @@ const Report = () => {
             <SubText>Daftar Auditoria</SubText>
             <FilterBox>
               <Container maxWidth="lg">
-                <Grid container spacing={1}>
-                  <GridCenter item xs={12} md={5} sx={{ padding: "0px 10px" }}>
-                    <FilterText>Cari majalah berdasarkan waktu penerbitan</FilterText>
-                  </GridCenter>
-                  <GridCenter item xs={12} md={4}>
-                    <FormControl>
-                      <Autocomplete
-                        value={publishedAt}
-                        placeholder="Pilih Tahun"
-                        onChange={handleChange}
-                        options={dataAuditoria}
-                        renderOption={(props, option) => (
-                          <AutocompleteOption {...props}>
-                            {moment(dataAuditoria.publishedAt).format('YYYY')}
-                          </AutocompleteOption>
-                        )}
-                        sx={{ width: { xs: 350, md: 220, lg: 280 } }}
-                      />
-                    </FormControl>
-                  </GridCenter>
-                  <GridCenter item xs={12} md={3}>
-                    <FilterButton sx={{ width: { xs: 350, md: 190 } }}>Submit</FilterButton>
-                  </GridCenter>
-                </Grid>
+                <form onSubmit={handleSubmit}>
+                  <Grid container spacing={1}>
+                    <GridCenter item xs={12} md={2}>
+                      <FilterButton onClick={handleAll} sx={{ width: { xs: 350, md: 150 }, backgroundColor: "#dedede", color: "#252525" }}>
+                        Semua
+                      </FilterButton>
+                    </GridCenter>
+                    <GridCenter item xs={12} md={5} sx={{ padding: "0px 10px", margin: { xs: "50px 10px 0px 10px", md: "0px" } }}>
+                      <FilterText>Cari majalah berdasarkan waktu penerbitan {">>"}</FilterText>
+                    </GridCenter>
+                    <GridCenter item xs={12} md={3}>
+                      <FormControl sx={{ backgroundColor: "fff" }}>
+                        <LocalizationProvider dateAdapter={AdapterMoment}>
+                          <DemoContainer components={["DatePicker"]} sx={{ padding: "0px", borderColor: "#252525" }}>
+                            <DatePicker
+                              autoOk={true}
+                              views={["year"]}
+                              animateYearScrolling
+                              value={publishedAt}
+                              onChange={(e) => setPublishedAt(e)}
+                              sx={{
+                                width: "100%",
+                                "& .MuiOutlinedInput-root": { height: "40px", fontSize: "15px", overflow: "hidden", borderRadius: "7px" },
+                                "& .MuiOutlinedInput-notchedOutline": { borderColor: "#252525", padding: "0px" },
+                                "& .MuiInputBase-root": { backgroundColor: "#fff" },
+                              }}
+                            />
+                          </DemoContainer>
+                        </LocalizationProvider>
+                      </FormControl>
+                    </GridCenter>
+                    <GridCenter item xs={12} md={2}>
+                      <FilterButton type="submit" sx={{ width: { xs: 350, md: 150 } }}>
+                        Submit
+                      </FilterButton>
+                    </GridCenter>
+                  </Grid>
+                </form>
               </Container>
             </FilterBox>
             <Grid container spacing={{ xs: 3, md: 4 }} column={{ xs: 4, sm: 8, md: 12 }} sx={{ justifyContent: "center" }}>
-              {dataAuditoria.map((obj) => (
-                <GridCenter item key={obj.auditoriaId} xs={12} sm={6} md={4}>
-                  <Card variant="outlined" sx={{ width: "270px", maxWidth: "100%", height: "380px", borderRadius: "20px", boxShadow: "lg", gap: "5px" }}>
-                    <CardOverflow>
-                      <AspectRatio ratio="16/9">
-                        <img src={`${BASE_URL}images/${obj.pathImage}`} loading="lazy" alt="" />
-                      </AspectRatio>
-                    </CardOverflow>
-                    <CardContent sx={{ display: "flex", textAlign: "center" }}>
-                      <Typography
-                        gutterBottom
-                        sx={{
-                          fontSize: "14px",
-                          color: "#0D5CAB",
-                          fontWeight: "500",
-                          margin: "10px 0px 10px 0px",
-                        }}
-                      >
-                        {formatDate(obj.publishedAt)}
-                      </Typography>
-                      <Typography
-                        sx={{
-                          fontSize: "14px",
-                          fontWeight: "600",
-                          marginBottom: "2px",
-                        }}
-                      >
-                        {obj.deskripsi}
-                      </Typography>
-                    </CardContent>
-                    <CardOverflow variant="soft" sx={{ bgcolor: "background.level1", padding: "0px" }}>
-                      <CardContent sx={{ width: "100%", padding: "0px" }}>
-                        <Link to={`/baca/auditoria/${obj.auditoriaId}`} className="link">
-                          <ClickButton variant="solid" size="lg">
-                            Buka Halaman
-                          </ClickButton>
-                        </Link>
-                      </CardContent>
-                    </CardOverflow>
-                  </Card>
-                </GridCenter>
-              ))}
+              {dataTahun.length === 0
+                ? dataAuditoria.map((obj) => (
+                    <GridCenter item key={obj.auditoriaId} xs={12} sm={6} md={4}>
+                      <Card variant="outlined" sx={{ width: "270px", maxWidth: "100%", height: "380px", borderRadius: "20px", boxShadow: "lg", gap: "5px" }}>
+                        <CardOverflow>
+                          <AspectRatio ratio="16/9">
+                            <img src={`${BASE_URL}images/${obj.pathImage}`} loading="lazy" alt="" />
+                          </AspectRatio>
+                        </CardOverflow>
+                        <CardContent sx={{ display: "flex", textAlign: "center" }}>
+                          <Typography
+                            gutterBottom
+                            sx={{
+                              fontSize: "14px",
+                              color: "#0D5CAB",
+                              fontWeight: "500",
+                              margin: "10px 0px 10px 0px",
+                            }}
+                          >
+                            {formatDate(obj.publishedAt)}
+                          </Typography>
+                          <Typography
+                            sx={{
+                              fontSize: "14px",
+                              fontWeight: "600",
+                              marginBottom: "2px",
+                            }}
+                          >
+                            {obj.deskripsi}
+                          </Typography>
+                        </CardContent>
+                        <CardOverflow variant="soft" sx={{ bgcolor: "background.level1", padding: "0px" }}>
+                          <CardContent sx={{ width: "100%", padding: "0px" }}>
+                            <Link to={`/baca/auditoria/${obj.auditoriaId}`} className="link">
+                              <ClickButton variant="solid" size="lg">
+                                Buka Halaman
+                              </ClickButton>
+                            </Link>
+                          </CardContent>
+                        </CardOverflow>
+                      </Card>
+                    </GridCenter>
+                  ))
+                : dataTahun.map((obj) => (
+                    <GridCenter item key={obj.auditoriaId} xs={12} sm={6} md={4}>
+                      <Card variant="outlined" sx={{ width: "270px", maxWidth: "100%", height: "380px", borderRadius: "20px", boxShadow: "lg", gap: "5px" }}>
+                        <CardOverflow>
+                          <AspectRatio ratio="16/9">
+                            <img src={`${BASE_URL}images/${obj.pathImage}`} loading="lazy" alt="" />
+                          </AspectRatio>
+                        </CardOverflow>
+                        <CardContent sx={{ display: "flex", textAlign: "center" }}>
+                          <Typography
+                            gutterBottom
+                            sx={{
+                              fontSize: "14px",
+                              color: "#0D5CAB",
+                              fontWeight: "500",
+                              margin: "10px 0px 10px 0px",
+                            }}
+                          >
+                            {formatDate(obj.publishedAt)}
+                          </Typography>
+                          <Typography
+                            sx={{
+                              fontSize: "14px",
+                              fontWeight: "600",
+                              marginBottom: "2px",
+                            }}
+                          >
+                            {obj.deskripsi}
+                          </Typography>
+                        </CardContent>
+                        <CardOverflow variant="soft" sx={{ bgcolor: "background.level1", padding: "0px" }}>
+                          <CardContent sx={{ width: "100%", padding: "0px" }}>
+                            <Link to={`/baca/auditoria/${obj.auditoriaId}`} className="link">
+                              <ClickButton variant="solid" size="lg">
+                                Buka Halaman
+                              </ClickButton>
+                            </Link>
+                          </CardContent>
+                        </CardOverflow>
+                      </Card>
+                    </GridCenter>
+                  ))}
             </Grid>
             <Stack spacing={2} sx={{ width: "100%", alignItems: "center" }}>
               <div className="pagination">
@@ -251,6 +333,3 @@ const Report = () => {
 
 // Export Code
 export default Report;
-
-// Array Data
-const tahun = [{ label: "Semua Tahun" }, { label: "2023" }, { label: "2022" }, { label: "2021" }, { label: "2020" }, { label: "2019" }];

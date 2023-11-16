@@ -62,29 +62,29 @@ const Dashboard = () => {
             <Route path="/kategori" element={<CategoryDash />} />
             <Route path="/visual" element={<VitjenDash />} />
 
-            <Route path="/artikel/tambah" element={<CrArticle mode="create" />} />
-            <Route path="/banner/tambah" element={<CrBanner mode="create" />} />
-            <Route path="/auditoria/tambah" element={<CrAudit mode="create" />} />
-            <Route path="/eselon/tambah" element={<CrEselon mode="create" />} />
-            <Route path="/layanan/tambah" element={<CrFeatur mode="create" />} />
-            <Route path="/gambar/tambah" element={<CrImage mode="create" />} />
-            <Route path="/pejabat/tambah" element={<CrPlacem mode="create" />} />
-            <Route path="/menus/tambah" element={<CrMenu mode="create" />} />
-            <Route path="/laporan/tambah" element={<CrReport mode="create" />} />
-            <Route path="/users/tambah" element={<CrUser mode="create" />} />
-            <Route path="/kategori/tambah" element={<CrCategory mode="create" />} />
+            <Route path="/artikel/tambah" element={<CrArticle mode="Tambah" />} />
+            <Route path="/banner/tambah" element={<CrBanner mode="Tambah" />} />
+            <Route path="/auditoria/tambah" element={<CrAudit mode="Tambah" />} />
+            <Route path="/eselon/tambah" element={<CrEselon mode="Tambah" />} />
+            <Route path="/layanan/tambah" element={<CrFeatur mode="Tambah" />} />
+            <Route path="/gambar/tambah" element={<CrImage mode="Tambah" />} />
+            <Route path="/pejabat/tambah" element={<CrPlacem mode="Tambah" />} />
+            <Route path="/menus/tambah" element={<CrMenu mode="Tambah" />} />
+            <Route path="/laporan/tambah" element={<CrReport mode="Tambah" />} />
+            <Route path="/users/tambah" element={<CrUser mode="Tambah" />} />
+            <Route path="/kategori/tambah" element={<CrCategory mode="Tambah" />} />
 
-            <Route path="/artikel/edit/:id" element={<CrArticle mode="edit" />} />
-            <Route path="/banner/edit/:id" element={<CrBanner mode="edit" />} />
-            <Route path="/auditoria/edit/:id" element={<CrAudit mode="edit" />} />
-            <Route path="/eselon/edit/:id" element={<CrEselon mode="edit" />} />
-            <Route path="/layanan/edit/:id" element={<CrFeatur mode="edit" />} />
-            <Route path="/gambar/edit/:id" element={<CrImage mode="edit" />} />
-            <Route path="/pejabat/edit/:id" element={<CrPlacem mode="edit" />} />
-            <Route path="/menus/edit/:id" element={<CrMenu mode="edit" />} />
-            <Route path="/laporan/edit/:id" element={<CrReport mode="edit" />} />
-            <Route path="/users/edit/:id" element={<CrUser mode="edit" />} />
-            <Route path="/kategori/edit/:id" element={<CrCategory mode="edit" />} />
+            <Route path="/artikel/edit/:id" element={<CrArticle mode="Edit" />} />
+            <Route path="/banner/edit/:id" element={<CrBanner mode="Edit" />} />
+            <Route path="/auditoria/edit/:id" element={<CrAudit mode="Edit" />} />
+            <Route path="/eselon/edit/:id" element={<CrEselon mode="Edit" />} />
+            <Route path="/layanan/edit/:id" element={<CrFeatur mode="Edit" />} />
+            <Route path="/gambar/edit/:id" element={<CrImage mode="Edit" />} />
+            <Route path="/pejabat/edit/:id" element={<CrPlacem mode="Edit" />} />
+            <Route path="/menus/edit/:id" element={<CrMenu mode="Edit" />} />
+            <Route path="/laporan/edit/:id" element={<CrReport mode="Edit" />} />
+            <Route path="/users/edit/:id" element={<CrUser mode="Edit" />} />
+            <Route path="/kategori/edit/:id" element={<CrCategory mode="Edit" />} />
           </Routes>
         </div>
       </Box>

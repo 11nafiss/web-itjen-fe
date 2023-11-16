@@ -156,3 +156,29 @@ export const getAuditoriaById = createAsyncThunk<AuditoriaData[], any, { rejectV
   return data;
 });
 
+export const getAuditoriaTahunAll = createAsyncThunk<AuditoriaData[], any, { rejectValue: AxiosError }>("article/getAuditoriaTahun", async (params, thunkAPI) => {
+  const articleTahunUrl = `/tahun/${params.tahun}`;
+
+  const responses = await axios.get(urlAuditoria + articleTahunUrl, {
+    headers: {
+      "Content-Type": "application/json",
+    },
+  });
+
+  const article: AuditoriaData[] = responses.data;
+  return article;
+});
+
+export const getAuditoriaTahunCount = createAsyncThunk<AuditoriaData[], any, { rejectValue: AxiosError }>("article/getAuditoriaNumber", async (params) => {
+  const articleCountUrl = `/jumlahtahun/${params.type}`;
+
+  const response = await axios.get(urlAuditoria + articleCountUrl, {
+    headers: {
+      "Content-Type": "application/json",
+    },
+  });
+
+  const data: AuditoriaData[] = response.data;
+  return data;
+});
+

@@ -1,5 +1,5 @@
 import { PayloadAction, createSlice, combineReducers } from "@reduxjs/toolkit";
-import { createAuditoria, editAuditoria, deleteAuditoria, getAuditoriaData, getAuditoriaAllTake, getAuditoriaSearchAll, getAuditoriaSearchCount, getAuditoriaAllCount, getAuditoriaById } from "../actions/auditoria.action";
+import { createAuditoria, editAuditoria, deleteAuditoria, getAuditoriaData, getAuditoriaAllTake, getAuditoriaSearchAll, getAuditoriaSearchCount, getAuditoriaAllCount, getAuditoriaById, getAuditoriaTahunAll, getAuditoriaTahunCount } from "../actions/auditoria.action";
 import { AuditoriaData } from "../../models/auditoria.model";
 
 interface typeOfInitialState {
@@ -234,17 +234,65 @@ export const auditoriaByIdSlice = createSlice({
   extraReducers: (builder) => {
     builder.addCase(getAuditoriaById.pending, (state) => {
       (state.isLoading = true), (state.errorMessage = "");
-      console.log("PENDING REPORT....");
+      console.log("PENDING AUDITORIA....");
     });
 
     builder.addCase(getAuditoriaById.fulfilled, (state, action: PayloadAction<AuditoriaData[]>) => {
       state.dataAuditoria = action.payload;
-      console.log("Filled REPORT");
+      console.log("Filled AUDITORIA");
     });
 
     builder.addCase(getAuditoriaById.rejected, (state, { payload }) => {
       if (payload) {
-        console.log("FAILED REPORT");
+        console.log("FAILED AUDITORIA");
+        state.isSuccess = false;
+      }
+    });
+  },
+});
+
+export const auditoriaTahunAllSlice = createSlice({
+  name: "auditoriaTahunReducer",
+  initialState,
+  reducers: {},
+  extraReducers: (builder) => {
+    builder.addCase(getAuditoriaTahunAll.pending, (state) => {
+      (state.isLoading = true), (state.errorMessage = "");
+      console.log("PENDING AUDITORIA....");
+    });
+
+    builder.addCase(getAuditoriaTahunAll.fulfilled, (state, action: PayloadAction<AuditoriaData[]>) => {
+      state.dataAuditoria = action.payload;
+      console.log("Filled AUDITORIA");
+    });
+
+    builder.addCase(getAuditoriaTahunAll.rejected, (state, { payload }) => {
+      if (payload) {
+        console.log("FAILED AUDITORIA");
+        state.isSuccess = false;
+      }
+    });
+  },
+});
+
+export const auditoriaTahunCountSlice = createSlice({
+  name: "auditoriaTahunCountReducer",
+  initialState,
+  reducers: {},
+  extraReducers: (builder) => {
+    builder.addCase(getAuditoriaTahunCount.pending, (state) => {
+      (state.isLoading = true), (state.errorMessage = "");
+      console.log("PENDING AUDITORIA....");
+    });
+
+    builder.addCase(getAuditoriaTahunCount.fulfilled, (state, action: PayloadAction<AuditoriaData[]>) => {
+      state.dataAuditoria = action.payload;
+      console.log("Filled AUDITORIA");
+    });
+
+    builder.addCase(getAuditoriaTahunCount.rejected, (state, { payload }) => {
+      if (payload) {
+        console.log("FAILED AUDITORIA");
         state.isSuccess = false;
       }
     });
@@ -260,6 +308,8 @@ const auditoriaReducer = combineReducers({
   auditoriaAllCount: auditoriaAllCountSlice.reducer,
   auditoriaSearchAll: auditoriaSearchAllSlice.reducer,
   auditoriaSearchCount: auditoriaSearchCountSlice.reducer,
+  auditoriaTahunAll: auditoriaTahunAllSlice.reducer,
+  auditoriaTahunCount: auditoriaTahunCountSlice.reducer,
   auditoriaId: auditoriaByIdSlice.reducer,
 });
 

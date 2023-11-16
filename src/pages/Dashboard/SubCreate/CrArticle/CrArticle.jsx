@@ -5,7 +5,7 @@ import { Grid, Box, Typography, Divider } from "@mui/material";
 import { FormHelperText, Option, Select, Radio, RadioGroup, Button, IconButton, Input, FormControl, FormLabel, Checkbox } from "@mui/joy";
 import { styled } from "@mui/material/styles";
 import { DemoContainer } from "@mui/x-date-pickers/internals/demo";
-import { AdapterMoment } from '@mui/x-date-pickers/AdapterMoment'
+import { AdapterMoment } from "@mui/x-date-pickers/AdapterMoment";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 import { useNavigate } from "react-router-dom";
@@ -109,7 +109,7 @@ const CrArticle = (props) => {
 
   useEffect(() => {
     dispatch(getCategory());
-    if (props.mode === "edit") {
+    if (props.mode === "Edit") {
       fetchArticleById();
     }
   }, [fetchArticleById, props, dispatch]);
@@ -152,44 +152,44 @@ const CrArticle = (props) => {
       thumbnail,
     };
 
-    if (props.mode === "edit") {
+    if (props.mode === "Edit") {
       dispatch(editArticle({ id, articleCredentials }));
       console.log("ini id", id);
     } else {
       dispatch(createArticle(articleCredentials));
     }
 
-    // const url = `${BASE_URL}api/upload/imagesartikelthumbnail`;
-    // const formData = new FormData();
-    // formData.append("file", file);
+    const url = `${BASE_URL}api/upload/imagesartikelthumbnail`;
+    const formData = new FormData();
+    formData.append("file", file);
 
-    // SetMsg("Uploading...");
-    // setProgress((prevState) => {
-    //   return { ...prevState, started: true };
-    // });
+    SetMsg("Uploading...");
+    setProgress((prevState) => {
+      return { ...prevState, started: true };
+    });
 
-    // const config = {
-    //   onUploadProgress: (progressEvent) => {
-    //     setProgress((prevState) => {
-    //       return { ...prevState, pc: progressEvent.progress * 100 };
-    //     });
-    //   },
-    //   headers: {
-    //     "content-type": "multipart/form-data",
-    //   },
-    // };
-    // axios
-    //   .post(url, formData, config)
-    //   .then((response) => {
-    //     SetMsg("Upload Successful");
-    //     console.log(response.data);
-    //   })
-    //   .catch((err) => {
-    //     SetMsg("Upload failed");
-    //     console.log(err);
-    //   });
+    const config = {
+      onUploadProgress: (progressEvent) => {
+        setProgress((prevState) => {
+          return { ...prevState, pc: progressEvent.progress * 100 };
+        });
+      },
+      headers: {
+        "content-type": "multipart/form-data",
+      },
+    };
+    axios
+      .post(url, formData, config)
+      .then((response) => {
+        SetMsg("Upload Successful");
+        console.log(response.data);
+      })
+      .catch((err) => {
+        SetMsg("Upload failed");
+        console.log(err);
+      });
 
-    // navigate("/dashboard/artikel");
+    navigate("/dashboard/artikel");
   };
 
   console.log("ini mode", props.mode);
@@ -200,7 +200,7 @@ const CrArticle = (props) => {
       <Grid container spacing={3}>
         <Grid item xs={12} md={12}>
           <Kotak>
-            <Judul>Tambah Artikel</Judul>
+            <Judul>{props.mode} Artikel</Judul>
             <Divider sx={{ borderSize: "20px" }} />
             <form onSubmit={handleUploadArticle}>
               <SpaceGrid container sx={{ justifyContent: { xs: "center", md: "left" }, paddingTop: "10px" }}>
@@ -227,6 +227,7 @@ const CrArticle = (props) => {
                       <LocalizationProvider dateAdapter={AdapterMoment}>
                         <DemoContainer components={["DatePicker"]} sx={{ padding: "0px", borderColor: "#252525" }}>
                           <DatePicker
+                            placeholder="Pilih Tahun"
                             value={publishedAt}
                             onChange={(e) => setPublishedAt(e)}
                             sx={{ width: "100%", "& .MuiOutlinedInput-root": { height: "48px", fontSize: "15px", overflow: "hidden", borderRadius: "7px" }, "& .MuiOutlinedInput-notchedOutline": { borderColor: "#252525", padding: "0px" } }}
