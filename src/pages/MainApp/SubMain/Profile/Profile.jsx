@@ -1,19 +1,22 @@
 // Import Library
-import {
-  Grid,
-  Container,
-  Box,
-  Typography,
-} from "@mui/material";
+import { useEffect } from "react";
+import { Grid, Container, Box } from "@mui/material";
 import { Button } from "@mui/joy";
 import { styled } from "@mui/material/styles";
+import { RWebShare } from "react-web-share";
+import FroalaEditorView from "react-froala-wysiwyg/FroalaEditorView";
 
 // Import Components
-import { ArVision, Trending } from "../../../../components/components";
+import { Trending } from "../../../../components/components";
 
 // Import Assets
 import { Juanda } from "../../../../assets/assets";
 import { HiShare } from "react-icons/hi";
+
+// Import Api
+import { useAppDispatch, useAppSelector } from "../../../../hooks/useTypedSelector";
+import { getPlacemById } from "../../../../features/actions/placem.action";
+import { useParams } from "react-router-dom";
 
 // MUI Styling CSS
 const Background = styled(Box)(() => ({
@@ -59,24 +62,39 @@ const TimeBox = styled(Box)(({ theme }) => ({
   },
 }));
 
-const TimeText = styled(Typography)(() => ({
-  fontSize: "16px",
-  fontWeight: "700",
-  textTransform: "capitalize",
-}));
-
 const GridCenter = styled(Grid)(() => ({
   display: "flex",
   justifyContent: "center",
 }));
 
-// Main Declaration
-const Vision = () => {
+const ContentBox = styled(Box)(({ theme }) => ({
+  display: "flex",
+  justifyContent: "left",
+  flexDirection: "column",
+  padding: "30px 50px 150px 50px",
+  height: "100%",
+  width: "100%",
+  backgroundColor: "#fff",
+  [theme.breakpoints.down("md")]: {
+    padding: "50px 30px",
+  },
+}));
 
-// Main Code
+// Main Declaration
+const Profile = () => {
+  const { id } = useParams();
+
+  const dispatch = useAppDispatch();
+  useEffect(() => {
+    dispatch(getPlacemById(id));
+  }, [dispatch, id]);
+
+  const { dataPlacem } = useAppSelector((state) => state.placem.placemId);
+
+  // Main Code
   return (
     <Background>
-      <main style={{ paddingTop: "25px", height: "100%" }}>
+      <main style={{ paddingTop: "90px", height: "100%" }}>
         <Grid container sx={{ height: "100%" }}>
           <GridCenter item xs={12} sx={{ alignItems: "start" }}>
             <CustomContainer>
@@ -89,14 +107,24 @@ const Vision = () => {
                   </GridCenter>
                   <GridCenter item xs={12}>
                     <TimeBox>
-                      <TimeText>Senin, 27 Februari 2023</TimeText>
-                      <Button variant="soft" endDecorator={<HiShare style={{ fontSize: "20px" }} />} color="neutral" sx={{ backgroundColor: "#252525", color: "#ECBC2A", fontSize: "16px" }}>
-                        Share
-                      </Button>
+                      <RWebShare
+                        data={{
+                          text: `${dataPlacem.jabatan}`,
+                          url: `https://itjen.kemenkeu.go.id/pejabat/${id}`,
+                          title: `${dataPlacem.jabatan}`,
+                        }}
+                        onClick={() => console.log("shared successfully!")}
+                      >
+                        <Button variant="soft" endDecorator={<HiShare style={{ fontSize: "20px" }} />} color="neutral" sx={{ backgroundColor: "#252525", color: "#ECBC2A", fontSize: "16px" }}>
+                          Share
+                        </Button>
+                      </RWebShare>
                     </TimeBox>
                   </GridCenter>
                   <GridCenter item xs={12}>
-                    <ArVision />
+                    <ContentBox>
+                      <FroalaEditorView model={dataPlacem.deskripsi} />
+                    </ContentBox>
                   </GridCenter>
                 </Grid>
               </CustomBox>
@@ -112,4 +140,4 @@ const Vision = () => {
 };
 
 // Export Code
-export default Vision;
+export default Profile;

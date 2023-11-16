@@ -5,7 +5,7 @@ import { Button } from "@mui/joy";
 import { styled } from "@mui/material/styles";
 import { RWebShare } from "react-web-share";
 import { useParams } from "react-router-dom";
-import FroalaEditorView from 'react-froala-wysiwyg/FroalaEditorView';
+import FroalaEditorView from "react-froala-wysiwyg/FroalaEditorView";
 
 // Import Components
 import { formatDate } from "../../../../utils/custom-format-date";
@@ -97,7 +97,7 @@ const Article = () => {
   const { title } = useParams();
   const { category } = useParams();
 
-  console.log ("ini kategori artikel", category)
+  console.log("ini kategori artikel", category);
 
   const dispatch = useAppDispatch();
   useEffect(() => {
@@ -105,7 +105,6 @@ const Article = () => {
   }, [dispatch, title]);
 
   const { dataArticle } = useAppSelector((state) => state.article.articleTitle);
-
 
   // Main Code
   return (
@@ -127,7 +126,7 @@ const Article = () => {
                       <RWebShare
                         data={{
                           text: `${dataArticle.title}`,
-                          url: `https://itjen.kemenkeu.go.id/${dataArticle.title?.replace(/ /g, "-")}`,
+                          url: `https://itjen.kemenkeu.go.id/artikel/${category}/${dataArticle.title?.replace(/ /g, "-")}`,
                           title: `${dataArticle.title}`,
                         }}
                         onClick={() => console.log("shared successfully!")}
@@ -139,9 +138,9 @@ const Article = () => {
                     </TimeBox>
                   </GridCenter>
                   <GridCenter item xs={12}>
-                    <ContentBox><FroalaEditorView
-                    model={dataArticle.content}
-                /></ContentBox>
+                    <ContentBox>
+                      <FroalaEditorView model={dataArticle.content} />
+                    </ContentBox>
                   </GridCenter>
                 </Grid>
               </CustomBox>

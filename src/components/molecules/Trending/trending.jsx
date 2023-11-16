@@ -9,6 +9,7 @@ import { useAppDispatch, useAppSelector } from "../../../hooks/useTypedSelector"
 import { getArticleTopNews } from "../../../features/actions/article.action";
 import { BASE_URL } from "../../../services/api";
 import { Juanda } from "../../../assets/assets";
+import { AspectRatio } from "@mui/joy";
 
 // MUI Styling CSS
 const CustomContainer = styled(Container)(({ theme }) => ({
@@ -56,27 +57,17 @@ const MiniTitle = styled(Typography)(({ theme }) => ({
 }));
 
 const ListButton = styled(ListItemButton)(({ theme }) => ({
-  width: "100%",
+  width: "300px",
   padding: "25px",
   display: "flex",
   alignItems: "center",
+  justifyContent: "start",
   flexDirection: "column",
   [theme.breakpoints.down("md")]: {
     padding: "10px 0px",
   },
 }));
 
-const ImgList = styled(ListItemAvatar)(({ theme }) => ({
-  maxWidth: "450px",
-  maxHeight: "800px",
-  margin: "0px",
-  marginBottom: "20px",
-  [theme.breakpoints.down("md")]: {
-    maxWidth: "225px",
-    maxHeight: "400px",
-    marginBottom: "10px",
-  },
-}));
 
 const SubList = styled(ListItemText)(() => ({
   width: "100%",
@@ -127,14 +118,16 @@ const Trending = () => {
       <TrendsBox>
         <ListBox>
           <MiniTitle>Berita Terkini</MiniTitle>
-          <List sx={{ width: "100%", display: "flex", flexDirection: { xs: "column", md: "row" }, justifyContent: "center" }}>
+          <List sx={{ width: "100%", display: "flex", flexDirection: { xs: "column", md: "row" }, justifyContent: "center", alignItems: "start" }}>
             {dataArticle.map((obj, index) => (
-              <ListItem key={index} sx={{ padding: "0px", maxHeight: "250px" }}>
-                <Link to={`/artikel/${handleUrlCategory(obj.categoryId)}/${obj.title.replace(/ /g, "-")}`} className="link" style={{ color: "black" }}>
-                  <ListButton alignItems="center">
-                    <ImgList>
-                      <img src={obj.featuredImage === null ? Juanda : `${BASE_URL}images/${obj.featuredImage}`} style={{ width: "100%", height: "100%", borderRadius: "10px" }} />
-                    </ImgList>
+              <ListItem key={index} sx={{ padding: "0px", maxHeight: "250px", justifyContent: "center", alignItems: "start" }}>
+                <Link to={`/artikel/${handleUrlCategory(obj.categoryId)}/${obj.title.replace(/ /g, "-")}`} className="link" style={{ color: "black", width: "100%" }}>
+                  <ListButton>
+                    <Box sx={{ width: "200px", height: "120px", margin: "0px", marginBottom: "20px" }}>
+                      <AspectRatio ratio="16/9">
+                        <img src={obj.featuredImage === null ? Juanda : `${BASE_URL}images/${obj.featuredImage}`} style={{ maxWidth: "100%", height: "100%", borderRadius: "10px", display: "block" }} />
+                      </AspectRatio>
+                    </Box>
                     <SubList>
                       <ListText>{obj.title}</ListText>
                     </SubList>

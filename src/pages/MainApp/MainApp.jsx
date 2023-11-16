@@ -6,8 +6,7 @@ import { Footer, Header, LiveChat } from "../../components/components";
 
 // Import MainApp Pages
 import NotFound from "../NotFound/NotFound";
-import { News, Home, Vision, Organ, Values, Placem, Gallery, Audit, AuditBook, Article, Search, Report, ReportBook } from "./SubMain/SubMain";
-import { OrgBsip, ProIrjen } from "./SubContent/SubContent";
+import { Profile, OrganSub, News, Home, Organ, Placem, Gallery, Audit, AuditBook, Article, Search, Report, ReportBook } from "./SubMain/SubMain";
 
 // Main Declaration
 const MainApp = () => {
@@ -21,12 +20,10 @@ const MainApp = () => {
       <div className="content-wrapper">
         <Routes>
           <Route path="/" element={<Home />} />
-          <Route path="/profil/visi" element={<Vision />} />
-          <Route path="/profil/nilai-kemenkeu" element={<Values />} />
           <Route path="/organisasi" element={<Organ />} />
-          <Route path="/organisasi/bsip" element={<OrgBsip />} />
+          <Route path="/organisasi/:id" element={<OrganSub />} />
           <Route path="/pejabat" element={<Placem />} />
-          <Route path="/pejabat/irjen" element={<ProIrjen />} />
+          <Route path="/pejabat/:id" element={<Profile />} />
           <Route path="/galeri" element={<Gallery />} />
           <Route path="/auditoria" element={<Audit />} />
           <Route path="/baca/auditoria/:id" element={<AuditBook />} />

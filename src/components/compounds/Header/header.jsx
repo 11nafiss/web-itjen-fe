@@ -98,7 +98,7 @@ const Header = (props) => {
                 <IconButton color="inherit" sx={{ display: { lg: "none" }, color: "#08347C" }} onClick={handleDrawerOpen}>
                   <GiHamburgerMenu />
                 </IconButton>
-                <Link to="https://itjen.kemenkeu.go.id/" className="link">
+                <Link to="https://www.kemenkeu.go.id/home" className="link">
                   <LogoBox>
                       <img src={Kemenkeu} style={{ width: "50px", height: "50px" }} />
                     <LogoText>

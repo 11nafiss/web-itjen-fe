@@ -154,9 +154,9 @@ const Placem = () => {
                     </CardContent>
                     <CardOverflow variant="soft" sx={{ bgcolor: "background.level1", padding: "0px" }}>
                       <CardContent sx={{ width: "100%", padding: "0px" }}>
-                        <Link to={`/baca/placem/${obj.placemId}`} className="link">
+                        <Link to={`/pejabat/${obj.id}`} className="link">
                           <ClickButton variant="solid" size="lg">
-                            Buka Halaman
+                            Lihat Pejabat
                           </ClickButton>
                         </Link>
                       </CardContent>

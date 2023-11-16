@@ -5,11 +5,13 @@ import { Grid, Box, Typography, Divider } from "@mui/material";
 import { FormHelperText, Option, Select, Radio, RadioGroup, Button, IconButton, Input, FormControl, FormLabel, Checkbox } from "@mui/joy";
 import { styled } from "@mui/material/styles";
 import { DemoContainer } from "@mui/x-date-pickers/internals/demo";
-import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
+import { AdapterMoment } from '@mui/x-date-pickers/AdapterMoment'
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 import { useNavigate } from "react-router-dom";
 import moment from "moment";
+import axios from "axios";
+import PropTypes from "prop-types";
 
 // Import Assets
 import AddIcon from "@mui/icons-material/Add";
@@ -19,6 +21,8 @@ import UploadIcon from "@mui/icons-material/Upload";
 import { useAppDispatch, useAppSelector } from "../../../../hooks/useTypedSelector";
 import { createArticle, editArticle } from "../../../../features/actions/article.action";
 import { artikelService } from "../../../../services/artikel.service";
+import { getCategory } from "../../../../features/actions/category.action";
+import { BASE_URL } from "../../../../services/api";
 
 // Import Editor
 import "froala-editor/css/froala_style.min.css";
@@ -26,9 +30,6 @@ import "froala-editor/css/froala_editor.pkgd.min.css";
 import "froala-editor/js/plugins.pkgd.min.js";
 import "font-awesome/css/font-awesome.css";
 import FroalaEditorComponent from "react-froala-wysiwyg";
-import { getCategory } from "../../../../features/actions/category.action";
-import { BASE_URL } from "../../../../services/api";
-import axios from "axios";
 
 // MUI Styling CSS
 const Kotak = styled(Box)(() => ({
@@ -68,7 +69,7 @@ const GridFlex = styled(Grid)(({ theme }) => ({
 }));
 
 // Main Declaration
-const CrArticle = (mode) => {
+const CrArticle = (props) => {
   const [title, setTitle] = useState("");
   const [content, setContent] = useState("");
   const [featuredImage, setFeaturedImage] = useState("");
@@ -76,7 +77,7 @@ const CrArticle = (mode) => {
   const [published, setPublished] = useState("published");
   const [tampilDiBeranda, setTampilDiBeranda] = useState(false);
   const [caption, setCaption] = useState("");
-  const [publishedAt, setPublishedAt] = useState("");
+  const [publishedAt, setPublishedAt] = useState(null);
   const [thumbnail, setThumbnail] = useState();
   const [file, setFile] = useState();
   const [progress, setProgress] = useState({ started: false, pc: 0 });
@@ -88,7 +89,7 @@ const CrArticle = (mode) => {
   const inputFile = useRef();
   const [articleId, SetArticleId] = useState(id);
 
-  const { isLoading, errorMessage } = useAppSelector((state) => state.article.createArticle);
+  const { errorMessage } = useAppSelector((state) => state.article.createArticle);
   const dataCategory = useAppSelector((state) => state.category.categoryAll.dataCategory);
   const currentUser = useAppSelector((state) => state.user.loginUser.currentUser);
 
@@ -108,10 +109,10 @@ const CrArticle = (mode) => {
 
   useEffect(() => {
     dispatch(getCategory());
-    if (mode.mode === "edit") {
+    if (props.mode === "edit") {
       fetchArticleById();
     }
-  }, [fetchArticleById, mode, dispatch]);
+  }, [fetchArticleById, props, dispatch]);
 
   const handleModelChange = (event) => {
     setContent(event);
@@ -122,13 +123,15 @@ const CrArticle = (mode) => {
     setFeaturedImage(event.target.files[0].name);
   }
 
-  const handleChange = (newValue) => {
+  const handleChange = (event, newValue) => {
     setCategoryId(newValue);
     console.log(newValue);
   };
 
   const handleUploadArticle = (e) => {
     e.preventDefault();
+
+    console.log("article submitted");
     if (!file) {
       console.log("No file Selected");
       return;
@@ -149,45 +152,47 @@ const CrArticle = (mode) => {
       thumbnail,
     };
 
-    if (mode.mode === "edit") {
+    if (props.mode === "edit") {
       dispatch(editArticle({ id, articleCredentials }));
       console.log("ini id", id);
     } else {
       dispatch(createArticle(articleCredentials));
     }
 
-    const url = `${BASE_URL}api/upload/imagesartikelthumbnail`;
-    const formData = new FormData();
-    formData.append("file", file);
+    // const url = `${BASE_URL}api/upload/imagesartikelthumbnail`;
+    // const formData = new FormData();
+    // formData.append("file", file);
 
-    SetMsg("Uploading...");
-    setProgress((prevState) => {
-      return { ...prevState, started: true };
-    });
+    // SetMsg("Uploading...");
+    // setProgress((prevState) => {
+    //   return { ...prevState, started: true };
+    // });
 
-    const config = {
-      onUploadProgress: (progressEvent) => {
-        setProgress((prevState) => {
-          return { ...prevState, pc: progressEvent.progress * 100 };
-        });
-      },
-      headers: {
-        "content-type": "multipart/form-data",
-      },
-    };
-    axios
-      .post(url, formData, config)
-      .then((response) => {
-        SetMsg("Upload Successful");
-        console.log(response.data);
-      })
-      .catch((err) => {
-        SetMsg("Upload failed");
-        console.log(err);
-      });
+    // const config = {
+    //   onUploadProgress: (progressEvent) => {
+    //     setProgress((prevState) => {
+    //       return { ...prevState, pc: progressEvent.progress * 100 };
+    //     });
+    //   },
+    //   headers: {
+    //     "content-type": "multipart/form-data",
+    //   },
+    // };
+    // axios
+    //   .post(url, formData, config)
+    //   .then((response) => {
+    //     SetMsg("Upload Successful");
+    //     console.log(response.data);
+    //   })
+    //   .catch((err) => {
+    //     SetMsg("Upload failed");
+    //     console.log(err);
+    //   });
 
-    navigate("/dashboard/artikel");
+    // navigate("/dashboard/artikel");
   };
+
+  console.log("ini mode", props.mode);
 
   // Main Code
   return (
@@ -219,7 +224,7 @@ const CrArticle = (mode) => {
                       >
                         Tanggal
                       </FormLabel>
-                      <LocalizationProvider dateAdapter={AdapterDayjs}>
+                      <LocalizationProvider dateAdapter={AdapterMoment}>
                         <DemoContainer components={["DatePicker"]} sx={{ padding: "0px", borderColor: "#252525" }}>
                           <DatePicker
                             value={publishedAt}
@@ -239,7 +244,7 @@ const CrArticle = (mode) => {
                       </FormLabel>
                       <Box sx={{ width: "100%", display: "flex", flexDirection: "row", alignItems: "center" }}>
                         <Select
-                          defaultValue={categoryId}
+                          value={categoryId}
                           onChange={handleChange}
                           placeholder="Pilih…"
                           sx={{
@@ -387,6 +392,10 @@ const CrArticle = (mode) => {
       </Grid>
     </Box>
   );
+};
+
+CrArticle.propTypes = {
+  mode: PropTypes.string,
 };
 
 // Export Code

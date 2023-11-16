@@ -11,11 +11,8 @@ import { useAppDispatch, useAppSelector } from "../../../../hooks/useTypedSelect
 import { getPlacemAllTake } from "../../../../features/actions/placem.action";
 import { BASE_URL } from "../../../../services/api";
 
-// Import Assets
-import { ImgIrjen } from "../../../../assets/assets";
-
-// Import Assets
-import { BoxIrjen, BoxSekre, BoxIrtor1, BoxIrtor2, BoxIrtor3, BoxIrtor4, BoxIrtor5, BoxIrtor6, BoxIrtor7, BoxIrtorBi, BoxBkkh, BoxBoahp, BoxBpk, BoxBsdm, BoxBsip, BoxBuk } from "../../../../components/components";
+// Import Components
+import { BoxKaBsip, BoxSubOti, BoxSubPdki, BoxSubPkti, BoxSubPsi, BackButton } from "../../../../components/components";
 
 // MUI Styling CSS
 const Background = styled(Box)(() => ({
@@ -154,8 +151,12 @@ const ContentBox = styled(Box)(({ theme }) => ({
   },
 }));
 
+const BoxButton = styled(Box)(() => ({
+  marginTop: "100px",
+}));
+
 // Main Declaration
-const Organ = () => {
+const OrganSub = () => {
   const dispatch = useAppDispatch();
   const [searchParams] = useSearchParams();
   const take = 20;
@@ -168,10 +169,6 @@ const Organ = () => {
   const dataPlacem = useAppSelector((state) => state.placem.placemAllTake.dataPlacem);
   const Eselon2 = dataPlacem.filter((item) => item.eselon === 2);
   const Eselon3 = dataPlacem.filter((item) => item.eselon === 3);
-
-  if(dataPlacem.length === 0) {
-    return null
-  } 
 
   // Main Code
   return (
@@ -193,56 +190,16 @@ const Organ = () => {
               <GridCenter item>
                 <ContentBox>
                   <Orgchart>
-                    <Tree
-                      lineWidth={"3px"}
-                      lineHeight={"30px"}
-                      lineColor={"black"}
-                      lineBorderRadius={"10px"}
-                      label={
-                        <Link to={`/pejabat/${dataPlacem[0].id}`} className="link">
-                          <BgHorizontal color="warning">
-                            <ProfileBox>
-                              <Avatar alt="inspektorat jenderal" src={`${BASE_URL}images/${dataPlacem[0].pathGambar}`} size="lg" />
-                              <NbHorizontal>
-                                <Pfposition>{dataPlacem[0].jabatan}</Pfposition>
-                                <Pfname>{dataPlacem[0].nama}</Pfname>
-                              </NbHorizontal>
-                            </ProfileBox>
-                          </BgHorizontal>
-                        </Link>
-                      }
-                    >
-                      <TreeNode label={<BoxSekre />}>
-                        <TreeNode label={<BoxBkkh />} />
-                        <TreeNode label={<BoxBoahp />} />
-                        <TreeNode label={<BoxBpk />} />
-                        <TreeNode label={<BoxBsdm />} />
-                        <TreeNode
-                          label={
-                            <Link to="/profil/organisasi/bsip" className="link">
-                              <BoxBsip />
-                            </Link>
-                          }
-                        />
-                        <TreeNode label={<BoxBuk />} />
-                      </TreeNode>
-                      <TreeNode label={<BoxIrtor1 />}>
-                        <TreeNode label={<BoxIrtor2 />}>
-                          <TreeNode label={<BoxIrtor3 />}>
-                            <TreeNode label={<BoxIrtor4 />}>
-                              <TreeNode label={<BoxIrtor5 />}>
-                                <TreeNode label={<BoxIrtor6 />}>
-                                  <TreeNode label={<BoxIrtor7 />}>
-                                    <TreeNode label={<BoxIrtorBi />} />
-                                  </TreeNode>
-                                </TreeNode>
-                              </TreeNode>
-                            </TreeNode>
-                          </TreeNode>
-                        </TreeNode>
-                      </TreeNode>
+                    <Tree lineWidth={"3px"} lineHeight={"30px"} lineColor={"black"} lineBorderRadius={"10px"} label={<BoxKaBsip />}>
+                      <TreeNode label={<BoxSubPkti />} />
+                      <TreeNode label={<BoxSubPsi />} />
+                      <TreeNode label={<BoxSubOti />} />
+                      <TreeNode label={<BoxSubPdki />} />
                     </Tree>
                   </Orgchart>
+                  <BoxButton>
+                    <BackButton />
+                  </BoxButton>
                 </ContentBox>
               </GridCenter>
             </Grid>
@@ -254,4 +211,4 @@ const Organ = () => {
 };
 
 // Export Code
-export default Organ;
+export default OrganSub;

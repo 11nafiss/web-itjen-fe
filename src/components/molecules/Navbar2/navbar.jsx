@@ -67,36 +67,32 @@ const Navbar = () => {
   return (
     <Box sx={{ display: "flex", alignItems: "center" }}>
       <Box sx={{ display: { xs: "none", lg: "block" } }}>
-        {MenuLevel1.map((obj1) => (
-          <PopupState key={obj1.menuId} variant="popover" popupId="demo-popup-menu">
+        {MenuLevel1.map((m1) => (
+          <PopupState key={m1.menuId} variant="popover" popupId="demo-popup-menu">
             {(popupState) => (
               <React.Fragment>
-                <Link to={obj1.link ? obj1.link : null} className="link">
+                <Link to={m1.link ? m1.link : null} className="link">
                   <MenuButton variant="text" {...bindTrigger(popupState)}>
-                    {obj1.menuText}
+                    {m1.menuText}
                   </MenuButton>
                 </Link>
-                {obj1.hasSubMenu ? (
+                {m1.hasSubMenu ? (
                   <Menu {...bindMenu(popupState)} sx={{ maxWidth: "500px" }}>
-                    {SubMenu2.length === 0
-                      ? MenuLevel2.map((obj2) => (
-                          <TypeItem key={obj2.menuId} onClick={popupState.close}>
-                            {obj2.menuText}
-                          </TypeItem>
-                        ))
-                      : MenuLevel2.map((obj2) => (
-                          <CustomItem key={obj2.menuId}>
+                    {MenuLevel2.filter((m2) => m2.parentId === m1.menuId).map((m2) => {
+                      if (m2.hasSubMenu) {
+                        return (
+                          <CustomItem key={m2.menuId}>
                             <CustomAccor>
-                              <Link to={obj2.link ? obj2.link : null} className="link">
+                              <Link to={m2.link ? m2.link : null} className="link">
                                 <AccorItem expandIcon={<ExpandMoreIcon />} aria-controls="panel1a-content" id="panel1a-header">
-                                  {obj2.menuText}
+                                  {m2.menuText}
                                 </AccorItem>
                               </Link>
-                              {obj2.hasSubMenu ? (
+                              {m2.hasSubMenu ? (
                                 <AccordionDetails>
-                                  {MenuLevel3.map((obj3) => (
-                                    <Link key={obj3.menuId} to={obj3.link ? obj3.link : null} className="link">
-                                      <SubItem onClick={popupState.close}>{obj3.menuText}</SubItem>
+                                  {MenuLevel3.filter((m3) => m3.parentId === m2.menuId).map((m3) => (
+                                    <Link key={m3.menuId} to={m3.link ? m3.link : null} className="link">
+                                      <SubItem onClick={popupState.close}>{m3.menuText}</SubItem>
                                     </Link>
                                   ))}
                                 </AccordionDetails>
@@ -105,7 +101,15 @@ const Navbar = () => {
                               )}
                             </CustomAccor>
                           </CustomItem>
-                        ))}
+                        );
+                      }
+
+                      return (
+                        <Link to={m2.link ? m2.link : null} key={m2.menuId} className="link">
+                          <TypeItem onClick={popupState.close}>{m2.menuText}</TypeItem>
+                        </Link>
+                      );
+                    })}
                   </Menu>
                 ) : null}
               </React.Fragment>

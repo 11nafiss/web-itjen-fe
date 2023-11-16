@@ -1,5 +1,5 @@
 import { PayloadAction, createSlice, combineReducers } from "@reduxjs/toolkit";
-import { createPlacem, editPlacem, deletePlacem, getPlacemData, getPlacemSearchCount, getPlacemSearchAll, getPlacemAllCount, getPlacemAllTake } from "../actions/placem.action";
+import { createPlacem, editPlacem, deletePlacem, getPlacemData, getPlacemSearchCount, getPlacemSearchAll, getPlacemAllCount, getPlacemAllTake, getPlacemById } from "../actions/placem.action";
 import { PlacemData } from "../../models/placem.model";
 
 interface typeOfInitialState {
@@ -227,6 +227,30 @@ export const placemSearchCountSlice = createSlice({
   },
 });
 
+export const placemByIdSlice = createSlice({
+  name: "placemByIdReducer",
+  initialState,
+  reducers: {},
+  extraReducers: (builder) => {
+    builder.addCase(getPlacemById.pending, (state) => {
+      (state.isLoading = true), (state.errorMessage = "");
+      console.log("PENDING PLACEM....");
+    });
+
+    builder.addCase(getPlacemById.fulfilled, (state, action: PayloadAction<PlacemData[]>) => {
+      state.dataPlacem = action.payload;
+      console.log("Filled PLACEM");
+    });
+
+    builder.addCase(getPlacemById.rejected, (state, { payload }) => {
+      if (payload) {
+        console.log("FAILED PLACEM");
+        state.isSuccess = false;
+      }
+    });
+  },
+});
+
 const placemReducer = combineReducers({
   createPlacem: createPlacemSlice.reducer,
   editPlacem: editPlacemSlice.reducer,
@@ -236,6 +260,7 @@ const placemReducer = combineReducers({
   placemAllCount: placemAllCountSlice.reducer,
   placemSearchAll: placemSearchAllSlice.reducer,
   placemSearchCount: placemSearchCountSlice.reducer,
+  placemId: placemByIdSlice.reducer,
 });
 
 export default placemReducer;

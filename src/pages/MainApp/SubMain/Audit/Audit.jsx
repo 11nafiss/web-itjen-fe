@@ -1,8 +1,8 @@
 // Import Library
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { Link, useSearchParams } from "react-router-dom";
 import { Pagination, PaginationItem, Stack, Grid, Container, Box, Typography, Button } from "@mui/material";
-import { Autocomplete, FormControl, AspectRatio, Card, CardOverflow, CardContent } from "@mui/joy";
+import { Autocomplete, FormControl, AspectRatio, Card, CardOverflow, CardContent, AutocompleteOption } from "@mui/joy";
 import { styled } from "@mui/material/styles";
 import { formatDate } from "../../../../utils/custom-format-date";
 
@@ -14,7 +14,7 @@ import ArrowForwardIcon from "@mui/icons-material/ArrowForward";
 import { useAppDispatch, useAppSelector } from "../../../../hooks/useTypedSelector";
 import { getAuditoriaAllCount, getAuditoriaAllTake } from "../../../../features/actions/auditoria.action";
 import { BASE_URL } from "../../../../services/api";
-
+import moment from "moment";
 
 // MUI Styling CSS
 const Background = styled(Box)(() => ({
@@ -124,6 +124,7 @@ const FilterButton = styled(Button)(() => ({
 const Report = () => {
   const [searchParams] = useSearchParams();
   const dispatch = useAppDispatch();
+  const [publishedAt, setPublishedAt] = useState(null)
   const take = 6;
   useEffect(() => {
     const page = searchParams.get("page") ?? 1;
@@ -133,7 +134,7 @@ const Report = () => {
 
   const dataAuditoria = useAppSelector((state) => state.auditoria.auditoriaAllTake.dataAuditoria);
   const jumlahAuditoria = useAppSelector((state) => state.auditoria.auditoriaAllCount.dataAuditoria);
-  const pageCount = Math.ceil(jumlahAuditoria / take)
+  const pageCount = Math.ceil(jumlahAuditoria / take);
 
   const handlePageChange = (event, value) => {
     let updatedSearchParams = new URLSearchParams(searchParams.toString());
@@ -141,6 +142,11 @@ const Report = () => {
 
     dispatch(getAuditoriaAllTake({ take, page: value }));
     dispatch(getAuditoriaAllCount());
+  };
+
+  const handleChange = (event, newValue) => {
+    setPublishedAt(newValue);
+    console.log(newValue);
   };
 
   // Main Code
@@ -167,7 +173,18 @@ const Report = () => {
                   </GridCenter>
                   <GridCenter item xs={12} md={4}>
                     <FormControl>
-                      <Autocomplete placeholder="Pilih Tahun" options={tahun} sx={{ width: { xs: 350, md: 220, lg: 280 } }} />
+                      <Autocomplete
+                        value={publishedAt}
+                        placeholder="Pilih Tahun"
+                        onChange={handleChange}
+                        options={dataAuditoria}
+                        renderOption={(props, option) => (
+                          <AutocompleteOption {...props}>
+                            {moment(dataAuditoria.publishedAt).format('YYYY')}
+                          </AutocompleteOption>
+                        )}
+                        sx={{ width: { xs: 350, md: 220, lg: 280 } }}
+                      />
                     </FormControl>
                   </GridCenter>
                   <GridCenter item xs={12} md={3}>
