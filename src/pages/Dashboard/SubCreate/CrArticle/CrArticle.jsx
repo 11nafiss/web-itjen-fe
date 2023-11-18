@@ -12,6 +12,7 @@ import { useNavigate } from "react-router-dom";
 import moment from "moment";
 import axios from "axios";
 import PropTypes from "prop-types";
+import { v4 as uuidv4 } from 'uuid';
 
 // Import Assets
 import AddIcon from "@mui/icons-material/Add";
@@ -118,50 +119,31 @@ const CrArticle = (props) => {
     setContent(event);
   };
 
-  function handleFile(event) {
-    setFile(event.target.files[0]);
-    setFeaturedImage(event.target.files[0].name);
-  }
-
   const handleChange = (event, newValue) => {
     setCategoryId(newValue);
     console.log(newValue);
   };
 
+  const generateFileName = (originalName) => {
+    const uuid = uuidv4()
+    const extension = originalName.split('.').pop()
+    return `${uuid}.${extension}`
+  }
+
+  function handleFile(event) {
+    setFile(event.target.files[0]);
+    setFeaturedImage(event.target.files[0].name);
+  }
+
   const handleUploadArticle = (e) => {
     e.preventDefault();
-
-    console.log("article submitted");
-    if (!file) {
-      console.log("No file Selected");
-      return;
-    }
-
-    let articleCredentials = {
-      id: articleId,
-      title,
-      content,
-      featuredImage,
-      authorName: currentUser.username,
-      categoryId,
-      published: published === "published" ? true : false,
-      pending: false,
-      tampilDiBeranda,
-      caption,
-      publishedAt: moment(publishedAt).format(),
-      thumbnail,
-    };
-
-    if (props.mode === "Edit") {
-      dispatch(editArticle({ id, articleCredentials }));
-      console.log("ini id", id);
-    } else {
-      dispatch(createArticle(articleCredentials));
-    }
-
+    const newFileName = generateFileName(file.name)
+    let data = new FormData();
+    data.append('image', file, newFileName);
+    let newFile = data.get('image');
     const url = `${BASE_URL}api/upload/imagesartikelthumbnail`;
     const formData = new FormData();
-    formData.append("file", file);
+    formData.append("file", newFile);
 
     SetMsg("Uploading...");
     setProgress((prevState) => {
@@ -189,10 +171,87 @@ const CrArticle = (props) => {
         console.log(err);
       });
 
+
+    let articleCredentials = {
+      id: articleId,
+      title,
+      content,
+      featuredImage: newFileName,
+      authorName: currentUser.username,
+      categoryId,
+      published: published === "published" ? true : false,
+      pending: false,
+      tampilDiBeranda,
+      caption,
+      publishedAt: moment(publishedAt).format(),
+      thumbnail,
+    };
+
+    if (props.mode === "Edit") {
+      dispatch(editArticle({ id, articleCredentials }));
+      console.log("ini id", id);
+    } else {
+      if (!file) {
+        console.log("No file Selected");
+        return;
+      }
+      dispatch(createArticle(articleCredentials));
+    }
+
     navigate("/dashboard/artikel");
   };
 
   console.log("ini mode", props.mode);
+
+  const EditorConfig = {
+    placeholder: "Tulis Artikel Disini",
+    attribution: false,
+    imagesLoadURL: `${BASE_URL}images/`,
+    imageUploadURL: `${BASE_URL}api/upload/imagesartikel`,
+    imageUploadMethod: "POST",
+    imageAllowedTypes: ["jpeg", "jpg", "png"],
+    videoUploadURL: `${BASE_URL}api/upload/videosartikel`,
+    videoUploadMethod: "POST",
+    videoAllowedTypes: ["webm", "jpg", "ogg", "vlc", "mp4"],
+    fileUploadURL: `${BASE_URL}api/upload/filesartikel`,
+    fileUploadMethod: "POST",
+    fileAllowedTypes: ["*"],
+    events: {
+      "image.inserted": () => {
+        console.log("gambar ditambahkan!");
+      },
+      "image.removed": function (img) {
+        const namaFile = img.attr("src").split("/").pop();
+        const apiUrl = `${BASE_URL}`;
+        axios.delete(apiUrl + "api/upload/imageartikeldelete/" + namaFile, {
+          headers: {
+            "Content-Type": "application/json",
+          },
+        });
+      },
+      "video.removed": function (video) {
+        const namaFile = video.attr("src").split("/").pop();
+        const apiUrl = `${BASE_URL}`;
+        axios.delete(apiUrl + "api/upload/videoartikeldelete/" + namaFile, {
+          headers: {
+            "Content-Type": "application/json",
+          },
+        });
+      },
+      "file.unlink": function (file) {
+        const namaFile = file.getAttribute("href").split("/").pop();
+        const apiUrl = `${BASE_URL}`;
+        axios.delete(apiUrl + "api/upload/pdfdelete/" + namaFile, {
+          headers: {
+            "Content-Type": "application/json",
+          },
+        });
+      },
+      "froalaEditor.initialized": function () {
+        console.log("initialized");
+      },
+    },
+  };
 
   // Main Code
   return (
@@ -368,7 +427,7 @@ const CrArticle = (props) => {
                 <GridFlex item xs={12} md={12} sx={{ justifyContent: { xs: "center", md: "left" } }}>
                   <Box sx={{ height: "100%", width: "100%", paddingTop: "10px", display: "flex", flexDirection: "column", justifyContent: "left", gap: "30px" }}>
                     <Box sx={{ maxWidth: { xs: "350px", sm: "600px", md: "900px", lg: "1250px" } }}>
-                      <FroalaEditorComponent tag="textarea" model={content} onModelChange={handleModelChange} />
+                      <FroalaEditorComponent tag="textarea" config={EditorConfig} model={content} onModelChange={handleModelChange} />
                     </Box>
                     <Box sx={{ width: "100%", display: "flex", justifyContent: "left", padding: "50px 0px 0px 5px" }}>
                       <Checkbox checked={tampilDiBeranda} onChange={(e) => setTampilDiBeranda(e.target.checked)} label="Tampilkan di Beranda?" color="neutral" />

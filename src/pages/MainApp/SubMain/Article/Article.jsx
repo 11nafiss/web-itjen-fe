@@ -117,7 +117,7 @@ const Article = () => {
                 <Grid container spacing={0}>
                   <GridCenter item xs={12}>
                     <Box style={{ maxWidth: "1600px", maxHeight: "900px", padding: "0" }}>
-                      <img src={dataArticle.featuredImage === null ? Juanda : `${BASE_URL}images/${dataArticle.featuredImage}`} style={{ width: "100%", height: "100%", objectFit: "cover" }} />
+                      <img src={dataArticle.featuredImage === "" ? Juanda : `${BASE_URL}thumbnail/${dataArticle.featuredImage}`} style={{ width: "100%", height: "100%", objectFit: "cover" }} />
                     </Box>
                   </GridCenter>
                   <GridCenter item xs={12}>

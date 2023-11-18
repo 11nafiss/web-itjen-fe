@@ -6,5 +6,5 @@ export interface BannerData {
   munculkanText: boolean;
   pathGambar: string;
   isActive: boolean;
-  urutan: number;
+  publishedAt: string;
 }

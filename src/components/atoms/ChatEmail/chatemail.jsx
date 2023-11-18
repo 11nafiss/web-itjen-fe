@@ -8,9 +8,11 @@ import { styles } from "./styles";
 
 // Import Assets
 import { LoadingOutlined } from "@ant-design/icons";
+import { useNavigate } from "react-router-dom";
 
 const ChatEmail = (props) => {
   const [loading, setLoading] = useState(false);
+  const navigate = useNavigate();
 
   const form = useRef();
 
@@ -21,7 +23,9 @@ const ChatEmail = (props) => {
       .then((result) => {
           console.log("pesan terkirim", result.text);
           alert("Pesan Email Terkirim");
+          window.alert="";
           setLoading(false);
+          navigate(0)
       }, (error) => {
           console.log("pesan gagal", error.text);
       });

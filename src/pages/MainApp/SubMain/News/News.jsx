@@ -9,6 +9,7 @@ import { formatDate } from "../../../../utils/custom-format-date";
 // Import Assets
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import ArrowForwardIcon from "@mui/icons-material/ArrowForward";
+import { Juanda } from "../../../../assets/assets";
 
 // Import Api
 import { useAppDispatch, useAppSelector } from "../../../../hooks/useTypedSelector";
@@ -159,7 +160,7 @@ const News = () => {
                   <Card variant="outlined" sx={{ width: "270px", maxWidth: "100%", height: "380px", borderRadius: "20px", boxShadow: "lg", gap: "5px" }}>
                     <CardOverflow>
                       <AspectRatio ratio="16/9">
-                        <img src={`${BASE_URL}images/${obj.featuredImage}`} loading="lazy" alt="" />
+                        <img src={obj.featuredImage === "" ? Juanda : `${BASE_URL}thumbnail/${obj.featuredImage}`} loading="lazy" alt="" />
                       </AspectRatio>
                     </CardOverflow>
                     <CardContent sx={{ display: "flex", textAlign: "center" }}>

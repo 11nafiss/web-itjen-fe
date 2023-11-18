@@ -2,23 +2,19 @@
 import { useEffect, useState } from "react";
 import { Link, useNavigate, useSearchParams } from "react-router-dom";
 import { Pagination, PaginationItem, Stack, Grid, Container, Box, Typography, Button } from "@mui/material";
-import { Autocomplete, FormControl, AspectRatio, Card, CardOverflow, CardContent, AutocompleteOption } from "@mui/joy";
+import { FormControl, AspectRatio, Card, CardOverflow, CardContent,  Select, Option } from "@mui/joy";
 import { styled } from "@mui/material/styles";
 import { formatDate } from "../../../../utils/custom-format-date";
-import { DemoContainer } from "@mui/x-date-pickers/internals/demo";
-import { AdapterMoment } from "@mui/x-date-pickers/AdapterMoment";
-import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
-import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 
 // Import Assets
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import ArrowForwardIcon from "@mui/icons-material/ArrowForward";
+import { Juanda } from "../../../../assets/assets";
 
 // Import Api
 import { useAppDispatch, useAppSelector } from "../../../../hooks/useTypedSelector";
-import { getAuditoriaAllCount, getAuditoriaAllTake, getAuditoriaTahunAll, getAuditoriaTahunCount } from "../../../../features/actions/auditoria.action";
+import { getAuditoriaAllCount, getAuditoriaAllTake, getAuditoriaTahunAll } from "../../../../features/actions/auditoria.action";
 import { BASE_URL } from "../../../../services/api";
-import moment from "moment";
 
 // MUI Styling CSS
 const Background = styled(Box)(() => ({
@@ -129,38 +125,28 @@ const Report = () => {
   const [searchParams] = useSearchParams();
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
-  const [publishedAt, setPublishedAt] = useState(moment());
-  const take = 6;
+  const [year, setYear] = useState();
 
   const dataAuditoria = useAppSelector((state) => state.auditoria.auditoriaAllTake.dataAuditoria);
   const dataTahun = useAppSelector((state) => state.auditoria.auditoriaTahunAll.dataAuditoria);
   const jumlahAuditoria = useAppSelector((state) => state.auditoria.auditoriaAllCount.dataAuditoria);
-  const pageCount = Math.ceil(jumlahAuditoria / take);
+  const selectYear = dataAuditoria.map((item) => item.tahunItem).filter((value, index, current_value) => current_value.indexOf(value) === index);
+  const pageCount = Math.ceil(jumlahAuditoria / 6);
 
   const handlePageChange = (event, value) => {
+    const take = 6;
     let updatedSearchParams = new URLSearchParams(searchParams.toString());
     updatedSearchParams.set("page", value);
 
     dispatch(getAuditoriaAllTake({ take, page: value }));
     dispatch(getAuditoriaAllCount());
+
+    console.log("ini value", value)
   };
 
   const handleSubmit = (e) => {
     e.preventDefault();
-
-    let year = moment(publishedAt).format("YYYY");
-
-    // for (const obj of dataTahun) {
-    //   if (year === obj.tahunItem) {
-    //     return year
-    //   } else {
-    //     alert('Data Tidak Ditemukan')
-    //     window.alert = ""
-    //   }
-    // }
-
     dispatch(getAuditoriaTahunAll({ tahun: year }));
-    dispatch(getAuditoriaTahunCount({ tahun: year }));
   };
 
   const handleAll = (e) => {
@@ -169,10 +155,11 @@ const Report = () => {
   };
 
   useEffect(() => {
-    const page = 1;
+    const take = 6;
+    const page = searchParams.get("page") ?? 1;
     dispatch(getAuditoriaAllTake({ take, page }));
     dispatch(getAuditoriaAllCount());
-  }, [dispatch, publishedAt]);
+  }, [dispatch, searchParams]);
 
   // Main Code
   return (
@@ -204,23 +191,26 @@ const Report = () => {
                     </GridCenter>
                     <GridCenter item xs={12} md={3}>
                       <FormControl sx={{ backgroundColor: "fff" }}>
-                        <LocalizationProvider dateAdapter={AdapterMoment}>
-                          <DemoContainer components={["DatePicker"]} sx={{ padding: "0px", borderColor: "#252525" }}>
-                            <DatePicker
-                              autoOk={true}
-                              views={["year"]}
-                              animateYearScrolling
-                              value={publishedAt}
-                              onChange={(e) => setPublishedAt(e)}
-                              sx={{
-                                width: "100%",
-                                "& .MuiOutlinedInput-root": { height: "40px", fontSize: "15px", overflow: "hidden", borderRadius: "7px" },
-                                "& .MuiOutlinedInput-notchedOutline": { borderColor: "#252525", padding: "0px" },
-                                "& .MuiInputBase-root": { backgroundColor: "#fff" },
-                              }}
-                            />
-                          </DemoContainer>
-                        </LocalizationProvider>
+                        <Box sx={{ width: "200px", display: "flex", flexDirection: "row", alignItems: "center" }}>
+                          <Select
+                            value={year}
+                            onChange={(event, e) => setYear(e)}
+                            placeholder="Pilih…"
+                            sx={{
+                              width: "100%",
+                              borderColor: "#252525",
+                              height: "48px",
+                            }}
+                          >
+                            {selectYear.map((obj) => {
+                              return (
+                                <Option key={obj} value={obj} label={obj}>
+                                  {obj}
+                                </Option>
+                              );
+                            })}
+                          </Select>
+                        </Box>
                       </FormControl>
                     </GridCenter>
                     <GridCenter item xs={12} md={2}>
@@ -239,7 +229,7 @@ const Report = () => {
                       <Card variant="outlined" sx={{ width: "270px", maxWidth: "100%", height: "380px", borderRadius: "20px", boxShadow: "lg", gap: "5px" }}>
                         <CardOverflow>
                           <AspectRatio ratio="16/9">
-                            <img src={`${BASE_URL}images/${obj.pathImage}`} loading="lazy" alt="" />
+                            <img src={obj.pathImage === "" ? Juanda : `${BASE_URL}images/${obj.pathImage}`} loading="lazy" alt="" />
                           </AspectRatio>
                         </CardOverflow>
                         <CardContent sx={{ display: "flex", textAlign: "center" }}>
@@ -281,7 +271,7 @@ const Report = () => {
                       <Card variant="outlined" sx={{ width: "270px", maxWidth: "100%", height: "380px", borderRadius: "20px", boxShadow: "lg", gap: "5px" }}>
                         <CardOverflow>
                           <AspectRatio ratio="16/9">
-                            <img src={`${BASE_URL}images/${obj.pathImage}`} loading="lazy" alt="" />
+                            <img src={obj.pathImage === "" ? Juanda : `${BASE_URL}images/${obj.pathImage}`} loading="lazy" alt="" />
                           </AspectRatio>
                         </CardOverflow>
                         <CardContent sx={{ display: "flex", textAlign: "center" }}>

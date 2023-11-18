@@ -181,7 +181,7 @@ const PlacemDash = () => {
                     dataPlacem.map((obj, index) => (
                       <Card key={index} variant="outlined" sx={{ width: 300, gap: "0px", height: "100%" }}>
                         <CardOverflow>
-                          <AspectRatio ratio="16/9">
+                          <AspectRatio ratio="4/3">
                             <img src={`${BASE_URL}images/${obj.pathGambar}`} loading="lazy" alt="" />
                           </AspectRatio>
                           <Link to={`/dashboard/pejabat/edit/${obj.id}`}>
@@ -234,7 +234,7 @@ const PlacemDash = () => {
                     dataSearch.map((obj, index) => (
                       <Card key={index} variant="outlined" sx={{ width: 300, gap: "0px", height: "100%" }}>
                         <CardOverflow>
-                          <AspectRatio ratio="16/9">
+                          <AspectRatio ratio="4/3">
                             <img src={`${BASE_URL}images/${obj.pathGambar}`} loading="lazy" alt="" />
                           </AspectRatio>
                           <Link to={`/dashboard/pejabat/edit/${obj.id}`}>

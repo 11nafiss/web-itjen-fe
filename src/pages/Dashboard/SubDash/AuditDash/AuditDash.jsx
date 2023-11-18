@@ -7,7 +7,6 @@ import { styled } from "@mui/material/styles";
 
 // Import Components
 import { AddButton } from "../../../../components/components";
-import { formatDate } from "../../../../utils/custom-format-date";
 
 // Import Assets
 import DeleteIcon from "@mui/icons-material/Delete";
@@ -221,7 +220,7 @@ const AuditDash = () => {
                         </CardOverflow>
                         <Box sx={{ display: "flex", alignItems: "start", mt: "35px" }}>
                           <Typography level="body3" sx={{ fontWeight: "md", color: "blue", fontSize: "14px" }}>
-                            {formatDate(obj.publishedAt)}
+                            {obj.judul}
                           </Typography>
                         </Box>
                         <Typography level="h2" sx={{ fontSize: "14px", my: "10px" }}>
@@ -274,7 +273,7 @@ const AuditDash = () => {
                         </CardOverflow>
                         <Box sx={{ display: "flex", alignItems: "start", mt: "35px" }}>
                           <Typography level="body3" sx={{ fontWeight: "md", color: "blue", fontSize: "14px" }}>
-                            {formatDate(obj.publishedAt)}
+                            {obj.judul}
                           </Typography>
                         </Box>
                         <Typography level="h2" sx={{ fontSize: "14px", my: "10px" }}>

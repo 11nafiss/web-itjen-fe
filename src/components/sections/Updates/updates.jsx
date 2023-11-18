@@ -14,12 +14,14 @@ import { BiNews } from "react-icons/bi";
 import { MdOutlineAnnouncement } from "react-icons/md";
 import { VscGraph } from "react-icons/vsc";
 import { BsPersonVcard } from "react-icons/bs";
+import { Juanda } from "../../../assets/assets";
 
 // Import Api
 import { useAppDispatch, useAppSelector } from "../../../hooks/useTypedSelector";
 import { getArticleByCategory } from "../../../features/actions/article.action";
 import { BASE_URL } from "../../../services/api";
 import { getCategory } from "../../../features/actions/category.action";
+import { getReportAllTake } from "../../../features/actions/report.action";
 
 // MUI Styling CSS
 const CustomButton = styled(Button)(({ theme }) => ({
@@ -139,24 +141,32 @@ const Updates = () => {
   }, [dispatch, instanceRef, searchParams]);
 
   const dataArticle = useAppSelector((state) => state.article.articleCategory.dataArticle);
+  const dataReport = useAppSelector((state) => state.report.reportAllTake.dataReport);
   const dataCategory = useAppSelector((state) => state.category.categoryAll.dataCategory);
 
   function FetchArticleByCategory(categoryId) {
     const page = searchParams.get("page") ?? 1;
     dispatch(getArticleByCategory({ take, page, categoryId: categoryId }));
+    dispatch(getReportAllTake({ take: 0, page }));
+  }
+
+  function FetchLaporan() {
+    const page = searchParams.get("page") ?? 1;
+    dispatch(getReportAllTake({ take, page }));
+    dispatch(getArticleByCategory({ take: 0, page, categoryId: null }));
   }
 
   const handleUrlCategory = (categoryId) => {
     let category = null;
-    for(const obj of dataCategory) {
+    for (const obj of dataCategory) {
       if (categoryId === obj.categoryId) {
         category = obj.categoryName;
       }
     }
-    if(category !== null) {
-      return category.replace(/ /g, "-")
+    if (category !== null) {
+      return category.replace(/ /g, "-");
     } else {
-      return category
+      return category;
     }
   };
 
@@ -206,7 +216,7 @@ const Updates = () => {
                   <ButtonText>Pengumuman</ButtonText>
                 </CustomButton>
                 <Divider />
-                <CustomButton onClick={() => FetchArticleByCategory(4)}>
+                <CustomButton onClick={() => FetchLaporan()}>
                   <IconBox>
                     <VscGraph />
                   </IconBox>
@@ -227,12 +237,54 @@ const Updates = () => {
           <Box>
             <div className="navigation-wrapper">
               <div ref={sliderRef} className="keen-slider" style={{ height: "400px" }}>
+                {dataReport.map((obj) => (
+                  <div key={obj.laporanId} className="keen-slider__slide" style={{ display: "flex", justifyContent: "center" }}>
+                    <Card variant="outlined" sx={{ width: "270px", maxWidth: "100%", height: "380px", borderRadius: "20px", boxShadow: "lg", gap: "5px" }}>
+                      <CardOverflow>
+                        <AspectRatio ratio="16/9">
+                          <img src={obj.pathImage === "" ? Juanda : `${BASE_URL}thumbnail/${obj.featuredImage}`} loading="lazy" alt="" />
+                        </AspectRatio>
+                      </CardOverflow>
+                      <CardContent sx={{ display: "flex", textAlign: "center" }}>
+                        <Typography
+                          gutterBottom
+                          sx={{
+                            fontSize: "14px",
+                            color: "#0D5CAB",
+                            fontWeight: "500",
+                            margin: "10px 0px 10px 0px",
+                          }}
+                        >
+                          Laporan {obj.jenis}
+                        </Typography>
+                        <Typography
+                          sx={{
+                            fontSize: "14px",
+                            fontWeight: "600",
+                            marginBottom: "2px",
+                          }}
+                        >
+                          {obj.judul}
+                        </Typography>
+                      </CardContent>
+                      <CardOverflow variant="soft" sx={{ bgcolor: "background.level1", padding: "0px" }}>
+                        <CardContent sx={{ width: "100%", padding: "0px" }}>
+                          <Link to={`/baca/laporan/${obj.laporanId}`} className="link">
+                            <ClickButton variant="solid" size="lg">
+                              Baca Laporan
+                            </ClickButton>
+                          </Link>
+                        </CardContent>
+                      </CardOverflow>
+                    </Card>
+                  </div>
+                ))}
                 {dataArticle.map((obj) => (
                   <div key={obj.id} className="keen-slider__slide" style={{ display: "flex", justifyContent: "center" }}>
                     <Card variant="outlined" sx={{ width: "270px", maxWidth: "100%", height: "380px", borderRadius: "20px", boxShadow: "lg", gap: "5px" }}>
                       <CardOverflow>
                         <AspectRatio ratio="16/9">
-                          <img src={`${BASE_URL}images/${obj.featuredImage}`} loading="lazy" alt="" />
+                          <img src={obj.featuredImage === "" ? Juanda : `${BASE_URL}thumbnail/${obj.featuredImage}`} loading="lazy" alt="" />
                         </AspectRatio>
                       </CardOverflow>
                       <CardContent sx={{ display: "flex", textAlign: "center" }}>

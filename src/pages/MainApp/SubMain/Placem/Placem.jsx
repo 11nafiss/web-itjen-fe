@@ -8,6 +8,7 @@ import { styled } from "@mui/material/styles";
 // Import Assets
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import ArrowForwardIcon from "@mui/icons-material/ArrowForward";
+import { Juanda } from "../../../../assets/assets";
 
 // Import Api
 import { useAppDispatch, useAppSelector } from "../../../../hooks/useTypedSelector";
@@ -127,7 +128,7 @@ const Placem = () => {
                   <Card variant="outlined" sx={{ width: "270px", maxWidth: "100%", height: "380px", borderRadius: "20px", boxShadow: "lg", gap: "5px" }}>
                     <CardOverflow>
                       <AspectRatio ratio="4/3">
-                        <img src={`${BASE_URL}images/${obj.pathGambar}`} loading="lazy" alt="" />
+                        <img src={obj.pathGambar === "" ? Juanda : `${BASE_URL}images/${obj.pathGambar}`} loading="lazy" alt="" />
                       </AspectRatio>
                     </CardOverflow>
                     <CardContent sx={{ display: "flex", textAlign: "center" }}>

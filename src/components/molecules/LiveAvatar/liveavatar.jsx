@@ -17,6 +17,7 @@ const LiveAvatar = (props) => {
             style={{
                 ...styles.avatarHello,
                 ...{opacity: hovered ? '1' : '0'},
+                ...{ display: hovered ? "block" : "none" },
                 zIndex: "999"
             }}
             >

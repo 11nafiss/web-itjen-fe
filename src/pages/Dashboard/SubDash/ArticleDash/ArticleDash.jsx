@@ -224,7 +224,7 @@ const ArticleDash = () => {
                       <Card key={index} variant="outlined" sx={{ width: 300, gap: "0px", height: "100%" }}>
                         <CardOverflow>
                           <AspectRatio ratio="16/9">
-                            <img src={`${BASE_URL}images/${obj.featuredImage}`} loading="lazy" alt="" />
+                            <img src={`${BASE_URL}thumbnail/${obj.featuredImage}`} loading="lazy" alt="" />
                           </AspectRatio>
                           <Link to={`/dashboard/artikel/edit/${obj.id}`}>
                             <IconButton
@@ -277,7 +277,7 @@ const ArticleDash = () => {
                       <Card key={index} variant="outlined" sx={{ width: 300, gap: "0px", height: "100%" }}>
                         <CardOverflow>
                           <AspectRatio ratio="16/9">
-                            <img src={`${BASE_URL}images/${obj.featuredImage}`} loading="lazy" alt="" />
+                            <img src={`${BASE_URL}thumbnail/${obj.featuredImage}`} loading="lazy" alt="" />
                           </AspectRatio>
                           <Link to={`/dashboard/artikel/edit/${obj.id}`}>
                             <IconButton
