@@ -21,6 +21,17 @@ export const createUser = createAsyncThunk<UserData[], any>("user/createUser", a
   return result;
 });
 
+export const editUser = createAsyncThunk<UserData[], any, any>("user/editUser", async (params) => {
+  const response = await axios.put(urlPengguna + "/" + params.id, params.tableConfig, {
+    headers: {
+      "Content-Type": "application/json",
+    },
+  });
+
+  const result: UserData[] = await response.data;
+  return result;
+});
+
 export const deleteUser = createAsyncThunk<UserData[], any>("user/deleteUser", async (id) => {
   const response = await axios.delete(urlPengguna + "/" + id, {
     headers: {

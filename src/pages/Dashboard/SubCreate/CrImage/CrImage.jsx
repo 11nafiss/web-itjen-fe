@@ -159,7 +159,7 @@ const CrImage = (props) => {
     }
 
     navigate("/dashboard/gambar");
-    // navigate(0);
+    navigate(0);
   };
 
   console.log("ini mode", props.mode);
@@ -194,6 +194,7 @@ const CrImage = (props) => {
                       >
                         Gambar
                       </FormLabel>
+                      <FormHelperText>Harus rasio 16/9</FormHelperText>
                       <Input
                         value={pathGambar}
                         onChange={() => setPathGambar(inputFileImage.current)}
@@ -246,7 +247,7 @@ const CrImage = (props) => {
                     >
                       Submit
                     </Button>
-                    {errorMessage && <FormHelperText sx={(theme) => ({ color: theme.vars.palette.danger[400] })}>Upload Article Gagal</FormHelperText>}
+                    {errorMessage && <FormHelperText sx={(theme) => ({ color: theme.vars.palette.danger[400] })}>Upload Gambar Galeri Gagal</FormHelperText>}
                   </Box>
                 </GridFlex>
               </SpaceGrid>

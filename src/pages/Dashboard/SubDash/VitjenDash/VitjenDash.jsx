@@ -21,6 +21,7 @@ import { useAppDispatch, useAppSelector } from "../../../../hooks/useTypedSelect
 import { deleteVitjen, getVitjenAllCount, getVitjenAll, getVitjenSearchAll, getVitjenSearchCount } from "../../../../features/actions/vitjen.action";
 import { BASE_URL } from "../../../../services/api";
 import { vitjenSearchAllSlice } from "../../../../features/slice/vitjen.slice";
+import { Axios } from "axios";
 
 // MUI Styling CSS
 const CustomBox = styled(Box)(() => ({
@@ -60,6 +61,7 @@ const VitjenDash = () => {
   const [searchParams, setSearchParams] = useSearchParams();
   const [searchInput, setSearchInput] = useState("");
   const [loading, setLoading] = useState(false);
+  const [msg, SetMsg] = useState(null);
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
   const take = 8;
@@ -68,7 +70,7 @@ const VitjenDash = () => {
   const isLoading = useAppSelector((state) => state.vitjen.vitjenAll.isLoading);
   const dataVitjen = useAppSelector((state) => state.vitjen.vitjenAll.dataVitjen);
   const jumlahVitjen = useAppSelector((state) => state.vitjen.vitjenAllCount.dataVitjen);
-  const pageCount = Math.ceil(jumlahVitjen / take)
+  const pageCount = Math.ceil(jumlahVitjen / take);
 
   useEffect(() => {
     const page = searchParams.get("page") ?? 1;
@@ -103,7 +105,7 @@ const VitjenDash = () => {
     }
   }
 
-  const handleDeleteVitjen = (id) => {
+  const handleDeleteVitjen = (id, image, html) => {
     const confirmation = confirm("Apakah anda yakin untuk menghapus data ini?");
 
     navigate(0);
@@ -112,6 +114,36 @@ const VitjenDash = () => {
 
     if (confirmation) {
       dispatch(deleteVitjen(id));
+      if (image) {
+        Axios.delete(BASE_URL + "api/upload/imagedelete/" + image, {
+          headers: {
+            "Content-Type": "application/json",
+          },
+        })
+          .then((response) => {
+            SetMsg("Delete Successful");
+            console.log(response.data);
+          })
+          .catch((err) => {
+            SetMsg("Delete failed");
+            console.log(err);
+          });
+      }
+      if (html) {
+        Axios.delete(BASE_URL + "api/upload/htmldelete/" + html, {
+          headers: {
+            "Content-Type": "application/json",
+          },
+        })
+          .then((response) => {
+            SetMsg("Delete Successful");
+            console.log(response.data);
+          })
+          .catch((err) => {
+            SetMsg("Delete failed");
+            console.log(err);
+          });
+      }
       setLoading(false);
     }
   };
@@ -131,6 +163,7 @@ const VitjenDash = () => {
                 </Link>
               </GridFlex>
               <GridFlex item xs={12} md={6} sx={{ justifyContent: { xs: "center", md: "right" } }}>
+                {msg && <span>{msg}</span>}
                 <form onSubmit={handleSubmit} style={{ display: "flex", justifyContent: "right", width: "100%" }}>
                   <FormControl
                     sx={() => ({
@@ -201,7 +234,7 @@ const VitjenDash = () => {
                             </IconButton>
                           </Link>
                           <IconButton
-                            onClick={() => handleDeleteVitjen(obj.id)}
+                            onClick={() => handleDeleteVitjen(obj.id, obj.image, obj.link)}
                             aria-label="Like minimal photography"
                             size="md"
                             variant="solid"
@@ -254,7 +287,7 @@ const VitjenDash = () => {
                             </IconButton>
                           </Link>
                           <IconButton
-                            onClick={() => handleDeleteVitjen(obj.vitjenId)}
+                            onClick={() => handleDeleteVitjen(obj.id, obj.image, obj.link)}
                             aria-label="Like minimal photography"
                             size="md"
                             variant="solid"

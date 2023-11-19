@@ -21,6 +21,7 @@ import { useAppDispatch, useAppSelector } from "../../../../hooks/useTypedSelect
 import { deleteAuditoria, getAuditoriaAllCount, getAuditoriaAllTake, getAuditoriaSearchAll, getAuditoriaSearchCount } from "../../../../features/actions/auditoria.action";
 import { BASE_URL } from "../../../../services/api";
 import { auditoriaSearchAllSlice } from "../../../../features/slice/auditoria.slice";
+import { Axios } from "axios";
 
 // MUI Styling CSS
 const CustomBox = styled(Box)(() => ({
@@ -62,6 +63,7 @@ const AuditDash = () => {
   const [loading, setLoading] = useState(false);
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
+  const [msg, SetMsg] = useState(null);
   const take = 8;
 
   const dataSearch = useAppSelector((state) => state.auditoria.auditoriaSearchAll.dataAuditoria);
@@ -103,7 +105,7 @@ const AuditDash = () => {
     }
   }
 
-  const handleDeleteAuditoria = (id) => {
+  const handleDeleteAuditoria = (id, image, pdf) => {
     const confirmation = confirm("Apakah anda yakin untuk menghapus data ini?");
 
     navigate(0);
@@ -112,6 +114,38 @@ const AuditDash = () => {
 
     if (confirmation) {
       dispatch(deleteAuditoria(id));
+      if(image) {
+        Axios
+        .delete(BASE_URL + "api/upload/imagedelete/" + image, {
+          headers: {
+            "Content-Type": "application/json",
+          },
+        })
+        .then((response) => {
+          SetMsg("Delete Successful");
+          console.log(response.data);
+        })
+        .catch((err) => {
+          SetMsg("Delete failed");
+          console.log(err);
+        });
+      }
+      if(pdf) {
+        Axios
+        .delete(BASE_URL + "api/upload/pdfdelete/" + pdf, {
+          headers: {
+            "Content-Type": "application/json",
+          },
+        })
+        .then((response) => {
+          SetMsg("Delete Successful");
+          console.log(response.data);
+        })
+        .catch((err) => {
+          SetMsg("Delete failed");
+          console.log(err);
+        });
+      }
       setLoading(false);
     }
   };
@@ -131,6 +165,7 @@ const AuditDash = () => {
                 </Link>
               </GridFlex>
               <GridFlex item xs={12} md={6} sx={{ justifyContent: { xs: "center", md: "right" } }}>
+              {msg && <span>{msg}</span>}
                 <form onSubmit={handleSubmit} style={{ display: "flex", justifyContent: "right", width: "100%" }}>
                   <FormControl
                     sx={() => ({
@@ -201,7 +236,7 @@ const AuditDash = () => {
                             </IconButton>
                           </Link>
                           <IconButton
-                            onClick={() => handleDeleteAuditoria(obj.auditoriaId)}
+                            onClick={() => handleDeleteAuditoria(obj.auditoriaId, obj.pathImage, obj.pathPdf)}
                             aria-label="Like minimal photography"
                             size="md"
                             variant="solid"
@@ -254,7 +289,7 @@ const AuditDash = () => {
                             </IconButton>
                           </Link>
                           <IconButton
-                            onClick={() => handleDeleteAuditoria(obj.auditoriaId)}
+                            onClick={() => handleDeleteAuditoria(obj.auditoriaId, obj.pathImage, obj.pathPdf)}
                             aria-label="Like minimal photography"
                             size="md"
                             variant="solid"

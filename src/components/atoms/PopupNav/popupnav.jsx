@@ -2,6 +2,7 @@ import React, { useEffect } from "react";
 import PopupState, { bindTrigger, bindMenu } from "material-ui-popup-state";
 import { Grid, Menu, MenuItem, Box, Typography, Button } from "@mui/material";
 import { styled } from "@mui/material/styles";
+import { Link } from "react-router-dom";
 
 // Import Api
 import { useAppDispatch, useAppSelector } from "../../../hooks/useTypedSelector";
@@ -9,7 +10,7 @@ import { getFeatureData } from "../../../features/actions/feature.action";
 
 // Import Assets
 import WidgetsIcon from "@mui/icons-material/Widgets";
-import { WhisIcon } from "../../../assets/assets";
+import { BASE_URL } from "../../../services/api";
 
 const PopupNav = () => {
   const dispatch = useAppDispatch();
@@ -69,18 +70,20 @@ const PopupNav = () => {
             <Grid container spacing={1} sx={{ width: "300px", padding: "15px" }}>
               {dataFeature.map((obj, index) => (
                 <GridCenter item key={index} xs={6}>
-                  <MenuIcon onClick={popupState.close}>
-                    <Grid container spacing={1}>
-                      <GridCenter item xs={12}>
-                        <CustomBox style={{ padding: "30px" }}>
-                          <img src={WhisIcon} style={{ width: "35px" }} />
-                        </CustomBox>
-                      </GridCenter>
-                      <GridCenter item xs={12}>
-                        <CustomType>{obj.singkatan}</CustomType>
-                      </GridCenter>
-                    </Grid>
-                  </MenuIcon>
+                  <Link to={obj.link} className="link">
+                    <MenuIcon onClick={popupState.close}>
+                      <Grid container spacing={1}>
+                        <GridCenter item xs={12}>
+                          <CustomBox style={{ padding: "30px" }}>
+                            <img src={`${BASE_URL}images/${obj.image}`} style={{ width: "35px" }} />
+                          </CustomBox>
+                        </GridCenter>
+                        <GridCenter item xs={12}>
+                          <CustomType>{obj.singkatan}</CustomType>
+                        </GridCenter>
+                      </Grid>
+                    </MenuIcon>
+                  </Link>
                 </GridCenter>
               ))}
             </Grid>

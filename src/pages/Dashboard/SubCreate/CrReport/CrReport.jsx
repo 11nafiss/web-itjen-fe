@@ -232,7 +232,7 @@ const CrReport = (props) => {
     }
 
     navigate("/dashboard/laporan");
-    // navigate(0);
+    navigate(0);
   };
 
   console.log("ini mode", props.mode);
@@ -267,6 +267,7 @@ const CrReport = (props) => {
                       >
                         Gambar
                       </FormLabel>
+                      <FormHelperText>Harus rasio 16/9</FormHelperText>
                       <Input
                         value={pathImage}
                         onChange={() => setPathImage(inputFileImage.current)}
@@ -405,7 +406,7 @@ const CrReport = (props) => {
                     >
                       Submit
                     </Button>
-                    {errorMessage && <FormHelperText sx={(theme) => ({ color: theme.vars.palette.danger[400] })}>Upload Auditoria Gagal</FormHelperText>}
+                    {errorMessage && <FormHelperText sx={(theme) => ({ color: theme.vars.palette.danger[400] })}>Upload Laporan Gagal</FormHelperText>}
                   </Box>
                 </GridFlex>
               </SpaceGrid>

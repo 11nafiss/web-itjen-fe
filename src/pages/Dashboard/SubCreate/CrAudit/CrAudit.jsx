@@ -258,6 +258,7 @@ const CrAudit = (props) => {
                       >
                         Gambar
                       </FormLabel>
+                      <FormHelperText>Harus rasio 16/9</FormHelperText>
                       <Input
                         value={pathImage}
                         onChange={() => setPathImage(inputFileImage.current)}

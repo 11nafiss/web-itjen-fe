@@ -21,6 +21,7 @@ import { useAppDispatch, useAppSelector } from "../../../../hooks/useTypedSelect
 import { getImageAllTake, getImageAllCount, getImageSearchCount, getImageSearchAll, deleteImage } from "../../../../features/actions/image.action";
 import { BASE_URL } from "../../../../services/api";
 import { imageSearchAllSlice } from "../../../../features/slice/image.slice";
+import { Axios } from "axios";
 
 // MUI Styling CSS
 const CustomBox = styled(Box)(() => ({
@@ -60,6 +61,7 @@ const ImageDash = () => {
   const [searchParams, setSearchParams] = useSearchParams();
   const [searchInput, setSearchInput] = useState("");
   const [loading, setLoading] = useState(false);
+  const [msg, SetMsg] = useState(null);
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
   const take = 8;
@@ -68,7 +70,7 @@ const ImageDash = () => {
   const isLoading = useAppSelector((state) => state.image.imageAllTake.isLoading);
   const dataImage = useAppSelector((state) => state.image.imageAllTake.dataImage);
   const jumlahImage = useAppSelector((state) => state.image.imageAllCount.dataImage);
-  const pageCount = Math.ceil(jumlahImage/take);
+  const pageCount = Math.ceil(jumlahImage / take);
 
   useEffect(() => {
     const page = searchParams.get("page") ?? 1;
@@ -78,7 +80,6 @@ const ImageDash = () => {
     dispatch(getImageAllCount());
   }, [dispatch, searchParams, isLoading]);
 
-
   const handlePageChange = (event, value) => {
     let updatedSearchParams = new URLSearchParams(searchParams.toString());
     updatedSearchParams.set("page", value);
@@ -86,7 +87,6 @@ const ImageDash = () => {
     dispatch(getImageAllTake({ take, page: value }));
     dispatch(getImageAllCount());
   };
-
 
   function handleSubmit(event) {
     event.preventDefault();
@@ -105,7 +105,7 @@ const ImageDash = () => {
     }
   }
 
-  const handleDeleteImage = (id) => {
+  const handleDeleteImage = (id, image) => {
     const confirmation = confirm("Apakah anda yakin untuk menghapus data ini?");
 
     navigate(0);
@@ -114,6 +114,21 @@ const ImageDash = () => {
 
     if (confirmation) {
       dispatch(deleteImage(id));
+      if (image) {
+        Axios.delete(BASE_URL + "api/upload/imagedelete/" + image, {
+          headers: {
+            "Content-Type": "application/json",
+          },
+        })
+          .then((response) => {
+            SetMsg("Delete Successful");
+            console.log(response.data);
+          })
+          .catch((err) => {
+            SetMsg("Delete failed");
+            console.log(err);
+          });
+      }
       setLoading(false);
     }
   };
@@ -133,6 +148,7 @@ const ImageDash = () => {
                 </Link>
               </GridFlex>
               <GridFlex item xs={12} md={6} sx={{ justifyContent: { xs: "center", md: "right" } }}>
+                {msg && <span>{msg}</span>}
                 <form onSubmit={handleSubmit} style={{ display: "flex", justifyContent: "right", width: "100%" }}>
                   <FormControl
                     sx={() => ({
@@ -203,7 +219,7 @@ const ImageDash = () => {
                             </IconButton>
                           </Link>
                           <IconButton
-                            onClick={() => handleDeleteImage(obj.id)}
+                            onClick={() => handleDeleteImage(obj.id, obj.pathGambar)}
                             aria-label="Like minimal photography"
                             size="md"
                             variant="solid"
@@ -251,7 +267,7 @@ const ImageDash = () => {
                             </IconButton>
                           </Link>
                           <IconButton
-                            onClick={() => handleDeleteImage(obj.id)}
+                            onClick={() => handleDeleteImage(obj.id, obj.pathGambar)}
                             aria-label="Like minimal photography"
                             size="md"
                             variant="solid"
@@ -276,9 +292,9 @@ const ImageDash = () => {
                 </Box>
               </GridFlex>
             </SpaceGrid>
-              <div className="pagination">
-                <Pagination color="primary" count={pageCount} onChange={handlePageChange} renderItem={(item) => <PaginationItem slots={{ previous: ArrowBackIcon, next: ArrowForwardIcon }} {...item} />} />
-              </div>
+            <div className="pagination">
+              <Pagination color="primary" count={pageCount} onChange={handlePageChange} renderItem={(item) => <PaginationItem slots={{ previous: ArrowBackIcon, next: ArrowForwardIcon }} {...item} />} />
+            </div>
           </CustomBox>
         </Grid>
       </Grid>

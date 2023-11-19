@@ -2,9 +2,10 @@
 import { Grid, Box, Typography, Divider } from "@mui/material";
 import { styled } from "@mui/material/styles";
 import { Select, Option } from "@mui/joy";
+import Highcharts from "highcharts";
+import HighchartsReact from "highcharts-react-official";
 
 // Import Assets
-import { GrKuartal, GrBulanan } from "../../../../assets/assets";
 import { AiFillCalendar } from "react-icons/ai";
 import { MdVisibility } from "react-icons/md";
 
@@ -75,11 +76,84 @@ const ImgBox = styled(Box)(() => ({
 
 // Main Declaration
 const HomeDash = () => {
-
   const dataUser = useAppSelector((state) => state.user.loginUser.currentUser);
-  console.log("ini", dataUser.username)
+  console.log("ini", dataUser.username);
 
-// Main Code
+  const options1 = {
+    chart: {
+      type: "line",
+    },
+    title: {
+      text: "Statistik Artikel Per Kuartal",
+    },
+    subtitle: {
+      text: "",
+    },
+    xAxis: {
+      categories: ["Kuartal I", "Kuartal II", "Kuartal III", "Kuartal IV"],
+    },
+    yAxis: {
+      title: {
+        text: "Jumlah Artikel",
+      },
+    },
+    plotOptions: {
+      line: {
+        dataLabels: {
+          enabled: true,
+        },
+        enableMouseTracking: true,
+      },
+    },
+    series: [
+      {
+        name: 'tebe',
+        data: [2.4, 3.4]
+      }, {
+        name: 'taufan',
+        data: [3.9, 4.2, 5.7, 8.5]
+      }
+    ],
+  };
+
+  const options2 = {
+    chart: {
+      type: "line",
+    },
+    title: {
+      text: "Statistik Artikel Per Bulan",
+    },
+    subtitle: {
+      text: "",
+    },
+    xAxis: {
+      categories: ["Jan", "Feb", "Mar", "Apr", "Mei", "Jun", "Jul", "Ags", "Sep", "Okt", "Nov", "Des"],
+    },
+    yAxis: {
+      title: {
+        text: "Jumlah Artikel",
+      },
+    },
+    plotOptions: {
+      line: {
+        dataLabels: {
+          enabled: true,
+        },
+        enableMouseTracking: true,
+      },
+    },
+    series: [
+      {
+        name: 'tebe',
+        data: [2.4, 3.4]
+      }, {
+        name: 'taufan',
+        data: [3.9, 4.2, 5.7, 8.5]
+      }
+    ],
+  };
+
+  // Main Code
   return (
     <Box component="main" sx={{ flexGrow: 1, p: 3, backgroundColor: "#D9D9D9" }}>
       <Grid container spacing={3}>
@@ -119,17 +193,15 @@ const HomeDash = () => {
         </Grid>
         <Grid item xs={12} md={6}>
           <CustomSquare>
-            <CustomText>Statistik Artikel Perkuartal</CustomText>
             <ImgBox>
-              <img src={GrKuartal} style={{ height: "90%" }} />
+              <HighchartsReact highcharts={Highcharts} options={options1} />
             </ImgBox>
           </CustomSquare>
         </Grid>
         <Grid item xs={12} md={6}>
           <CustomSquare>
-            <CustomText>Statistik Artikel Perbulan</CustomText>
             <ImgBox>
-              <img src={GrBulanan} style={{ height: "90%" }} />
+              <HighchartsReact highcharts={Highcharts} options={options2} />
             </ImgBox>
           </CustomSquare>
         </Grid>

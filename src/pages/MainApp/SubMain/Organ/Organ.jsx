@@ -1,6 +1,6 @@
 // Import Library
 import { useEffect } from "react";
-import { Link, useSearchParams } from "react-router-dom";
+import { Link } from "react-router-dom";
 import { Tree, TreeNode } from "react-organizational-chart";
 import { Grid, Container, Box, Typography } from "@mui/material";
 import { Avatar, Button } from "@mui/joy";
@@ -8,14 +8,8 @@ import { styled } from "@mui/material/styles";
 
 // Import Api
 import { useAppDispatch, useAppSelector } from "../../../../hooks/useTypedSelector";
-import { getPlacemAllTake } from "../../../../features/actions/placem.action";
+import { getPlacemData } from "../../../../features/actions/placem.action";
 import { BASE_URL } from "../../../../services/api";
-
-// Import Assets
-import { ImgIrjen } from "../../../../assets/assets";
-
-// Import Assets
-import { BoxIrjen, BoxSekre, BoxIrtor1, BoxIrtor2, BoxIrtor3, BoxIrtor4, BoxIrtor5, BoxIrtor6, BoxIrtor7, BoxIrtorBi, BoxBkkh, BoxBoahp, BoxBpk, BoxBsdm, BoxBsip, BoxBuk } from "../../../../components/components";
 
 // MUI Styling CSS
 const Background = styled(Box)(() => ({
@@ -71,17 +65,17 @@ const CustomTitle = styled(Typography)(({ theme }) => ({
 
 const Orgchart = styled(Box)(({ theme }) => ({
   display: "block",
+  overflow: "hidden",
   [theme.breakpoints.down("sm")]: {
     display: "flex",
-    overflowX: "auto",
     direction: "ltr",
   },
 }));
 
 const BgHorizontal = styled(Button)(() => ({
   display: "flex",
-  height: "90px",
-  width: "260px",
+  height: "150px",
+  width: "300px",
   backgroundColor: "#041D44",
   alignItems: "start",
   borderColor: "#041D44",
@@ -94,7 +88,7 @@ const BgHorizontal = styled(Button)(() => ({
 const ProfileBox = styled(Box)(() => ({
   display: "flex",
   padding: "10px",
-  height: "90%",
+  height: "150px",
   width: "100%",
   backgroundColor: "#fff",
   alignItems: "center",
@@ -103,33 +97,41 @@ const ProfileBox = styled(Box)(() => ({
 
 const NbHorizontal = styled(Box)(() => ({
   display: "flex",
+  width: "100%",
   flexDirection: "column",
-  alignItems: "start",
+  alignItems: "center",
   justifyContent: "start",
-  marginLeft: "15px",
+  marginLeft: "10px",
+  gap: "5px",
 }));
 
 const Pfposition = styled(Typography)(() => ({
   fontSize: "14px",
   fontWeight: "700",
+  color: "#fff",
 }));
 
 const Pfname = styled(Typography)(() => ({
   fontSize: "14px",
   fontWeight: "500",
+  color: "#252525",
 }));
 
 const BgVertical = styled(Button)(() => ({
   display: "flex",
-  height: "200px",
-  width: "90px",
+  flexDirection: "column",
+  justifyContent: "start",
+  minHeight: "240px",
+  width: "150px",
   backgroundColor: "#F05023",
-  alignItems: "start",
+  alignItems: "center",
   borderColor: "#F05023",
   borderRadius: "15px",
   borderWidth: "5px",
   padding: "5px",
+  paddingBottom: "30px",
   margin: "auto",
+  gap: "15px",
 }));
 
 const NbVertical = styled(Box)(() => ({
@@ -137,8 +139,9 @@ const NbVertical = styled(Box)(() => ({
   flexDirection: "column",
   alignItems: "center",
   justifyContent: "start",
-  gap: "15px",
+  gap: "10px",
   width: "100%",
+  height: "100%",
 }));
 
 const ContentBox = styled(Box)(({ theme }) => ({
@@ -149,6 +152,7 @@ const ContentBox = styled(Box)(({ theme }) => ({
   width: "100%",
   backgroundColor: "#fff",
   alignItems: "left",
+  overflow: "hidden",
   [theme.breakpoints.down("md")]: {
     padding: "50px 30px",
   },
@@ -157,21 +161,18 @@ const ContentBox = styled(Box)(({ theme }) => ({
 // Main Declaration
 const Organ = () => {
   const dispatch = useAppDispatch();
-  const [searchParams] = useSearchParams();
-  const take = 20;
 
   useEffect(() => {
-    const page = searchParams.get("page") ?? 1;
-    dispatch(getPlacemAllTake({ take, page }));
-  }, [dispatch, take, searchParams]);
+    dispatch(getPlacemData());
+  }, [dispatch]);
 
-  const dataPlacem = useAppSelector((state) => state.placem.placemAllTake.dataPlacem);
-  const Eselon2 = dataPlacem.filter((item) => item.eselon === 2);
-  const Eselon3 = dataPlacem.filter((item) => item.eselon === 3);
+  const dataPlacem = useAppSelector((state) => state.placem.placemAll.dataPlacem);
+  const pejabatEs1 = dataPlacem.filter((item) => item.eselon === 1);
+  const pejabatEs2 = dataPlacem.filter((item) => item.eselon === 2);
 
-  if(dataPlacem.length === 0) {
-    return null
-  } 
+  if (dataPlacem.length === 0) {
+    return null;
+  }
 
   // Main Code
   return (
@@ -189,59 +190,76 @@ const Organ = () => {
         <BoxBg>
           <CustomContainer>
             <SubText>Struktur Organisasi</SubText>
-            <Grid container spacing={{ xs: 3, md: 4 }} sx={{ justifyContent: "center" }}>
+            <Grid container spacing={{ xs: 3, md: 4 }} sx={{ justifyContent: "center", overflowX: { sm: "scroll", lg: "visible" } }}>
               <GridCenter item>
                 <ContentBox>
                   <Orgchart>
-                    <Tree
-                      lineWidth={"3px"}
-                      lineHeight={"30px"}
-                      lineColor={"black"}
-                      lineBorderRadius={"10px"}
-                      label={
-                        <Link to={`/pejabat/${dataPlacem[0].id}`} className="link">
-                          <BgHorizontal color="warning">
-                            <ProfileBox>
-                              <Avatar alt="inspektorat jenderal" src={`${BASE_URL}images/${dataPlacem[0].pathGambar}`} size="lg" />
-                              <NbHorizontal>
-                                <Pfposition>{dataPlacem[0].jabatan}</Pfposition>
-                                <Pfname>{dataPlacem[0].nama}</Pfname>
-                              </NbHorizontal>
-                            </ProfileBox>
-                          </BgHorizontal>
-                        </Link>
-                      }
-                    >
-                      <TreeNode label={<BoxSekre />}>
-                        <TreeNode label={<BoxBkkh />} />
-                        <TreeNode label={<BoxBoahp />} />
-                        <TreeNode label={<BoxBpk />} />
-                        <TreeNode label={<BoxBsdm />} />
-                        <TreeNode
-                          label={
-                            <Link to="/profil/organisasi/bsip" className="link">
-                              <BoxBsip />
-                            </Link>
-                          }
-                        />
-                        <TreeNode label={<BoxBuk />} />
-                      </TreeNode>
-                      <TreeNode label={<BoxIrtor1 />}>
-                        <TreeNode label={<BoxIrtor2 />}>
-                          <TreeNode label={<BoxIrtor3 />}>
-                            <TreeNode label={<BoxIrtor4 />}>
-                              <TreeNode label={<BoxIrtor5 />}>
-                                <TreeNode label={<BoxIrtor6 />}>
-                                  <TreeNode label={<BoxIrtor7 />}>
-                                    <TreeNode label={<BoxIrtorBi />} />
-                                  </TreeNode>
-                                </TreeNode>
-                              </TreeNode>
-                            </TreeNode>
-                          </TreeNode>
-                        </TreeNode>
-                      </TreeNode>
-                    </Tree>
+                    {pejabatEs1.map((p1) => (
+                      <Tree
+                        key={p1.id}
+                        lineWidth={"3px"}
+                        lineHeight={"30px"}
+                        lineColor={"black"}
+                        lineBorderRadius={"10px"}
+                        label={
+                          <Link to={`/pejabat/${p1.id}`} className="link">
+                            <BgHorizontal color="warning">
+                              <ProfileBox sx={{ height: "90%" }}>
+                                <Avatar alt={p1.jabatan} src={`${BASE_URL}images/${p1.pathGambar}`} size="lg" sx={{ width: "70px", height: "70px" }} />
+                                <NbHorizontal>
+                                  <Pfposition sx={{ color: "#252525", fontSize: "16px" }}>{p1.jabatan}</Pfposition>
+                                  <Pfname sx={{ fontSize: "16px" }}> {p1.nama}</Pfname>
+                                </NbHorizontal>
+                              </ProfileBox>
+                            </BgHorizontal>
+                          </Link>
+                        }
+                      >
+                        {pejabatEs2
+                          .filter((p2) => p2.atasanId === p1.id)
+                          .map((p2) => {
+                            if (p2.hasSubJabatan) {
+                              return (
+                                <TreeNode
+                                  key={p2.id}
+                                  label={
+                                    <Link to={`/organisasi/${p2.eselon}/${p2.id}`} className="link">
+                                      <BgVertical color="warning">
+                                        <ProfileBox>
+                                          <NbVertical>
+                                            <Avatar alt={p2.jabatan} src={`${BASE_URL}images/${p2.pathGambar}`} size="lg" sx={{ width: "70px", height: "70px" }} />
+                                            <Pfname>{p2.nama}</Pfname>
+                                          </NbVertical>
+                                        </ProfileBox>
+                                        <Pfposition>{p2.jabatan}</Pfposition>
+                                      </BgVertical>
+                                    </Link>
+                                  }
+                                />
+                              );
+                            } else {
+                              return (
+                                <TreeNode
+                                  key={p2.id}
+                                  label={
+                                    <Link to={`/pejabat/${p2.id}`} className="link">
+                                      <BgVertical color="warning">
+                                        <ProfileBox>
+                                          <NbVertical>
+                                            <Avatar alt={p2.jabatan} src={`${BASE_URL}images/${p2.pathGambar}`} size="lg" sx={{ width: "70px", height: "70px" }} />
+                                            <Pfname>{p2.nama}</Pfname>
+                                          </NbVertical>
+                                        </ProfileBox>
+                                        <Pfposition>{p2.jabatan}</Pfposition>
+                                      </BgVertical>
+                                    </Link>
+                                  }
+                                />
+                              );
+                            }
+                          })}
+                      </Tree>
+                    ))}
                   </Orgchart>
                 </ContentBox>
               </GridCenter>

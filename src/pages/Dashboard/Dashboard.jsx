@@ -85,7 +85,6 @@ const Dashboard = () => {
             <Route path="/pejabat/edit/:id" element={<CrPlacem mode="Edit" />} />
             <Route path="/menus/edit/:id" element={<CrMenu mode="Edit" />} />
             <Route path="/laporan/edit/:id" element={<CrReport mode="Edit" />} />
-            <Route path="/users/edit/:id" element={<CrUser mode="Edit" />} />
             <Route path="/kategori/edit/:id" element={<CrCategory mode="Edit" />} />
             <Route path="/visual/edit/:id" element={<CrVitjen mode="Edit" />} />
           </Routes>

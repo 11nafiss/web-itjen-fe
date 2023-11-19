@@ -203,6 +203,7 @@ const CrBanner = (props) => {
                       >
                         Gambar
                       </FormLabel>
+                      <FormHelperText>Harus rasio 16/9</FormHelperText>
                       <Input
                         value={pathGambar}
                         onChange={() => setPathGambar(inputFile.current)}

@@ -21,6 +21,7 @@ import { useAppDispatch, useAppSelector } from "../../../../hooks/useTypedSelect
 import { deleteReport, getReportAllCount, getReportAllTake, getReportSearchAll, getReportSearchCount } from "../../../../features/actions/report.action";
 import { BASE_URL } from "../../../../services/api";
 import { reportSearchAllSlice } from "../../../../features/slice/report.slice";
+import { Axios } from "axios";
 
 // MUI Styling CSS
 const CustomBox = styled(Box)(() => ({
@@ -62,14 +63,14 @@ const ReportDash = () => {
   const [loading, setLoading] = useState(false);
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
+  const [msg, SetMsg] = useState(null);
   const take = 8;
 
   const dataSearch = useAppSelector((state) => state.report.reportSearchAll.dataReport);
   const isLoading = useAppSelector((state) => state.report.reportAllTake.isLoading);
   const dataReport = useAppSelector((state) => state.report.reportAllTake.dataReport);
   const jumlahReport = useAppSelector((state) => state.report.reportAllCount.dataReport);
-  const pageCount = Math.ceil(jumlahReport/take)
-
+  const pageCount = Math.ceil(jumlahReport / take);
 
   useEffect(() => {
     const page = searchParams.get("page") ?? 1;
@@ -104,7 +105,7 @@ const ReportDash = () => {
     }
   }
 
-  const handleDeleteReport = (id) => {
+  const handleDeleteReport = (id, image, pdf) => {
     const confirmation = confirm("Apakah anda yakin untuk menghapus data ini?");
 
     navigate(0);
@@ -113,6 +114,36 @@ const ReportDash = () => {
 
     if (confirmation) {
       dispatch(deleteReport(id));
+      if (image) {
+        Axios.delete(BASE_URL + "api/upload/imagedelete/" + image, {
+          headers: {
+            "Content-Type": "application/json",
+          },
+        })
+          .then((response) => {
+            SetMsg("Delete Successful");
+            console.log(response.data);
+          })
+          .catch((err) => {
+            SetMsg("Delete failed");
+            console.log(err);
+          });
+      }
+      if (pdf) {
+        Axios.delete(BASE_URL + "api/upload/pdfdelete/" + pdf, {
+          headers: {
+            "Content-Type": "application/json",
+          },
+        })
+          .then((response) => {
+            SetMsg("Delete Successful");
+            console.log(response.data);
+          })
+          .catch((err) => {
+            SetMsg("Delete failed");
+            console.log(err);
+          });
+      }
       setLoading(false);
     }
   };
@@ -132,6 +163,7 @@ const ReportDash = () => {
                 </Link>
               </GridFlex>
               <GridFlex item xs={12} md={6} sx={{ justifyContent: { xs: "center", md: "right" } }}>
+                {msg && <span>{msg}</span>}
                 <form onSubmit={handleSubmit} style={{ display: "flex", justifyContent: "right", width: "100%" }}>
                   <FormControl
                     sx={() => ({
@@ -202,7 +234,7 @@ const ReportDash = () => {
                             </IconButton>
                           </Link>
                           <IconButton
-                            onClick={() => handleDeleteReport(obj.reportId)}
+                            onClick={() => handleDeleteReport(obj.laporanId, obj.pathImage, obj.pathPdf)}
                             aria-label="Like minimal photography"
                             size="md"
                             variant="solid"
@@ -255,7 +287,7 @@ const ReportDash = () => {
                             </IconButton>
                           </Link>
                           <IconButton
-                            onClick={() => handleDeleteReport(obj.reportId)}
+                            onClick={() => handleDeleteReport(obj.laporanId, obj.pathImage, obj.pathPdf)}
                             aria-label="Like minimal photography"
                             size="md"
                             variant="solid"
@@ -285,9 +317,9 @@ const ReportDash = () => {
                 </Box>
               </GridFlex>
             </SpaceGrid>
-              <div className="pagination">
-                <Pagination color="primary" count={pageCount} onChange={handlePageChange} renderItem={(item) => <PaginationItem slots={{ previous: ArrowBackIcon, next: ArrowForwardIcon }} {...item} />} />
-              </div>
+            <div className="pagination">
+              <Pagination color="primary" count={pageCount} onChange={handlePageChange} renderItem={(item) => <PaginationItem slots={{ previous: ArrowBackIcon, next: ArrowForwardIcon }} {...item} />} />
+            </div>
           </CustomBox>
         </Grid>
       </Grid>

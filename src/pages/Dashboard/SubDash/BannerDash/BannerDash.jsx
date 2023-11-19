@@ -21,6 +21,7 @@ import { useAppDispatch, useAppSelector } from "../../../../hooks/useTypedSelect
 import { getBannerAllTake, getBannerAllCount, getBannerSearchCount, getBannerSearchAll, deleteBanner } from "../../../../features/actions/banner.action";
 import { BASE_URL } from "../../../../services/api";
 import { bannerSearchAllSlice } from "../../../../features/slice/banner.slice";
+import { Axios } from "axios";
 
 // MUI Styling CSS
 const CustomBox = styled(Box)(() => ({
@@ -60,6 +61,7 @@ const BannerDash = () => {
   const [searchParams, setSearchParams] = useSearchParams();
   const [searchInput, setSearchInput] = useState("");
   const [loading, setLoading] = useState(false);
+  const [msg, SetMsg] = useState(null);
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
   const take = 8;
@@ -106,7 +108,7 @@ const BannerDash = () => {
     }
   }
 
-  const handleDeleteBanner = (id) => {
+  const handleDeleteBanner = (id, image) => {
     const confirmation = confirm("Apakah anda yakin untuk menghapus data ini?");
 
     navigate(0);
@@ -115,6 +117,21 @@ const BannerDash = () => {
 
     if (confirmation) {
       dispatch(deleteBanner(id));
+      if (image) {
+        Axios.delete(BASE_URL + "api/upload/imagedelete/" + image, {
+          headers: {
+            "Content-Type": "application/json",
+          },
+        })
+          .then((response) => {
+            SetMsg("Delete Successful");
+            console.log(response.data);
+          })
+          .catch((err) => {
+            SetMsg("Delete failed");
+            console.log(err);
+          });
+      }
       setLoading(false);
     }
   };
@@ -134,6 +151,7 @@ const BannerDash = () => {
                 </Link>
               </GridFlex>
               <GridFlex item xs={12} md={6} sx={{ justifyContent: { xs: "center", md: "right" } }}>
+                {msg && <span>{msg}</span>}
                 <form onSubmit={handleSubmit} style={{ display: "flex", justifyContent: "right", width: "100%" }}>
                   <FormControl
                     sx={() => ({

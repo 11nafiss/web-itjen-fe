@@ -1,7 +1,7 @@
 // Import Library
 import { useCallback, useEffect, useRef, useState } from "react";
 import { Grid, Box, Typography, Divider } from "@mui/material";
-import { Option, Select, Button, IconButton, Input, FormControl, FormLabel, FormHelperText } from "@mui/joy";
+import { Radio, RadioGroup, Option, Select, Button, IconButton, Input, FormControl, FormLabel, FormHelperText } from "@mui/joy";
 import { styled } from "@mui/material/styles";
 import { DemoContainer } from "@mui/x-date-pickers/internals/demo";
 import { AdapterMoment } from "@mui/x-date-pickers/AdapterMoment";
@@ -84,12 +84,16 @@ const CrPlacem = (props) => {
   const [eselon, setEselon] = useState();
   const [atasanId, setAtasanId] = useState();
   const [publishedAt, setPublishedAt] = useState(null);
+  const [hasSubJabatan, setHasSubJabatan] = useState("Tidak");
   const [fileImage, setFileImage] = useState();
   const [progress, setProgress] = useState({ started: false, pc: 0 });
   const [msg, setMsg] = useState(null);
 
   const { errorMessage } = useAppSelector((state) => state.placem.createPlacem);
   const dataPlacem = useAppSelector((state) => state.placem.placemAll.dataPlacem);
+  const parentSub1 = dataPlacem.filter((item) => item.eselon === 1);
+  const parentSub2 = dataPlacem.filter((item) => item.eselon === 2);
+  const parentSub3 = dataPlacem.filter((item) => item.eselon === 3);
 
   const fetchPlacemById = useCallback(async () => {
     const response = await pejabatService.getPejabatById(id);
@@ -101,6 +105,7 @@ const CrPlacem = (props) => {
     setEselon(response.eselon);
     setAtasanId(response.atasanId);
     setPublishedAt(moment(response.publishedAt));
+    setHasSubJabatan(response.hasSubJabatan === true ? "Iya" : "Tidak");
   }, [id]);
 
   useEffect(() => {
@@ -169,6 +174,7 @@ const CrPlacem = (props) => {
       atasanId,
       pathGambar: !fileImage ? pathGambar : newImageName,
       publishedAt: moment(publishedAt),
+      hasSubJabatan: hasSubJabatan === "Iya" ? true : false,
     };
 
     if (props.mode === "Edit") {
@@ -220,10 +226,6 @@ const CrPlacem = (props) => {
                       </FormLabel>
                       <Input value={jabatan} onChange={(e) => setJabatan(e.target.value)} size="lg" name="Size" placeholder="Tulis..." sx={{ width: "100%", borderColor: "#252525" }} />
                     </FormControl>
-                  </Box>
-                </GridFlex>
-                <GridFlex item xs={12} md={6} sx={{ justifyContent: { xs: "center", md: "left" } }}>
-                  <Box sx={{ width: "100%", display: "flex", flexDirection: { xs: "column", lg: "row" }, gap: "20px" }}>
                     <FormControl required sx={{ width: "100%" }}>
                       <FormLabel
                         sx={{
@@ -259,6 +261,10 @@ const CrPlacem = (props) => {
                         </Select>
                       </Box>
                     </FormControl>
+                  </Box>
+                </GridFlex>
+                <GridFlex item xs={12} md={6} sx={{ justifyContent: { xs: "center", md: "left" } }}>
+                  <Box sx={{ width: "100%", display: "flex", flexDirection: { xs: "column", lg: "row" }, gap: "20px" }}>
                     <FormControl required sx={{ width: "100%" }}>
                       <FormLabel
                         sx={{
@@ -279,16 +285,88 @@ const CrPlacem = (props) => {
                           }}
                           required
                         >
-                          <Option value={0} label="!! Tanpa Atasan !!">
-                            !! Tanpa Atasan !!
-                          </Option>
-                          {dataPlacem.map((option) => (
-                            <Option key={option.id} value={option.id} label={option.nama}>
-                              {option.nama}
+                          {eselon === 1 ? (
+                            <Option value={0} label="!! Ini Menu Awal !!">
+                              !! Tanpa Atasan !!
                             </Option>
-                          ))}
+                          ) : null}
+                          {eselon === 2
+                            ? parentSub1.map((option) => (
+                                <Option key={option.id} value={option.id} label={option.nama}>
+                                  {option.nama}
+                                </Option>
+                              ))
+                            : null}
+                          {eselon === 3
+                            ? parentSub2.map((option) => (
+                                <Option key={option.id} value={option.id} label={option.nama}>
+                                  {option.nama}
+                                </Option>
+                              ))
+                            : null}
+                          {eselon === 4
+                            ? parentSub3.map((option) => (
+                                <Option key={option.id} value={option.id} label={option.nama}>
+                                  {option.nama}
+                                </Option>
+                              ))
+                            : null}
                         </Select>
                       </Box>
+                    </FormControl>
+                    <FormControl required sx={{ width: "100%" }}>
+                      <FormLabel
+                        sx={{
+                          fontSize: "18px",
+                        }}
+                      >
+                        Ada Sub Jabatan
+                      </FormLabel>
+                      <RadioGroup
+                        value={hasSubJabatan}
+                        onChange={(e) => setHasSubJabatan(e.target.value)}
+                        orientation="horizontal"
+                        aria-labelledby="segmented-controls-example"
+                        name="justify"
+                        sx={{
+                          height: "48px",
+                          padding: "4px",
+                          margin: "0px",
+                          borderRadius: "md",
+                          bgcolor: "neutral.softBg",
+                          "--RadioGroup-gap": "4px",
+                          "--Radio-actionRadius": "8px",
+                        }}
+                      >
+                        {["Iya", "Tidak"].map((item) => (
+                          <Radio
+                            key={item}
+                            color="neutral"
+                            value={item}
+                            disableIcon
+                            label={item}
+                            variant="plain"
+                            sx={{
+                              px: 2,
+                              alignItems: "center",
+                              width: "100%",
+                            }}
+                            slotProps={{
+                              action: ({ checked }) => ({
+                                sx: {
+                                  ...(checked && {
+                                    bgcolor: "background.surface",
+                                    boxShadow: "md",
+                                    "&:hover": {
+                                      bgcolor: "background.surface",
+                                    },
+                                  }),
+                                },
+                              }),
+                            }}
+                          />
+                        ))}
+                      </RadioGroup>
                     </FormControl>
                   </Box>
                   <Box sx={{ width: "100%", paddingTop: "20px", display: "flex", flexDirection: { xs: "column", lg: "row" }, gap: "20px" }}>
@@ -300,6 +378,7 @@ const CrPlacem = (props) => {
                       >
                         Gambar
                       </FormLabel>
+                      <FormHelperText>Harus rasio 4/3</FormHelperText>
                       <Input
                         value={pathGambar}
                         onChange={() => setPathGambar(inputFileImage.current)}
@@ -356,7 +435,7 @@ const CrPlacem = (props) => {
                     >
                       Submit
                     </Button>
-                    {errorMessage && <FormHelperText sx={(theme) => ({ color: theme.vars.palette.danger[400] })}>Upload Article Gagal</FormHelperText>}
+                    {errorMessage && <FormHelperText sx={(theme) => ({ color: theme.vars.palette.danger[400] })}>Upload Pejabat Gagal</FormHelperText>}
                   </Box>
                 </GridFlex>
               </SpaceGrid>

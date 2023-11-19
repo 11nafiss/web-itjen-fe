@@ -200,6 +200,7 @@ const CrVitjen = (props) => {
                       >
                         Gambar
                       </FormLabel>
+                      <FormHelperText>Harus rasio 16/9</FormHelperText>
                       <Input
                         value={image}
                         onChange={() => setImage(inputFileImage.current)}
@@ -278,7 +279,7 @@ const CrVitjen = (props) => {
                     >
                       Submit
                     </Button>
-                    {errorMessage && <FormHelperText sx={(theme) => ({ color: theme.vars.palette.danger[400] })}>Upload Vitjen Gagal</FormHelperText>}
+                    {errorMessage && <FormHelperText sx={(theme) => ({ color: theme.vars.palette.danger[400] })}>Upload Visual Gagal</FormHelperText>}
                   </Box>
                 </GridFlex>
               </SpaceGrid>

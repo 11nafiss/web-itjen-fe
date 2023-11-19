@@ -102,7 +102,7 @@ const CrEselon = (props) => {
     }
 
     navigate("/dashboard/eselon");
-    // navigate(0);
+    navigate(0);
   };
 
   console.log("ini mode", props.mode);
@@ -184,7 +184,7 @@ const CrEselon = (props) => {
                     >
                       Submit
                     </Button>
-                    {errorMessage && <FormHelperText sx={(theme) => ({ color: theme.vars.palette.danger[400] })}>Upload Auditoria Gagal</FormHelperText>}
+                    {errorMessage && <FormHelperText sx={(theme) => ({ color: theme.vars.palette.danger[400] })}>Upload Eselon Gagal</FormHelperText>}
                   </Box>
                 </GridFlex>
               </SpaceGrid>

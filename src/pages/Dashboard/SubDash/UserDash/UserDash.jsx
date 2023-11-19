@@ -125,7 +125,6 @@ const UserDash = () => {
 
     navigate(0);
 
-
     if (confirmation) {
       dispatch(deleteUser(id));
     }

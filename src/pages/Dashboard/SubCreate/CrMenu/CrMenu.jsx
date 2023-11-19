@@ -303,7 +303,7 @@ const CrMenu = (props) => {
                     >
                       Submit
                     </Button>
-                    {errorMessage && <FormHelperText sx={(theme) => ({ color: theme.vars.palette.danger[400] })}>Upload Article Gagal</FormHelperText>}
+                    {errorMessage && <FormHelperText sx={(theme) => ({ color: theme.vars.palette.danger[400] })}>Upload Menu Gagal</FormHelperText>}
                   </Box>
                 </GridFlex>
               </SpaceGrid>

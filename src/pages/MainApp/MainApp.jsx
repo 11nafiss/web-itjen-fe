@@ -10,7 +10,6 @@ import { Profile, OrganSub, News, Home, Organ, Placem, Gallery, Audit, AuditBook
 
 // Main Declaration
 const MainApp = () => {
-
   // Main Code
   return (
     <div className="main-wrapper">
@@ -19,9 +18,10 @@ const MainApp = () => {
       </div>
       <div className="content-wrapper">
         <Routes>
+          <Route path="*" element={<NotFound />} />
           <Route path="/" element={<Home />} />
           <Route path="/organisasi" element={<Organ />} />
-          <Route path="/organisasi/:id" element={<OrganSub />} />
+          <Route path="/organisasi/:eselon/:id" element={<OrganSub />} />
           <Route path="/pejabat" element={<Placem />} />
           <Route path="/pejabat/:id" element={<Profile />} />
           <Route path="/galeri" element={<Gallery />} />
@@ -32,7 +32,6 @@ const MainApp = () => {
           <Route path="/cari" element={<Search />} />
           <Route path="/artikel/:category" element={<News />} />
           <Route path="/artikel/:category/:title" element={<Article />} />
-          <Route path="*" element={<NotFound />} />
         </Routes>
         <LiveChat />
       </div>

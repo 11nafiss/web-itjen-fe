@@ -166,7 +166,7 @@ const CrFeatur = (props) => {
     }
 
     navigate("/dashboard/layanan");
-    // navigate(0);
+    navigate(0);
   };
 
   console.log("ini mode", props.mode);
@@ -246,6 +246,7 @@ const CrFeatur = (props) => {
                       >
                         Gambar Icon
                       </FormLabel>
+                      <FormHelperText>Harus ekstensi SVG</FormHelperText>
                       <Input
                         value={image}
                         onChange={() => setImage(inputFileImage.current)}
@@ -280,7 +281,7 @@ const CrFeatur = (props) => {
                     >
                       Submit
                     </Button>
-                    {errorMessage && <FormHelperText sx={(theme) => ({ color: theme.vars.palette.danger[400] })}>Upload Article Gagal</FormHelperText>}
+                    {errorMessage && <FormHelperText sx={(theme) => ({ color: theme.vars.palette.danger[400] })}>Upload Icon Layanan Gagal</FormHelperText>}
                   </Box>
                 </GridFlex>
               </SpaceGrid>

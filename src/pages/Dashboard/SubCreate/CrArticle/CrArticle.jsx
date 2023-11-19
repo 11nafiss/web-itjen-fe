@@ -294,6 +294,7 @@ const CrArticle = (props) => {
                     >
                       Gambar
                     </FormLabel>
+                    <FormHelperText>Harus rasio 16/9</FormHelperText>
                     <Input
                       value={featuredImage}
                       onChange={() => setFeaturedImage(inputFile.current)}

@@ -3,7 +3,6 @@ export interface FeatureData {
     link: string;
     deskripsi: string;
     image: string;
-    urutan: number;
     singkatan: string;
     publishedAt: string;
 }

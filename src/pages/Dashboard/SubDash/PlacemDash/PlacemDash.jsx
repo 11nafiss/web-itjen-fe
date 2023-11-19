@@ -21,6 +21,7 @@ import { useAppDispatch, useAppSelector } from "../../../../hooks/useTypedSelect
 import { deletePlacem, getPlacemAllCount, getPlacemAllTake, getPlacemSearchAll, getPlacemSearchCount } from "../../../../features/actions/placem.action";
 import { BASE_URL } from "../../../../services/api";
 import { placemSearchAllSlice } from "../../../../features/slice/placem.slice";
+import { Axios } from "axios";
 
 // MUI Styling CSS
 const CustomBox = styled(Box)(() => ({
@@ -60,6 +61,7 @@ const PlacemDash = () => {
   const [searchParams, setSearchParams] = useSearchParams();
   const [searchInput, setSearchInput] = useState("");
   const [loading, setLoading] = useState(false);
+  const [msg, SetMsg] = useState(null);
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
   const take = 8;
@@ -68,7 +70,7 @@ const PlacemDash = () => {
   const isLoading = useAppSelector((state) => state.placem.placemAllTake.isLoading);
   const dataPlacem = useAppSelector((state) => state.placem.placemAllTake.dataPlacem);
   const jumlahPlacem = useAppSelector((state) => state.placem.placemAllCount.dataPlacem);
-  const pageCount = Math.ceil(jumlahPlacem/take);
+  const pageCount = Math.ceil(jumlahPlacem / take);
 
   useEffect(() => {
     const page = searchParams.get("page") ?? 1;
@@ -105,7 +107,7 @@ const PlacemDash = () => {
     }
   }
 
-  const handleDeletePlacem = (id) => {
+  const handleDeletePlacem = (id, image) => {
     const confirmation = confirm("Apakah anda yakin untuk menghapus data ini?");
 
     navigate(0);
@@ -114,6 +116,21 @@ const PlacemDash = () => {
 
     if (confirmation) {
       dispatch(deletePlacem(id));
+      if (image) {
+        Axios.delete(BASE_URL + "api/upload/imagedelete/" + image, {
+          headers: {
+            "Content-Type": "application/json",
+          },
+        })
+          .then((response) => {
+            SetMsg("Delete Successful");
+            console.log(response.data);
+          })
+          .catch((err) => {
+            SetMsg("Delete failed");
+            console.log(err);
+          });
+      }
       setLoading(false);
     }
   };
@@ -133,6 +150,7 @@ const PlacemDash = () => {
                 </Link>
               </GridFlex>
               <GridFlex item xs={12} md={6} sx={{ justifyContent: { xs: "center", md: "right" } }}>
+                {msg && <span>{msg}</span>}
                 <form onSubmit={handleSubmit} style={{ display: "flex", justifyContent: "right", width: "100%" }}>
                   <FormControl
                     sx={() => ({
@@ -203,7 +221,7 @@ const PlacemDash = () => {
                             </IconButton>
                           </Link>
                           <IconButton
-                            onClick={() => handleDeletePlacem(obj.id)}
+                            onClick={() => handleDeletePlacem(obj.id, obj.pathGambar)}
                             aria-label="Like minimal photography"
                             size="md"
                             variant="solid"
@@ -256,7 +274,7 @@ const PlacemDash = () => {
                             </IconButton>
                           </Link>
                           <IconButton
-                            onClick={() => handleDeletePlacem(obj.id)}
+                            onClick={() => handleDeletePlacem(obj.id, obj.pathGambar)}
                             aria-label="Like minimal photography"
                             size="md"
                             variant="solid"
@@ -286,9 +304,9 @@ const PlacemDash = () => {
                 </Box>
               </GridFlex>
             </SpaceGrid>
-              <div className="pagination">
-                <Pagination color="primary" count={pageCount} onChange={handlePageChange} renderItem={(item) => <PaginationItem slots={{ previous: ArrowBackIcon, next: ArrowForwardIcon }} {...item} />} />
-              </div>
+            <div className="pagination">
+              <Pagination color="primary" count={pageCount} onChange={handlePageChange} renderItem={(item) => <PaginationItem slots={{ previous: ArrowBackIcon, next: ArrowForwardIcon }} {...item} />} />
+            </div>
           </CustomBox>
         </Grid>
       </Grid>

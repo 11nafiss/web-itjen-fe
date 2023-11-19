@@ -17,6 +17,8 @@ import { FaSearch } from "react-icons/fa";
 import { useAppDispatch, useAppSelector } from "../../../../hooks/useTypedSelector";
 import { deleteFeature, getFeatureData, getFeatureSearchAll } from "../../../../features/actions/feature.action";
 import { featureSearchAllSlice, featureSlice } from "../../../../features/slice/feature.slice";
+import { BASE_URL } from "../../../../services/api";
+import { Axios } from "axios";
 
 // MUI Styling CSS
 const CustomBox = styled(Box)(() => ({
@@ -55,6 +57,7 @@ const GridFlex = styled(Grid)(() => ({
 const FeaturDash = () => {
   const [searchParams, setSearchParams] = useSearchParams();
   const [searchInput, setSearchInput] = useState("");
+  const [msg, SetMsg] = useState(null);
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
   const take = 8;
@@ -81,7 +84,6 @@ const FeaturDash = () => {
       dispatch(featureSlice.actions.onNavigateNext());
     }
   };
-
 
   useEffect(() => {
     const page = searchParams.get("page") ?? 1;
@@ -121,13 +123,28 @@ const FeaturDash = () => {
     }
   }
 
-  const handleDeleteFeature = (id) => {
+  const handleDeleteFeature = (id, image) => {
     const confirmation = confirm("Apakah anda yakin untuk menghapus data ini?");
 
     navigate(0);
 
     if (confirmation) {
       dispatch(deleteFeature(id));
+      if (image) {
+        Axios.delete(BASE_URL + "api/upload/imagedelete/" + image, {
+          headers: {
+            "Content-Type": "application/json",
+          },
+        })
+          .then((response) => {
+            SetMsg("Delete Successful");
+            console.log(response.data);
+          })
+          .catch((err) => {
+            SetMsg("Delete failed");
+            console.log(err);
+          });
+      }
     }
   };
 
@@ -146,6 +163,7 @@ const FeaturDash = () => {
                 </Link>
               </GridFlex>
               <GridFlex item xs={12} md={6} sx={{ justifyContent: { xs: "center", md: "right" } }}>
+                {msg && <span>{msg}</span>}
                 <form onSubmit={handleSubmit} style={{ display: "flex", justifyContent: "right", width: "100%" }}>
                   <FormControl
                     sx={() => ({
@@ -232,54 +250,56 @@ const FeaturDash = () => {
                         <tr>
                           <th style={{ width: 50 }}>No</th>
                           <th style={{ width: 100 }}>Nama</th>
-                          <th style={{ width: 300 }}>Deskripsi</th>
-                          <th style={{ width: 200 }}>Gambar</th>
+                          <th style={{ width: 200 }}>Deskripsi</th>
+                          <th style={{ width: 250 }}>Link</th>
                           <th aria-label="last" style={{ width: "var(--Table-lastColumnWidth)" }}>
                             Aksi
                           </th>
                         </tr>
                       </thead>
                       <tbody>
-                        {dataSearch.length === 0 && visibleData.map((obj) => (
-                          <tr key={obj.id}>
-                            <td>{obj.id}</td>
-                            <td>{obj.singkatan}</td>
-                            <td>{obj.deskripsi}</td>
-                            <td>{obj.image}</td>
-                            <td>
-                              <Box sx={{ display: "flex", gap: 1 }}>
-                                <Link to={`/dashboard/layanan/edit/${obj.id}`} style={{width: "100%"}}>
-                                  <Button variant="soft" color="warning" sx={{ width: "100%", marginInline: "auto" }}>
-                                    Edit
+                        {dataSearch.length === 0 &&
+                          visibleData.map((obj) => (
+                            <tr key={obj.id}>
+                              <td>{obj.id}</td>
+                              <td>{obj.singkatan}</td>
+                              <td>{obj.deskripsi}</td>
+                              <td>{obj.link}</td>
+                              <td>
+                                <Box sx={{ display: "flex", gap: 1 }}>
+                                  <Link to={`/dashboard/layanan/edit/${obj.id}`} style={{ width: "100%" }}>
+                                    <Button variant="soft" color="warning" sx={{ width: "100%", marginInline: "auto" }}>
+                                      Edit
+                                    </Button>
+                                  </Link>
+                                  <Button onClick={() => handleDeleteFeature(obj.id, obj.image)} variant="soft" color="danger" sx={{ width: "100%", marginInline: "auto" }}>
+                                    Hapus
                                   </Button>
-                                </Link>
-                                <Button onClick={() => handleDeleteFeature(obj.id)} variant="soft" color="danger" sx={{ width: "100%", marginInline: "auto" }}>
-                                  Hapus
-                                </Button>
-                              </Box>
-                            </td>
-                          </tr>
-                        ))}
-                        {dataSearch.length !== 0 && dataSearch.map((obj) => (
-                          <tr key={obj.id}>
-                            <td>{obj.id}</td>
-                            <td>{obj.singkatan}</td>
-                            <td>{obj.deskripsi}</td>
-                            <td>{obj.image}</td>
-                            <td>
-                              <Box sx={{ display: "flex", gap: 1 }}>
-                                <Link to={`/dashboard/layanan/edit/${obj.id}`} style={{width: "100%"}}>
-                                  <Button variant="soft" color="warning" sx={{ width: "100%", marginInline: "auto" }}>
-                                    Edit
+                                </Box>
+                              </td>
+                            </tr>
+                          ))}
+                        {dataSearch.length !== 0 &&
+                          dataSearch.map((obj) => (
+                            <tr key={obj.id}>
+                              <td>{obj.id}</td>
+                              <td>{obj.singkatan}</td>
+                              <td>{obj.deskripsi}</td>
+                              <td>{obj.image}</td>
+                              <td>
+                                <Box sx={{ display: "flex", gap: 1 }}>
+                                  <Link to={`/dashboard/layanan/edit/${obj.id}`} style={{ width: "100%" }}>
+                                    <Button variant="soft" color="warning" sx={{ width: "100%", marginInline: "auto" }}>
+                                      Edit
+                                    </Button>
+                                  </Link>
+                                  <Button onClick={() => handleDeleteFeature(obj.id, obj.image)} variant="soft" color="danger" sx={{ width: "100%", marginInline: "auto" }}>
+                                    Hapus
                                   </Button>
-                                </Link>
-                                <Button onClick={() => handleDeleteFeature(obj.id)} variant="soft" color="danger" sx={{ width: "100%", marginInline: "auto" }}>
-                                  Hapus
-                                </Button>
-                              </Box>
-                            </td>
-                          </tr>
-                        ))}
+                                </Box>
+                              </td>
+                            </tr>
+                          ))}
                       </tbody>
                       <tfoot>
                         <tr>

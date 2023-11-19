@@ -14,8 +14,8 @@ import { useAppDispatch, useAppSelector } from "../../../hooks/useTypedSelector"
 import { getFeatureData } from "../../../features/actions/feature.action";
 
 // Import Assets
-import { WhisIcon } from "../../../assets/assets";
 import { Link } from "react-router-dom";
+import { BASE_URL } from "../../../services/api";
 
 const CustomBox = styled(Box)(() => ({
   display: "flex",
@@ -110,7 +110,7 @@ const Features = () => {
                       <Grid item xs={12} sx={{ display: "flex", justifyContent: "center", alignItems: "center" }}>
                         <Tooltip title={obj.deskripsi} color="primary" placement="top" variant="solid" arrow sx={{ cursor: "pointer" }}>
                           <CustomBox style={{ padding: "20px" }}>
-                            <img src={WhisIcon} style={{ width: "50px" }} />
+                            <img src={`${BASE_URL}images/${obj.image}`} style={{ width: "50px", height: "50px" }} />
                           </CustomBox>
                         </Tooltip>
                       </Grid>

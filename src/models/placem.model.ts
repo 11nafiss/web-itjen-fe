@@ -7,4 +7,5 @@ export interface PlacemData {
     eselon: number;
     deskripsi: string;
     atasanId: number;
+    hasSubJabatan: boolean;
 }
