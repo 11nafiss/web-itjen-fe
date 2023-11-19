@@ -6,33 +6,23 @@ import { ImageData } from "../../models/image.model";
 import { imagegalleryService } from "../../services/imagegallery.service";
 
 const urlImage = BASE_URL_API + "imagegallery";
-const token = Cookies.get("access_token");
 
-export const createImage = createAsyncThunk<ImageData[], any>("image/createImage", async ({ namaFile }) => {
-  const response = await axios.post(urlImage, {
+export const createImage = createAsyncThunk<ImageData[], any>("image/createImage", async (tableConfig) => {
+  const response = await axios.post(urlImage, tableConfig, {
     headers: {
       "Content-Type": "application/json",
-      Authorization: `Bearer ${token}`,
     },
-    body: JSON.stringify({
-      namaFile,
-    }),
   });
 
   const result: ImageData[] = await response.data;
   return result;
 });
 
-export const editImage = createAsyncThunk<ImageData[], any, any>("image/editImage", async ({ id, namaFile }) => {
-  const response = await axios.put(urlImage + "/" + id, {
+export const editImage = createAsyncThunk<ImageData[], any, any>("image/editImage", async (params) => {
+  const response = await axios.put(urlImage + "/" + params.id, params.tableConfig, {
     headers: {
       "Content-Type": "application/json",
-      Authorization: `Bearer ${token}`,
     },
-    body: JSON.stringify({
-      id: id,
-      namaFile,
-    }),
   });
 
   const result: ImageData[] = await response.data;
@@ -43,7 +33,6 @@ export const deleteImage = createAsyncThunk<ImageData[], any>("image/deleteImage
   const response = await axios.delete(urlImage + "/" + id, {
     headers: {
       "Content-Type": "application/json",
-      Authorization: `Bearer ${token}`,
     },
   });
 
@@ -66,7 +55,7 @@ export const getImageAllTake = createAsyncThunk<ImageData[], any, { rejectValue:
   const take = params.take;
   const skip = params.page * params.take - params.take;
   const newUrl = `/${take}/${skip}`;
-  
+
   const response = await axios.get(urlImage + newUrl, {
     headers: {
       "Content-Type": "application/json",

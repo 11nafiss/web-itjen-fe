@@ -10,6 +10,7 @@ import CrPlacem from './CrPlacem/CrPlacem'
 import CrMenu from './CrMenu/CrMenu'
 import CrReport from './CrReport/CrReport'
 import CrUser from './CrUser/CrUser'
+import CrVitjen from './CrVitjen/CrVitjen'
 
 // Export Code
 export {
@@ -24,4 +25,5 @@ export {
     CrMenu,
     CrReport,
     CrUser,
+    CrVitjen,
 }

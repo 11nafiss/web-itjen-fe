@@ -22,6 +22,7 @@ import { useAppDispatch, useAppSelector } from "../../../../hooks/useTypedSelect
 import { getArticleAllTake, getArticlePublished, getArticleAllCount, getArticleSearchAll, getArticleSearchCount, deleteArticle } from "../../../../features/actions/article.action";
 import { BASE_URL } from "../../../../services/api";
 import { articleSearchSlice } from "../../../../features/slice/article.slice";
+import axios from "axios";
 
 // MUI Styling CSS
 const CustomBox = styled(Box)(() => ({
@@ -52,6 +53,7 @@ const ArticleDash = () => {
   const [searchParams, setSearchParams] = useSearchParams();
   const [searchInput, setSearchInput] = useState("");
   const [loading, setLoading] = useState(false);
+  const [msg, SetMsg] = useState(null);
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
   const take = 8;
@@ -62,7 +64,6 @@ const ArticleDash = () => {
   const jumlahArticle = useAppSelector((state) => state.article.articleAllCount.dataArticle);
   const pageCount = Math.ceil(jumlahArticle / take);
 
-
   useEffect(() => {
     const page = searchParams.get("page") ?? 1;
     const keyword = searchParams.get("keyword");
@@ -70,7 +71,6 @@ const ArticleDash = () => {
     dispatch(getArticleAllTake({ take, page }));
     dispatch(getArticleAllCount());
   }, [dispatch, searchParams]);
-
 
   const handlePageChange = (event, value) => {
     let updatedSearchParams = new URLSearchParams(searchParams.toString());
@@ -113,7 +113,7 @@ const ArticleDash = () => {
     setSearchInput("");
   }
 
-  const handleDeleteArticle = (id) => {
+  const handleDeleteArticle = (id, image) => {
     const confirmation = confirm("Apakah anda yakin untuk menghapus data ini?");
 
     navigate(0);
@@ -122,6 +122,22 @@ const ArticleDash = () => {
 
     if (confirmation) {
       dispatch(deleteArticle(id));
+      if(image) {
+        axios
+        .delete(BASE_URL + "api/upload/imageartikelthumbnaildelete/" + image, {
+          headers: {
+            "Content-Type": "application/json",
+          },
+        })
+        .then((response) => {
+          SetMsg("Delete Successful");
+          console.log(response.data);
+        })
+        .catch((err) => {
+          SetMsg("Delete failed");
+          console.log(err);
+        });
+      }
       setLoading(false);
     }
   };
@@ -175,6 +191,7 @@ const ArticleDash = () => {
                 </Button>
               </GridFlex>
               <GridFlex item xs={12} md={6} sx={{ justifyContent: { xs: "center", md: "right" } }}>
+                {msg && <span>{msg}</span>}
                 <form onSubmit={handleSubmit} style={{ display: "flex", justifyContent: "right", width: "100%" }}>
                   <FormControl
                     sx={() => ({
@@ -187,6 +204,7 @@ const ArticleDash = () => {
                       placeholder="Cari"
                       value={searchInput}
                       onChange={(e) => setSearchInput(e.target.value)}
+                      autoComplete="on"
                       endDecorator={
                         <IconButton color="neutral" sx={{ width: "100%", height: "100%" }}>
                           <FaSearch />
@@ -206,19 +224,21 @@ const ArticleDash = () => {
               <GridFlex item xs={12} md={12} sx={{ justifyContent: { xs: "center", md: "left" }, height: "100%" }}>
                 <Box sx={{ height: "100%", paddingTop: "30px", display: "grid", gap: "30px", width: "100%", gridTemplateColumns: { xs: "1fr", md: "1fr 1fr 1fr 1fr" } }}>
                   {isLoading === true ? (
-                      <LoadingOutlined
-                        className="loadingIcon transition-5"
-                        style={{
-                          ...{
-                            zIndex: loading ? "10" : "-1",
-                            opacity: loading ? "0.33" : "0",
-                            fontSize: "82px",
-                            top: "calc(50% - 41px)",
-                            left: "calc(50% - 41px)",
-                          },
-                        }}
-                      />
-                  ) : isLoading === false }
+                    <LoadingOutlined
+                      className="loadingIcon transition-5"
+                      style={{
+                        ...{
+                          zIndex: loading ? "10" : "-1",
+                          opacity: loading ? "0.33" : "0",
+                          fontSize: "82px",
+                          top: "calc(50% - 41px)",
+                          left: "calc(50% - 41px)",
+                        },
+                      }}
+                    />
+                  ) : (
+                    isLoading === false
+                  )}
                   {dataSearch.length === 0 &&
                     dataArticle.map((obj, index) => (
                       <Card key={index} variant="outlined" sx={{ width: 300, gap: "0px", height: "100%" }}>
@@ -245,7 +265,7 @@ const ArticleDash = () => {
                             </IconButton>
                           </Link>
                           <IconButton
-                            onClick={() => handleDeleteArticle(obj.id)}
+                            onClick={() => handleDeleteArticle(obj.id, obj.featuredImage)}
                             aria-label="Like minimal photography"
                             size="md"
                             variant="solid"
@@ -298,7 +318,7 @@ const ArticleDash = () => {
                             </IconButton>
                           </Link>
                           <IconButton
-                            onClick={() => handleDeleteArticle(obj.id)}
+                            onClick={() => handleDeleteArticle(obj.id, obj.featuredImage)}
                             aria-label="Like minimal photography"
                             size="md"
                             variant="solid"
@@ -328,9 +348,9 @@ const ArticleDash = () => {
                 </Box>
               </GridFlex>
             </SpaceGrid>
-              <div className="pagination">
-                <Pagination color="primary" count={pageCount} onChange={handlePageChange} renderItem={(item) => <PaginationItem slots={{ previous: ArrowBackIcon, next: ArrowForwardIcon }} {...item} />} />
-              </div>
+            <div className="pagination">
+              <Pagination color="primary" count={pageCount} onChange={handlePageChange} renderItem={(item) => <PaginationItem slots={{ previous: ArrowBackIcon, next: ArrowForwardIcon }} {...item} />} />
+            </div>
           </CustomBox>
         </Grid>
       </Grid>

@@ -75,9 +75,17 @@ export const getCarouselById = (id: number) => {
   return axios.get(urlCarousel + '/' + id, {
     headers: {
       'Content-Type': 'application/json',
-      'Authorization': `Bearer ${token}`
     }
   }).then(res => {
     return res.data
   })
+}
+
+
+export const carouselService = {
+  create,
+  edit,
+  hapus,
+  getAllCarousel,
+  getCarouselById
 }

@@ -60,7 +60,6 @@ const Navbar = () => {
   const dataMenu = useAppSelector((state) => state.menu.menuAll.dataMenu);
   const MenuLevel1 = dataMenu.filter((item) => item.menuLevel === 1);
   const MenuLevel2 = dataMenu.filter((item) => item.menuLevel === 2);
-  const SubMenu2 = MenuLevel2.find((item) => item.hasSubMenu === true);
   const MenuLevel3 = dataMenu.filter((item) => item.menuLevel === 3);
 
   // Main Code

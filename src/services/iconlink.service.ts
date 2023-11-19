@@ -63,7 +63,6 @@ const getIconLinkById = (id: number) => {
   return axios.get(urlIconLink + '/' + id, {
     headers: {
       'Content-type': 'application/json',
-      'Authorization': `Bearer ${token}`
     }
   }).then(res => {
     return res.data

@@ -9,17 +9,12 @@ const urlUser = BASE_URL + "user";
 const urlPengguna = BASE_URL_API + "pengguna";
 const token = Cookies.get("access_token");
 
-export const createUser = createAsyncThunk<UserData[], any>("user/createUser", async ({ username, password, email }) => {
+export const createUser = createAsyncThunk<UserData[], any>("user/createUser", async (tableConfig) => {
   let url = "/register";
-  const response = await axios.post(urlUser + url, {
+  const response = await axios.post(urlUser + url, tableConfig, {
     headers: {
       "Content-Type": "application/json",
     },
-    body: JSON.stringify({
-      username,
-      password,
-      email,
-    }),
   });
 
   const result: UserData[] = await response.data;
@@ -38,8 +33,6 @@ export const deleteUser = createAsyncThunk<UserData[], any>("user/deleteUser", a
 });
 
 export const getUserData = createAsyncThunk<UserData[], void, { rejectValue: AxiosError }>("user/fetchAllUser", async (_, { rejectWithValue }) => {
-  
-  
   const response = await axios.get(urlPengguna, {
     headers: {
       "Content-Type": "application/json",

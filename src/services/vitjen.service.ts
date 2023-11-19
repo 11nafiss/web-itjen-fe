@@ -6,10 +6,10 @@ import { BASE_URL_API } from './api'
 const token = Cookies.get('access_token')
 
 // const urlArtikel = window.config.apiarticle'
-const urlCategory = BASE_URL_API + 'category'
+const urlVitjen = BASE_URL_API + 'vitjen'
 
-const getCategory = () => {
-  return axios.get(urlCategory, {
+const getVitjen = () => {
+  return axios.get(urlVitjen, {
     headers: {
       'Content-Type': 'application/json',
       'Authorization': `Bearer ${token}`
@@ -19,8 +19,8 @@ const getCategory = () => {
   })
 }
 
-export const getCategoryById = (id: number) => {
-  return axios.get(urlCategory + '/' + id, {
+export const getVitjenById = (id: number) => {
+  return axios.get(urlVitjen + '/' + id, {
     headers: {
       'Content-Type': 'application/json',
     }
@@ -29,7 +29,7 @@ export const getCategoryById = (id: number) => {
   })
 }
 
-export const categoryService = {
-  getCategory,
-  getCategoryById
+export const vitjenService = {
+    getVitjen,
+    getVitjenById
 }

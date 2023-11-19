@@ -6,43 +6,23 @@ import { PlacemData } from "../../models/placem.model";
 import { pejabatService } from "../../services/pejabat.service";
 
 const urlPlacem = BASE_URL_API + "pejabat";
-const token = Cookies.get("access_token");
 
-export const createPlacem = createAsyncThunk<PlacemData[], any>("placem/createPlacem", async ({ nama, jabatan, pathGambar, eselon, deskripsi, atasanId }) => {
-  const response = await axios.post(urlPlacem, {
+export const createPlacem = createAsyncThunk<PlacemData[], any>("placem/createPlacem", async (tableConfig) => {
+  const response = await axios.post(urlPlacem, tableConfig, {
     headers: {
       "Content-Type": "application/json",
-      Authorization: `Bearer ${token}`,
     },
-    body: JSON.stringify({
-      nama,
-      jabatan,
-      pathGambar,
-      eselon,
-      deskripsi,
-      atasanId,
-    }),
   });
 
   const result: PlacemData[] = await response.data;
   return result;
 });
 
-export const editPlacem = createAsyncThunk<PlacemData[], any, any>("placem/editPlacem", async ({ id, nama, jabatan, pathGambar, eselon, deskripsi, atasanId }) => {
-  const response = await axios.put(urlPlacem + "/" + id, {
+export const editPlacem = createAsyncThunk<PlacemData[], any, any>("placem/editPlacem", async (params) => {
+  const response = await axios.put(urlPlacem + "/" + params.id, params.tableConfig, {
     headers: {
       "Content-Type": "application/json",
-      Authorization: `Bearer ${token}`,
     },
-    body: JSON.stringify({
-      id: id,
-      nama,
-      jabatan,
-      pathGambar,
-      eselon,
-      deskripsi,
-      atasanId,
-    }),
   });
 
   const result: PlacemData[] = await response.data;
@@ -53,7 +33,6 @@ export const deletePlacem = createAsyncThunk<PlacemData[], any>("placem/deletePl
   const response = await axios.delete(urlPlacem + "/" + id, {
     headers: {
       "Content-Type": "application/json",
-      Authorization: `Bearer ${token}`,
     },
   });
 

@@ -183,7 +183,7 @@ const ReportDash = () => {
                           <AspectRatio ratio="16/9">
                             <img src={`${BASE_URL}images/${obj.pathImage}`} loading="lazy" alt="" />
                           </AspectRatio>
-                          <Link to={`/dashboard/laporan/edit/${obj.reportId}`}>
+                          <Link to={`/dashboard/laporan/edit/${obj.laporanId}`}>
                             <IconButton
                               aria-label="Like minimal photography"
                               size="md"
@@ -236,7 +236,7 @@ const ReportDash = () => {
                           <AspectRatio ratio="16/9">
                             <img src={`${BASE_URL}images/${obj.pathImage}`} loading="lazy" alt="" />
                           </AspectRatio>
-                          <Link to={`/dashboard/laporan/edit/${obj.reportId}`}>
+                          <Link to={`/dashboard/laporan/edit/${obj.laporanId}`}>
                             <IconButton
                               aria-label="Like minimal photography"
                               size="md"

@@ -7,8 +7,8 @@ import { VitjenData } from "../../models/vitjen.model";
 
 const urlVitjen = BASE_URL_API + "vitjen";
 
-export const createVitjen = createAsyncThunk<VitjenData, any>("vitjen/createVitjen", async (articleCredentials) => {
-  const response = await axios.post(urlVitjen, articleCredentials, {
+export const createVitjen = createAsyncThunk<VitjenData, any>("vitjen/createVitjen", async (tableConfig) => {
+  const response = await axios.post(urlVitjen, tableConfig, {
     headers: {
       "Content-Type": "application/json",
     },
@@ -19,7 +19,7 @@ export const createVitjen = createAsyncThunk<VitjenData, any>("vitjen/createVitj
 });
 
 export const editVitjen = createAsyncThunk<VitjenData, any, any>("vitjen/editVitjen", async (params) => {
-  const response = await axios.put(urlVitjen + "/" + params.id, params.articleCredentials, {
+  const response = await axios.put(urlVitjen + "/" + params.id, params.tableConfig, {
     headers: {
       "Content-Type": "application/json",
     },

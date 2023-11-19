@@ -182,7 +182,7 @@ const ImageDash = () => {
                       <Card key={index} variant="outlined" sx={{ width: 300, gap: "0px", height: "100%" }}>
                         <CardOverflow>
                           <AspectRatio ratio="16/9">
-                            <img src={`${BASE_URL}images/${obj.namaFile}`} loading="lazy" alt="" />
+                            <img src={`${BASE_URL}images/${obj.pathGambar}`} loading="lazy" alt="" />
                           </AspectRatio>
                           <Link to={`/dashboard/gambar/edit/${obj.id}`}>
                             <IconButton
@@ -221,7 +221,7 @@ const ImageDash = () => {
                           </IconButton>
                         </CardOverflow>
                         <Typography level="h2" sx={{ fontSize: "16px", mt: "40px", mb: "10px" }}>
-                          {obj.namaFile.toString()}
+                          {obj.namaFile}
                         </Typography>
                       </Card>
                     ))}

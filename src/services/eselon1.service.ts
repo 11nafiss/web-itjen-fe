@@ -2,14 +2,6 @@ import axios from 'axios'
 import { BASE_URL_API } from './api'
 import Cookies from 'js-cookie'
 
-export const eselon1Service = {
-  create,
-  edit,
-  hapus,
-  getEselon1,
-  getEselon1ById
-}
-
 const token = Cookies.get('access_token')
 
 const urlEselon1 = BASE_URL_API + 'eselon1';
@@ -82,9 +74,16 @@ function getEselon1ById (id: number) {
   return axios.get(urlEselon1 + '/' + id, {
     headers: {
       'Content-Type': 'application/json',
-      'Authorization': `Bearer ${token}`
     }
   }).then(res => {
     return res.data
   })
+}
+
+export const eselon1Service = {
+  create,
+  edit,
+  hapus,
+  getEselon1,
+  getEselon1ById
 }

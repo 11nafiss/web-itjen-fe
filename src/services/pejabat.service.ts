@@ -82,7 +82,6 @@ const getPejabatById = (id: number) => {
   return axios.get(urlPejabat + '/' + id, {
     headers: {
       'Content-Type': 'application/json',
-      'Authorization': `Bearer ${token}`
     }
   }).then(res => {
     return res.data

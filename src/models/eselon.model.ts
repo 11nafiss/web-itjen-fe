@@ -4,5 +4,6 @@ export interface EselonData {
     link: string;
     urutan: number;
     singkatan: string;
+    publishedAt: string;
 }
   

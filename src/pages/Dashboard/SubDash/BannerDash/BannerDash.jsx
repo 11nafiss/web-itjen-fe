@@ -78,8 +78,6 @@ const BannerDash = () => {
     dispatch(getBannerAllCount());
   }, [dispatch, searchParams, isLoading]);
 
-  console.log("ini jumlah ", dispatch(getBannerAllCount()).length);
-
   const handlePageChange = (event, value) => {
     let updatedSearchParams = new URLSearchParams(searchParams.toString());
     updatedSearchParams.set("page", value);
@@ -102,6 +100,9 @@ const BannerDash = () => {
     if (searchInput === "" || searchInput == null) {
       navigate("/dashboard/banner?page=1");
       dispatch(getBannerAllCount());
+    } else {
+      alert("Data berhasil ditemukan");
+      window.alert = "";
     }
   }
 
@@ -276,9 +277,9 @@ const BannerDash = () => {
                 </Box>
               </GridFlex>
             </SpaceGrid>
-              <div className="pagination">
-                <Pagination color="primary" count={pageCount} onChange={handlePageChange} renderItem={(item) => <PaginationItem slots={{ previous: ArrowBackIcon, next: ArrowForwardIcon }} {...item} />} />
-              </div>
+            <div className="pagination">
+              <Pagination color="primary" count={pageCount} onChange={handlePageChange} renderItem={(item) => <PaginationItem slots={{ previous: ArrowBackIcon, next: ArrowForwardIcon }} {...item} />} />
+            </div>
           </CustomBox>
         </Grid>
       </Grid>

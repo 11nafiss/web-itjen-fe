@@ -20,7 +20,6 @@ const getMenuById = (id: number) => {
   return axios.get(urlMenu + '/' + id, {
     headers: {
       'Content-type': 'application/json',
-      'Authorization': `Bearer ${token}`
     }
   }).then(res => {
     return res.data

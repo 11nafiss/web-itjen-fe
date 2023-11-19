@@ -5,5 +5,6 @@ export interface FeatureData {
     image: string;
     urutan: number;
     singkatan: string;
+    publishedAt: string;
 }
   

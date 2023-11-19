@@ -126,7 +126,7 @@ const VitjenDash = () => {
             <Divider sx={{ borderSize: "20px" }} />
             <SpaceGrid container>
               <GridFlex item xs={12} md={6} sx={{ justifyContent: { xs: "left" } }}>
-                <Link to="/dashboard/laporan/tambah">
+                <Link to="/dashboard/visual/tambah">
                   <AddButton />
                 </Link>
               </GridFlex>

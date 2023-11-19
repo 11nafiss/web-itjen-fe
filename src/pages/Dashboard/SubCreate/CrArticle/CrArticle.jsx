@@ -12,7 +12,7 @@ import { useNavigate } from "react-router-dom";
 import moment from "moment";
 import axios from "axios";
 import PropTypes from "prop-types";
-import { v4 as uuidv4 } from 'uuid';
+import { v4 as uuidv4 } from "uuid";
 
 // Import Assets
 import AddIcon from "@mui/icons-material/Add";
@@ -31,6 +31,9 @@ import "froala-editor/css/froala_editor.pkgd.min.css";
 import "froala-editor/js/plugins.pkgd.min.js";
 import "font-awesome/css/font-awesome.css";
 import FroalaEditorComponent from "react-froala-wysiwyg";
+
+// Import CSS
+import { EditorConfig } from "./EditorConfig"
 
 // MUI Styling CSS
 const Kotak = styled(Box)(() => ({
@@ -71,24 +74,24 @@ const GridFlex = styled(Grid)(({ theme }) => ({
 
 // Main Declaration
 const CrArticle = (props) => {
+  const { id } = useParams();
+  const [articleId, setArticleId] = useState(id);
   const [title, setTitle] = useState("");
   const [content, setContent] = useState("");
   const [featuredImage, setFeaturedImage] = useState("");
   const [categoryId, setCategoryId] = useState();
   const [published, setPublished] = useState("published");
-  const [tampilDiBeranda, setTampilDiBeranda] = useState(false);
+  const [tampilDiBeranda, setTampilDiBeranda] = useState(true);
   const [caption, setCaption] = useState("");
   const [publishedAt, setPublishedAt] = useState(null);
   const [thumbnail, setThumbnail] = useState();
   const [file, setFile] = useState();
   const [progress, setProgress] = useState({ started: false, pc: 0 });
-  const [msg, SetMsg] = useState(null);
+  const [msg, setMsg] = useState(null);
 
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
-  const { id } = useParams();
   const inputFile = useRef();
-  const [articleId, SetArticleId] = useState(id);
 
   const { errorMessage } = useAppSelector((state) => state.article.createArticle);
   const dataCategory = useAppSelector((state) => state.category.categoryAll.dataCategory);
@@ -96,7 +99,7 @@ const CrArticle = (props) => {
 
   const fetchArticleById = useCallback(async () => {
     const response = await artikelService.getArtikelById(id);
-    SetArticleId(response.id);
+    setArticleId(response.id);
     setTitle(response.title);
     setContent(response.content);
     setFeaturedImage(response.featuredImage);
@@ -125,10 +128,10 @@ const CrArticle = (props) => {
   };
 
   const generateFileName = (originalName) => {
-    const uuid = uuidv4()
-    const extension = originalName.split('.').pop()
-    return `${uuid}.${extension}`
-  }
+    const uuid = uuidv4();
+    const extension = originalName.split(".").pop();
+    return `${uuid}.${extension}`;
+  };
 
   function handleFile(event) {
     setFile(event.target.files[0]);
@@ -137,121 +140,74 @@ const CrArticle = (props) => {
 
   const handleUploadArticle = (e) => {
     e.preventDefault();
-    const newFileName = generateFileName(file.name)
-    let data = new FormData();
-    data.append('image', file, newFileName);
-    let newFile = data.get('image');
-    const url = `${BASE_URL}api/upload/imagesartikelthumbnail`;
-    const formData = new FormData();
-    formData.append("file", newFile);
+    const newFileName = generateFileName(featuredImage);
 
-    SetMsg("Uploading...");
-    setProgress((prevState) => {
-      return { ...prevState, started: true };
-    });
+    if (file) {
+      let data = new FormData();
+      data.append("image", file, newFileName);
+      let newFile = data.get("image");
+      const url = `${BASE_URL}api/upload/imagesartikelthumbnail`;
+      const formData = new FormData();
+      formData.append("file", newFile);
 
-    const config = {
-      onUploadProgress: (progressEvent) => {
-        setProgress((prevState) => {
-          return { ...prevState, pc: progressEvent.progress * 100 };
-        });
-      },
-      headers: {
-        "content-type": "multipart/form-data",
-      },
-    };
-    axios
-      .post(url, formData, config)
-      .then((response) => {
-        SetMsg("Upload Successful");
-        console.log(response.data);
-      })
-      .catch((err) => {
-        SetMsg("Upload failed");
-        console.log(err);
+      setMsg("Uploading...");
+      setProgress((prevState) => {
+        return { ...prevState, started: true };
       });
 
+      const config = {
+        onUploadProgress: (progressEvent) => {
+          setProgress((prevState) => {
+            return { ...prevState, pc: progressEvent.progress * 100 };
+          });
+        },
+        headers: {
+          "content-type": "multipart/form-data",
+        },
+      };
+      axios
+        .post(url, formData, config)
+        .then((response) => {
+          setMsg("Upload Successful");
+          console.log(response.data);
+        })
+        .catch((err) => {
+          setMsg("Upload failed");
+          console.log(err);
+        });
+    }
 
-    let articleCredentials = {
+    let tableConfig = {
       id: articleId,
       title,
       content,
-      featuredImage: newFileName,
+      featuredImage: !file ? featuredImage : newFileName,
       authorName: currentUser.username,
       categoryId,
       published: published === "published" ? true : false,
       pending: false,
       tampilDiBeranda,
       caption,
-      publishedAt: moment(publishedAt).format(),
+      publishedAt: moment(publishedAt),
       thumbnail,
     };
 
     if (props.mode === "Edit") {
-      dispatch(editArticle({ id, articleCredentials }));
+      dispatch(editArticle({ id, tableConfig }));
       console.log("ini id", id);
     } else {
       if (!file) {
         console.log("No file Selected");
         return;
       }
-      dispatch(createArticle(articleCredentials));
+      dispatch(createArticle(tableConfig));
     }
 
     navigate("/dashboard/artikel");
+    navigate(0);
   };
 
   console.log("ini mode", props.mode);
-
-  const EditorConfig = {
-    placeholder: "Tulis Artikel Disini",
-    attribution: false,
-    imagesLoadURL: `${BASE_URL}images/`,
-    imageUploadURL: `${BASE_URL}api/upload/imagesartikel`,
-    imageUploadMethod: "POST",
-    imageAllowedTypes: ["jpeg", "jpg", "png"],
-    videoUploadURL: `${BASE_URL}api/upload/videosartikel`,
-    videoUploadMethod: "POST",
-    videoAllowedTypes: ["webm", "jpg", "ogg", "vlc", "mp4"],
-    fileUploadURL: `${BASE_URL}api/upload/filesartikel`,
-    fileUploadMethod: "POST",
-    fileAllowedTypes: ["*"],
-    events: {
-      "image.inserted": () => {
-        console.log("gambar ditambahkan!");
-      },
-      "image.removed": function (img) {
-        const namaFile = img.attr("src").split("/").pop();
-        const apiUrl = `${BASE_URL}`;
-        axios.delete(apiUrl + "api/upload/imageartikeldelete/" + namaFile, {
-          headers: {
-            "Content-Type": "application/json",
-          },
-        });
-      },
-      "video.removed": function (video) {
-        const namaFile = video.attr("src").split("/").pop();
-        const apiUrl = `${BASE_URL}`;
-        axios.delete(apiUrl + "api/upload/videoartikeldelete/" + namaFile, {
-          headers: {
-            "Content-Type": "application/json",
-          },
-        });
-      },
-      "file.unlink": function (file) {
-        const namaFile = file.getAttribute("href").split("/").pop();
-        const apiUrl = `${BASE_URL}`;
-        axios.delete(apiUrl + "api/upload/pdfdelete/" + namaFile, {
-          headers: {
-            "Content-Type": "application/json",
-          },
-        });
-      },
-      "froalaEditor.initialized": function () {
-        console.log("initialized");
-      },
-    },
-  };
 
   // Main Code
   return (
@@ -264,7 +220,7 @@ const CrArticle = (props) => {
             <form onSubmit={handleUploadArticle}>
               <SpaceGrid container sx={{ justifyContent: { xs: "center", md: "left" }, paddingTop: "10px" }}>
                 <GridFlex item xs={12} md={6} sx={{ justifyContent: { xs: "center", md: "left" } }}>
-                  <FormControl sx={{ width: "100%" }}>
+                  <FormControl required sx={{ width: "100%" }}>
                     <FormLabel
                       sx={{
                         fontSize: "18px",
@@ -275,7 +231,7 @@ const CrArticle = (props) => {
                     <Input value={title} onChange={(e) => setTitle(e.target.value)} size="lg" name="Size" placeholder="Tulis..." sx={{ width: "100%", borderColor: "#252525" }} />
                   </FormControl>
                   <Box sx={{ width: "100%", paddingTop: "20px", display: "flex", flexDirection: { xs: "column", lg: "row" }, gap: "20px" }}>
-                    <FormControl sx={{ width: "100%" }}>
+                    <FormControl required sx={{ width: "100%" }}>
                       <FormLabel
                         sx={{
                           fontSize: "18px",
@@ -286,7 +242,7 @@ const CrArticle = (props) => {
                       <LocalizationProvider dateAdapter={AdapterMoment}>
                         <DemoContainer components={["DatePicker"]} sx={{ padding: "0px", borderColor: "#252525" }}>
                           <DatePicker
-                            placeholder="Pilih Tahun"
+                            placeholder="Pilih Tanggal"
                             value={publishedAt}
                             onChange={(e) => setPublishedAt(e)}
                             sx={{ width: "100%", "& .MuiOutlinedInput-root": { height: "48px", fontSize: "15px", overflow: "hidden", borderRadius: "7px" }, "& .MuiOutlinedInput-notchedOutline": { borderColor: "#252525", padding: "0px" } }}
@@ -294,7 +250,7 @@ const CrArticle = (props) => {
                         </DemoContainer>
                       </LocalizationProvider>
                     </FormControl>
-                    <FormControl sx={{ width: "100%" }}>
+                    <FormControl required sx={{ width: "100%" }}>
                       <FormLabel
                         sx={{
                           fontSize: "18px",
@@ -330,7 +286,7 @@ const CrArticle = (props) => {
                   </Box>
                 </GridFlex>
                 <GridFlex item xs={12} md={6} sx={{ justifyContent: { xs: "center", md: "left" } }}>
-                  <FormControl sx={{ width: "100%" }}>
+                  <FormControl required sx={{ width: "100%" }}>
                     <FormLabel
                       sx={{
                         fontSize: "18px",
@@ -358,7 +314,7 @@ const CrArticle = (props) => {
                     {msg && <span>{msg}</span>}
                   </FormControl>
                   <Box sx={{ width: "100%", paddingTop: "20px", display: "flex", flexDirection: { xs: "column", lg: "row" }, gap: "20px" }}>
-                    <FormControl sx={{ width: "100%" }}>
+                    <FormControl required sx={{ width: "100%" }}>
                       <FormLabel
                         sx={{
                           fontSize: "18px",
@@ -368,7 +324,7 @@ const CrArticle = (props) => {
                       </FormLabel>
                       <Input value={caption} onChange={(e) => setCaption(e.target.value)} size="lg" name="Size" placeholder="Tulis..." sx={{ width: "100%", borderColor: "#252525" }} />
                     </FormControl>
-                    <FormControl sx={{ width: "100%" }}>
+                    <FormControl required sx={{ width: "100%" }}>
                       <FormLabel
                         sx={{
                           fontSize: "18px",

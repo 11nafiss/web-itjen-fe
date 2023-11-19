@@ -6,58 +6,24 @@ import { AuditoriaData } from "../../models/auditoria.model";
 import { auditoriaService } from "../../services/auditoria.service";
 
 const urlAuditoria = BASE_URL_API + "auditoria";
-const token = Cookies.get("access_token");
 
-
-export const createAuditoria = createAsyncThunk<AuditoriaData[], any>("auditoria/createAuditoria", async ({ judul, deskripsi, pathPdf, pathImage, publishedAt, bulanItem, tahunItem, tampilDiBeranda, link }) => {
-  const response = await axios.post(
-    urlAuditoria,
-    {
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${token}`,
-      },
-      body: JSON.stringify({
-        judul,
-        deskripsi,
-        pathPdf,
-        pathImage,
-        publishedAt,
-        bulanItem,
-        tahunItem,
-        tampilDiBeranda,
-        link,
-      })
-      ,
-    }
-  );
+export const createAuditoria = createAsyncThunk<AuditoriaData[], any>("auditoria/createAuditoria", async (tableConfig) => {
+  const response = await axios.post(urlAuditoria, tableConfig, {
+    headers: {
+      "Content-Type": "application/json",
+    },
+  });
 
   const result: AuditoriaData[] = await response.data;
   return result;
 });
 
-export const editAuditoria = createAsyncThunk<AuditoriaData[], any, any>("auditoria/editAuditoria", async ({ id, judul, deskripsi, pathPdf, pathImage, publishedAt, bulanItem, tahunItem, tampilDiBeranda, link }) => {
-  const response = await axios.put(
-    urlAuditoria + "/" + id,
-    {
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${token}`,
-      },
-      body: JSON.stringify({
-        auditoriaId: id,
-        judul,
-        deskripsi,
-        pathPdf,
-        pathImage,
-        publishedAt,
-        bulanItem,
-        tahunItem,
-        tampilDiBeranda,
-        link,
-      }),
-    }
-  );
+export const editAuditoria = createAsyncThunk<AuditoriaData[], any, any>("auditoria/editAuditoria", async (params) => {
+  const response = await axios.put(urlAuditoria + "/" + params.id, params.tableConfig, {
+    headers: {
+      "Content-Type": "application/json",
+    },
+  });
 
   const result: AuditoriaData[] = await response.data;
   return result;
@@ -67,7 +33,6 @@ export const deleteAuditoria = createAsyncThunk<AuditoriaData[], any>("auditoria
   const response = await axios.delete(urlAuditoria + "/" + id, {
     headers: {
       "Content-Type": "application/json",
-      Authorization: `Bearer ${token}`,
     },
   });
 
@@ -76,22 +41,21 @@ export const deleteAuditoria = createAsyncThunk<AuditoriaData[], any>("auditoria
 });
 
 export const getAuditoriaData = createAsyncThunk<AuditoriaData[], void, { rejectValue: AxiosError }>("auditoria/fetchAllAuditoria", async (_, { rejectWithValue }) => {
-  try {
-    const response = await auditoriaService.getAuditoria();
-    return response as AuditoriaData[];
-  } catch (error) {
-    if (error instanceof AxiosError) {
-      return rejectWithValue(error);
-    }
-    throw error;
-  }
+  const response = await axios.get(urlAuditoria, {
+    headers: {
+      "Content-Type": "application/json",
+    },
+  });
+
+  const data: AuditoriaData[] = await response.data;
+  return data;
 });
 
 export const getAuditoriaAllTake = createAsyncThunk<AuditoriaData[], any, { rejectValue: AxiosError }>("Auditoria/getAuditoriaAllTake", async (params, thunkAPI) => {
   const take = params.take;
   const skip = params.page * params.take - params.take;
   const newUrl = `/${take}/${skip}`;
-  
+
   const response = await axios.get(urlAuditoria + newUrl, {
     headers: {
       "Content-Type": "application/json",
@@ -181,4 +145,3 @@ export const getAuditoriaTahunCount = createAsyncThunk<AuditoriaData[], any, { r
   const data: AuditoriaData[] = response.data;
   return data;
 });
-

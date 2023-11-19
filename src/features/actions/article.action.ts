@@ -7,8 +7,8 @@ import { artikelService } from "../../services/artikel.service";
 
 const urlArticle = BASE_URL_API + "article";
 
-export const createArticle = createAsyncThunk<ArticleData, any>("article/createArticle", async (articleCredentials) => {
-  const response = await axios.post(urlArticle, articleCredentials, {
+export const createArticle = createAsyncThunk<ArticleData, any>("article/createArticle", async (tableConfig) => {
+  const response = await axios.post(urlArticle, tableConfig, {
     headers: {
       "Content-Type": "application/json",
     },
@@ -19,7 +19,7 @@ export const createArticle = createAsyncThunk<ArticleData, any>("article/createA
 });
 
 export const editArticle = createAsyncThunk<ArticleData, any, any>("article/editArticle", async (params) => {
-  const response = await axios.put(urlArticle + "/" + params.id, params.articleCredentials, {
+  const response = await axios.put(urlArticle + "/" + params.id, params.tableConfig, {
     headers: {
       "Content-Type": "application/json",
     },
@@ -68,34 +68,34 @@ export const getArticleByCategory = createAsyncThunk<ArticleData[], any, { rejec
 });
 
 export const getArticleById = createAsyncThunk<ArticleData[], any, { rejectValue: AxiosError }>("article/getArticleById", async (id, { rejectWithValue }) => {
-  try {
-    const response = await artikelService.getArtikelById(id);
-    return response as ArticleData[];
-  } catch (error) {
-    if (error instanceof AxiosError) {
-      return rejectWithValue(error);
-    }
-    throw error;
-  }
+  const newUrl = `/${id}`;
+
+  const response = await axios.get(urlArticle + newUrl, {
+    headers: {
+      "Content-Type": "application/json",
+    },
+  });
+
+  const data: ArticleData[] = await response.data;
+  return data;
 });
 
 export const getArticleAll = createAsyncThunk<ArticleData[], void, { rejectValue: AxiosError }>("article/getArticleAll", async (_, { rejectWithValue }) => {
-  try {
-    const response = await artikelService.getArtikel();
-    return response as ArticleData[];
-  } catch (error) {
-    if (error instanceof AxiosError) {
-      return rejectWithValue(error);
-    }
-    throw error;
-  }
+  const response = await axios.get(urlArticle, {
+    headers: {
+      "Content-Type": "application/json",
+    },
+  });
+
+  const data: ArticleData[] = await response.data;
+  return data;
 });
 
 export const getArticleAllTake = createAsyncThunk<ArticleData[], any, { rejectValue: AxiosError }>("article/getArticlePublished", async (params, thunkAPI) => {
   const take = params.take;
   const skip = params.page * params.take - params.take;
   const newUrl = `/${take}/${skip}`;
-  
+
   const response = await axios.get(urlArticle + newUrl, {
     headers: {
       "Content-Type": "application/json",
@@ -151,7 +151,7 @@ export const getArticlePublished = createAsyncThunk<ArticleData[], any, { reject
   const take = params.take;
   const skip = params.page * params.take - params.take;
   const newUrl = `/publish/${params.published}/${take}/${skip}`;
-  
+
   const response = await axios.get(urlArticle + newUrl, {
     headers: {
       "Content-Type": "application/json",
@@ -164,7 +164,7 @@ export const getArticlePublished = createAsyncThunk<ArticleData[], any, { reject
 
 export const getArticlePublishedCount = createAsyncThunk<ArticleData[], any, { rejectValue: AxiosError }>("article/getArticlePublished", async (params) => {
   const newUrl = `/jumlah/publish/${params.published}`;
-  
+
   const response = await axios.get(urlArticle + newUrl, {
     headers: {
       "Content-Type": "application/json",
@@ -245,7 +245,3 @@ export const getArticleTypeCount = createAsyncThunk<ArticleData[], any, { reject
   const data: ArticleData[] = response.data;
   return data;
 });
-
-
-
-

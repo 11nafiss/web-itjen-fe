@@ -1,7 +1,7 @@
 // Import Library
 import { useEffect } from "react";
 import { Link } from "react-router-dom";
-import { Container, Box, Typography, List, ListItemButton, ListItemAvatar, ListItemText, ListItem } from "@mui/material";
+import { Container, Box, Typography, List, ListItemButton, ListItemText, ListItem } from "@mui/material";
 import { styled } from "@mui/material/styles";
 
 // Import Api
@@ -120,12 +120,12 @@ const Trending = () => {
           <MiniTitle>Berita Terkini</MiniTitle>
           <List sx={{ width: "100%", display: "flex", flexDirection: { xs: "column", md: "row" }, justifyContent: "center", alignItems: "start" }}>
             {dataArticle.map((obj, index) => (
-              <ListItem key={index} sx={{ padding: "0px", maxHeight: "250px", justifyContent: "center", alignItems: "start" }}>
-                <Link to={`/artikel/${handleUrlCategory(obj.categoryId)}/${obj.title.replace(/ /g, "-")}`} className="link" style={{ color: "black", width: "100%" }}>
+              <ListItem key={index} sx={{ width: "100%", padding: "0px", maxHeight: "250px", justifyContent: "center", alignItems: { xs: "center", md: "start" } }}>
+                <Link to={`/artikel/${handleUrlCategory(obj.categoryId)}/${obj.title.replace(/ /g, "-")}`} className="link" style={{ color: "black", width: "100%", display: "flex", justifyContent: "center" }}>
                   <ListButton>
                     <Box sx={{ width: "200px", height: "120px", margin: "0px", marginBottom: "20px" }}>
                       <AspectRatio ratio="16/9">
-                        <img src={obj.featuredImage === null ? Juanda : `${BASE_URL}images/${obj.featuredImage}`} style={{ maxWidth: "100%", height: "100%", borderRadius: "10px", display: "block" }} />
+                        <img src={obj.featuredImage === "" ? Juanda : `${BASE_URL}thumbnail/${obj.featuredImage}`} style={{ maxWidth: "100%", height: "100%", borderRadius: "10px", display: "block" }} />
                       </AspectRatio>
                     </Box>
                     <SubList>

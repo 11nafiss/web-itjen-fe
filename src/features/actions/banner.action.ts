@@ -6,41 +6,23 @@ import { BannerData } from "../../models/banner.model";
 import { getAllCarousel } from "../../services/carousel.service";
 
 const urlBanner = BASE_URL_API + "carousel";
-const token = Cookies.get("access_token");
 
-export const createBanner = createAsyncThunk<BannerData[], any>("banner/createBanner", async ({ judul, deskripsi, pathGambar, link, munculkanText }) => {
-  const response = await axios.post(urlBanner, {
+export const createBanner = createAsyncThunk<BannerData[], any>("banner/createBanner", async (tableConfig) => {
+  const response = await axios.post(urlBanner, tableConfig, {
     headers: {
       "Content-Type": "application/json",
-      Authorization: `Bearer ${token}`,
     },
-    body: JSON.stringify({
-      judul,
-      deskripsi,
-      pathGambar,
-      link,
-      munculkanText,
-    }),
   });
 
   const result: BannerData[] = await response.data;
   return result;
 });
 
-export const editBanner = createAsyncThunk<BannerData[], any, any>("banner/editBanner", async ({ id,judul, deskripsi, pathGambar, link, munculkanText }) => {
-  const response = await axios.put(urlBanner + "/" + id, {
+export const editBanner = createAsyncThunk<BannerData[], any, any>("banner/editBanner", async (params) => {
+  const response = await axios.put(urlBanner + "/" + params.id, params.tableConfig, {
     headers: {
       "Content-Type": "application/json",
-      Authorization: `Bearer ${token}`,
     },
-    body: JSON.stringify({
-      carouselId: id,
-      judul,
-      deskripsi,
-      pathGambar,
-      link,
-      munculkanText,
-    }),
   });
 
   const result: BannerData[] = await response.data;
@@ -51,7 +33,6 @@ export const deleteBanner = createAsyncThunk<BannerData[], any>("banner/deleteBa
   const response = await axios.delete(urlBanner + "/" + id, {
     headers: {
       "Content-Type": "application/json",
-      Authorization: `Bearer ${token}`,
     },
   });
 
@@ -60,22 +41,21 @@ export const deleteBanner = createAsyncThunk<BannerData[], any>("banner/deleteBa
 });
 
 export const getBanner = createAsyncThunk<BannerData[], void, { rejectValue: AxiosError }>("banner/fetchAllBanner", async (_, { rejectWithValue }) => {
-  try {
-    const response = await getAllCarousel();
-    return response as BannerData[];
-  } catch (error) {
-    if (error instanceof AxiosError) {
-      return rejectWithValue(error);
-    }
-    throw error;
-  }
+  const response = await axios.get(urlBanner, {
+    headers: {
+      "Content-Type": "application/json",
+    },
+  });
+
+  const data: BannerData[] = await response.data;
+  return data;
 });
 
 export const getBannerAllTake = createAsyncThunk<BannerData[], any, { rejectValue: AxiosError }>("Banner/getBannerAllTake", async (params, thunkAPI) => {
   const take = params.take;
   const skip = params.page * params.take - params.take;
   const newUrl = `/${take}/${skip}`;
-  
+
   const response = await axios.get(urlBanner + newUrl, {
     headers: {
       "Content-Type": "application/json",

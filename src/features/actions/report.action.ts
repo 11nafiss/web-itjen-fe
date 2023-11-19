@@ -6,60 +6,24 @@ import { ReportData } from "../../models/report.models";
 import { laporanService } from "../../services/laporan.service";
 
 const urlReport = BASE_URL_API + "laporan";
-const token = Cookies.get("access_token");
 
-
-export const createReport = createAsyncThunk<ReportData[], any>("report/createReport", async ({ judul, deskripsi, pathPdf, pathImage, publishedAt, bulanItem, tahunItem, tampilDiBeranda, link, jenis }) => {
-  const response = await axios.post(
-    urlReport,
-    {
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${token}`,
-      },
-      body: JSON.stringify({
-        judul,
-        deskripsi,
-        pathPdf,
-        pathImage,
-        publishedAt,
-        bulanItem,
-        tahunItem,
-        tampilDiBeranda,
-        link,
-        jenis
-      })
-      ,
-    }
-  );
+export const createReport = createAsyncThunk<ReportData[], any>("report/createReport", async (tableConfig) => {
+  const response = await axios.post(urlReport, tableConfig, {
+    headers: {
+      "Content-Type": "application/json",
+    },
+  });
 
   const result: ReportData[] = await response.data;
   return result;
 });
 
-export const editReport = createAsyncThunk<ReportData[], any, any>("report/editReport", async ({ id, judul, deskripsi, pathPdf, pathImage, publishedAt, bulanItem, tahunItem, tampilDiBeranda, link, jenis }) => {
-  const response = await axios.put(
-    urlReport + "/" + id,
-    {
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${token}`,
-      },
-      body: JSON.stringify({
-        laporanId: id,
-        judul,
-        deskripsi,
-        pathPdf,
-        pathImage,
-        publishedAt,
-        bulanItem,
-        tahunItem,
-        tampilDiBeranda,
-        link,
-        jenis
-      }),
-    }
-  );
+export const editReport = createAsyncThunk<ReportData[], any, any>("report/editReport", async (params) => {
+  const response = await axios.put(urlReport + "/" + params.id, params.tableConfig, {
+    headers: {
+      "Content-Type": "application/json",
+    },
+  });
 
   const result: ReportData[] = await response.data;
   return result;
@@ -69,7 +33,6 @@ export const deleteReport = createAsyncThunk<ReportData[], any>("report/deleteRe
   const response = await axios.delete(urlReport + "/" + id, {
     headers: {
       "Content-Type": "application/json",
-      Authorization: `Bearer ${token}`,
     },
   });
 
@@ -78,22 +41,21 @@ export const deleteReport = createAsyncThunk<ReportData[], any>("report/deleteRe
 });
 
 export const getReportData = createAsyncThunk<ReportData[], void, { rejectValue: AxiosError }>("report/fetchAllReport", async (_, { rejectWithValue }) => {
-  try {
-    const response = await laporanService.getLaporan();
-    return response as ReportData[];
-  } catch (error) {
-    if (error instanceof AxiosError) {
-      return rejectWithValue(error);
-    }
-    throw error;
-  }
+  const response = await axios.get(urlReport, {
+    headers: {
+      "Content-Type": "application/json",
+    },
+  });
+
+  const data: ReportData[] = await response.data;
+  return data;
 });
 
 export const getReportAllTake = createAsyncThunk<ReportData[], any, { rejectValue: AxiosError }>("Report/getReportAllTake", async (params, thunkAPI) => {
   const take = params.take;
   const skip = params.page * params.take - params.take;
   const newUrl = `/${take}/${skip}`;
-  
+
   const response = await axios.get(urlReport + newUrl, {
     headers: {
       "Content-Type": "application/json",

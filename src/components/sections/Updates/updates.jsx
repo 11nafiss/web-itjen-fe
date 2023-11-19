@@ -242,7 +242,7 @@ const Updates = () => {
                     <Card variant="outlined" sx={{ width: "270px", maxWidth: "100%", height: "380px", borderRadius: "20px", boxShadow: "lg", gap: "5px" }}>
                       <CardOverflow>
                         <AspectRatio ratio="16/9">
-                          <img src={obj.pathImage === "" ? Juanda : `${BASE_URL}thumbnail/${obj.featuredImage}`} loading="lazy" alt="" />
+                          <img src={obj.pathImage === "" ? Juanda : `${BASE_URL}images/${obj.pathImage}`} loading="lazy" alt="" />
                         </AspectRatio>
                       </CardOverflow>
                       <CardContent sx={{ display: "flex", textAlign: "center" }}>

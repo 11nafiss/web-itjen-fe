@@ -4,4 +4,5 @@ export interface VitjenData {
     title: string;
     deskripsi: string;
     image: string;
+    publishedAt: string;
 }

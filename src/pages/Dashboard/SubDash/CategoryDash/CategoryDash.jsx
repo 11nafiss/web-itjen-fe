@@ -246,12 +246,12 @@ const CategoryDash = () => {
                               <td>{obj.categoryName}</td>
                               <td>
                                 <Box sx={{ display: "flex", gap: 1 }}>
-                                  <Link to={`/dashboard/kategori/edit/${obj.id}`} style={{width: "100%"}}>
+                                  <Link to={`/dashboard/kategori/edit/${obj.categoryId}`} style={{width: "100%"}}>
                                     <Button variant="soft" color="warning" sx={{ width: "100%", marginInline: "auto" }}>
                                       Edit
                                     </Button>
                                   </Link>
-                                  <Button onClick={() => handleDeleteCategory(obj.id)} variant="soft" color="danger" sx={{ width: "100%", marginInline: "auto" }}>
+                                  <Button onClick={() => handleDeleteCategory(obj.categoryId)} variant="soft" color="danger" sx={{ width: "100%", marginInline: "auto" }}>
                                     Hapus
                                   </Button>
                                 </Box>
@@ -265,12 +265,12 @@ const CategoryDash = () => {
                               <td>{obj.categoryName}</td>
                               <td>
                                 <Box sx={{ display: "flex", gap: 1 }}>
-                                  <Link to={`/dashboard/kategori/edit/${obj.id}`} style={{width: "100%"}}>
+                                  <Link to={`/dashboard/kategori/edit/${obj.categoryId}`} style={{width: "100%"}}>
                                     <Button variant="soft" color="warning" sx={{ width: "100%", marginInline: "auto" }}>
                                       Edit
                                     </Button>
                                   </Link>
-                                  <Button onClick={() => handleDeleteCategory(obj.id)} variant="soft" color="danger" sx={{ width: "100%", marginInline: "auto" }}>
+                                  <Button onClick={() => handleDeleteCategory(obj.categoryId)} variant="soft" color="danger" sx={{ width: "100%", marginInline: "auto" }}>
                                     Hapus
                                   </Button>
                                 </Box>

@@ -92,7 +92,6 @@ const getAuditoriaById = (id: number) => {
   return axios.get(urlAuditoria + '/' + id, {
     headers: {
       'Content-Type': 'application/json',
-      'Authorization': `Bearer ${token}`
     }
   }).then(res => {
     return res.data

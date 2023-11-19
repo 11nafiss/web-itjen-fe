@@ -34,6 +34,7 @@ import {
   CrMenu,
   CrReport,
   CrUser,
+  CrVitjen
 } from "./SubCreate/SubCreate";
 
 // Main Declaration
@@ -73,6 +74,7 @@ const Dashboard = () => {
             <Route path="/laporan/tambah" element={<CrReport mode="Tambah" />} />
             <Route path="/users/tambah" element={<CrUser mode="Tambah" />} />
             <Route path="/kategori/tambah" element={<CrCategory mode="Tambah" />} />
+            <Route path="/visual/tambah" element={<CrVitjen mode="Tambah" />} />
 
             <Route path="/artikel/edit/:id" element={<CrArticle mode="Edit" />} />
             <Route path="/banner/edit/:id" element={<CrBanner mode="Edit" />} />
@@ -85,6 +87,7 @@ const Dashboard = () => {
             <Route path="/laporan/edit/:id" element={<CrReport mode="Edit" />} />
             <Route path="/users/edit/:id" element={<CrUser mode="Edit" />} />
             <Route path="/kategori/edit/:id" element={<CrCategory mode="Edit" />} />
+            <Route path="/visual/edit/:id" element={<CrVitjen mode="Edit" />} />
           </Routes>
         </div>
       </Box>

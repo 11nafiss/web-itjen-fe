@@ -231,10 +231,10 @@ const MenuDash = () => {
                       <thead>
                         <tr>
                           <th style={{ width: 50 }}>No</th>
-                          <th style={{ width: 300 }}>Nama</th>
+                          <th style={{ width: 200 }}>Nama</th>
                           <th style={{ width: 100 }}>Menu Level</th>
                           <th style={{ width: 100 }}>Menu Parent</th>
-                          <th style={{ width: 200 }}>Link</th>
+                          <th style={{ width: 300 }}>Link</th>
                           <th aria-label="last" style={{ width: "var(--Table-lastColumnWidth)" }}>
                             Aksi
                           </th>

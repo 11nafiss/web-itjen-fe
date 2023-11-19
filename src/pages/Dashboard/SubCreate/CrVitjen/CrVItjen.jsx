@@ -1,7 +1,7 @@
 // Import Library
 import { useCallback, useEffect, useRef, useState } from "react";
 import { Grid, Box, Typography, Divider } from "@mui/material";
-import { Option, Select, Button, IconButton, Input, FormControl, FormLabel, FormHelperText } from "@mui/joy";
+import { Button, IconButton, Input, FormControl, FormLabel, Textarea, FormHelperText } from "@mui/joy";
 import { styled } from "@mui/material/styles";
 import { DemoContainer } from "@mui/x-date-pickers/internals/demo";
 import { AdapterMoment } from "@mui/x-date-pickers/AdapterMoment";
@@ -18,19 +18,9 @@ import UploadIcon from "@mui/icons-material/Upload";
 
 // Import Api
 import { useAppDispatch, useAppSelector } from "../../../../hooks/useTypedSelector";
-import { createPlacem, editPlacem, getPlacemData } from "../../../../features/actions/placem.action";
+import { createVitjen, editVitjen } from "../../../../features/actions/vitjen.action";
+import { vitjenService } from "../../../../services/vitjen.service";
 import { BASE_URL } from "../../../../services/api";
-import { pejabatService } from "../../../../services/pejabat.service";
-
-// Import Editor
-import "froala-editor/css/froala_style.min.css";
-import "froala-editor/css/froala_editor.pkgd.min.css";
-import "froala-editor/js/plugins.pkgd.min.js";
-import "font-awesome/css/font-awesome.css";
-import FroalaEditorComponent from "react-froala-wysiwyg";
-
-// Import CSS
-import { EditorConfig } from "./EditorConfig";
 
 // MUI Styling CSS
 const Kotak = styled(Box)(() => ({
@@ -70,45 +60,39 @@ const GridFlex = styled(Grid)(({ theme }) => ({
 }));
 
 // Main Declaration
-const CrPlacem = (props) => {
+const CrVitjen = (props) => {
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
   const inputFileImage = useRef();
   const { id } = useParams();
-  const [placemId, setPlacemId] = useState(id);
-  console.log("ini id", placemId);
-  const [nama, setNama] = useState("");
-  const [jabatan, setJabatan] = useState("");
+  const [vitjenId, setVitjenId] = useState(id);
+  console.log("ini id", vitjenId);
+  const [title, setTitle] = useState("");
   const [deskripsi, setDeskripsi] = useState("");
-  const [pathGambar, setPathGambar] = useState("");
-  const [eselon, setEselon] = useState();
-  const [atasanId, setAtasanId] = useState();
+  const [image, setImage] = useState("");
+  const [link, setLink] = useState("");
   const [publishedAt, setPublishedAt] = useState(null);
   const [fileImage, setFileImage] = useState();
   const [progress, setProgress] = useState({ started: false, pc: 0 });
   const [msg, setMsg] = useState(null);
 
-  const { errorMessage } = useAppSelector((state) => state.placem.createPlacem);
-  const dataPlacem = useAppSelector((state) => state.placem.placemAll.dataPlacem);
+  const { errorMessage } = useAppSelector((state) => state.vitjen.createVitjen);
 
-  const fetchPlacemById = useCallback(async () => {
-    const response = await pejabatService.getPejabatById(id);
-    setPlacemId(response.id);
-    setNama(response.nama);
-    setJabatan(response.jabatan);
+  const fetchVitjenById = useCallback(async () => {
+    const response = await vitjenService.getVitjenById(id);
+    setVitjenId(response.id);
+    setTitle(response.title);
     setDeskripsi(response.deskripsi);
-    setPathGambar(response.pathGambar);
-    setEselon(response.eselon);
-    setAtasanId(response.atasanId);
+    setImage(response.image);
+    setLink(response.link);
     setPublishedAt(moment(response.publishedAt));
   }, [id]);
 
   useEffect(() => {
-    dispatch(getPlacemData());
     if (props.mode === "Edit") {
-      fetchPlacemById();
+      fetchVitjenById();
     }
-  }, [fetchPlacemById, props, dispatch]);
+  }, [fetchVitjenById, props, dispatch]);
 
   const generateFileName = (originalName) => {
     const uuid = uuidv4();
@@ -118,12 +102,12 @@ const CrPlacem = (props) => {
 
   function handleFileImage(event) {
     setFileImage(event.target.files[0]);
-    setPathGambar(event.target.files[0].name);
+    setImage(event.target.files[0].name);
   }
 
-  const handleUploadPlacem = (e) => {
+  const handleUploadVitjen = (e) => {
     e.preventDefault();
-    const newImageName = generateFileName(pathGambar);
+    const newImageName = generateFileName(image);
 
     if (fileImage) {
       let data = new FormData();
@@ -162,27 +146,25 @@ const CrPlacem = (props) => {
 
     let tableConfig = {
       id: id,
-      nama,
-      jabatan,
+      title,
       deskripsi,
-      eselon,
-      atasanId,
-      pathGambar: !fileImage ? pathGambar : newImageName,
+      link,
+      image: !fileImage ? image : newImageName,
       publishedAt: moment(publishedAt),
     };
 
     if (props.mode === "Edit") {
-      dispatch(editPlacem({ id, tableConfig }));
+      dispatch(editVitjen({ id, tableConfig }));
       console.log("ini table", tableConfig);
     } else {
       if (!fileImage) {
         console.log("No file Selected");
         return;
       }
-      dispatch(createPlacem(tableConfig));
+      dispatch(createVitjen(tableConfig));
     }
 
-    navigate("/dashboard/pejabat");
+    navigate("/dashboard/visual");
     navigate(0);
   };
 
@@ -194,9 +176,9 @@ const CrPlacem = (props) => {
       <Grid container spacing={3}>
         <Grid item xs={12} md={12}>
           <Kotak>
-            <Judul>{props.mode} Pejabat</Judul>
+            <Judul>{props.mode} Vitjen</Judul>
             <Divider sx={{ borderSize: "20px" }} />
-            <form onSubmit={handleUploadPlacem}>
+            <form onSubmit={handleUploadVitjen}>
               <SpaceGrid container sx={{ justifyContent: { xs: "center", md: "left" }, paddingTop: "10px" }}>
                 <GridFlex item xs={12} md={6} sx={{ justifyContent: { xs: "center", md: "left" } }}>
                   <FormControl required sx={{ width: "100%" }}>
@@ -205,92 +187,10 @@ const CrPlacem = (props) => {
                         fontSize: "18px",
                       }}
                     >
-                      Nama
+                      Judul
                     </FormLabel>
-                    <Input value={nama} onChange={(e) => setNama(e.target.value)} size="lg" name="Size" placeholder="Tulis..." sx={{ width: "100%", borderColor: "#252525" }} />
+                    <Input value={title} onChange={(e) => setTitle(e.target.value)} size="lg" name="Size" placeholder="Tulis..." sx={{ width: "100%", borderColor: "#252525" }} />
                   </FormControl>
-                  <Box sx={{ width: "100%", paddingTop: "20px", display: "flex", flexDirection: { xs: "column", lg: "row" }, gap: "20px" }}>
-                    <FormControl required sx={{ width: "100%" }}>
-                      <FormLabel
-                        sx={{
-                          fontSize: "18px",
-                        }}
-                      >
-                        Jabatan
-                      </FormLabel>
-                      <Input value={jabatan} onChange={(e) => setJabatan(e.target.value)} size="lg" name="Size" placeholder="Tulis..." sx={{ width: "100%", borderColor: "#252525" }} />
-                    </FormControl>
-                  </Box>
-                </GridFlex>
-                <GridFlex item xs={12} md={6} sx={{ justifyContent: { xs: "center", md: "left" } }}>
-                  <Box sx={{ width: "100%", display: "flex", flexDirection: { xs: "column", lg: "row" }, gap: "20px" }}>
-                    <FormControl required sx={{ width: "100%" }}>
-                      <FormLabel
-                        sx={{
-                          fontSize: "18px",
-                        }}
-                      >
-                        Eselon
-                      </FormLabel>
-                      <Box sx={{ width: "100%", display: "flex", flexDirection: "row", alignItems: "center" }}>
-                        <Select
-                          value={eselon}
-                          onChange={(e, v) => setEselon(v)}
-                          placeholder="Pilih…"
-                          sx={{
-                            width: "100%",
-                            borderColor: "#252525",
-                            height: "48px",
-                          }}
-                          required
-                        >
-                          <Option value={1} label="1">
-                            1
-                          </Option>
-                          <Option value={2} label="2">
-                            2
-                          </Option>
-                          <Option value={3} label="3">
-                            3
-                          </Option>
-                          <Option value={4} label="4">
-                            4
-                          </Option>
-                        </Select>
-                      </Box>
-                    </FormControl>
-                    <FormControl required sx={{ width: "100%" }}>
-                      <FormLabel
-                        sx={{
-                          fontSize: "18px",
-                        }}
-                      >
-                        Atasan
-                      </FormLabel>
-                      <Box sx={{ width: "100%", display: "flex", flexDirection: "row", alignItems: "center" }}>
-                        <Select
-                          value={atasanId}
-                          onChange={(e, v) => setAtasanId(v)}
-                          placeholder="Pilih…"
-                          sx={{
-                            width: "100%",
-                            borderColor: "#252525",
-                            height: "48px",
-                          }}
-                          required
-                        >
-                          <Option value={0} label="!! Tanpa Atasan !!">
-                            !! Tanpa Atasan !!
-                          </Option>
-                          {dataPlacem.map((option) => (
-                            <Option key={option.id} value={option.id} label={option.nama}>
-                              {option.nama}
-                            </Option>
-                          ))}
-                        </Select>
-                      </Box>
-                    </FormControl>
-                  </Box>
                   <Box sx={{ width: "100%", paddingTop: "20px", display: "flex", flexDirection: { xs: "column", lg: "row" }, gap: "20px" }}>
                     <FormControl required sx={{ width: "100%" }}>
                       <FormLabel
@@ -301,8 +201,8 @@ const CrPlacem = (props) => {
                         Gambar
                       </FormLabel>
                       <Input
-                        value={pathGambar}
-                        onChange={() => setPathGambar(inputFileImage.current)}
+                        value={image}
+                        onChange={() => setImage(inputFileImage.current)}
                         onClick={() => inputFileImage.current.click()}
                         readOnly
                         size="lg"
@@ -319,6 +219,8 @@ const CrPlacem = (props) => {
                       {progress.started && <progress max="100" value={progress.pc}></progress>}
                       {msg && <span>{msg}</span>}
                     </FormControl>
+                  </Box>
+                  <Box sx={{ width: "100%", paddingTop: "20px", display: "flex", flexDirection: { xs: "column", lg: "row" }, gap: "20px" }}>
                     <FormControl required sx={{ width: "100%" }}>
                       <FormLabel
                         sx={{
@@ -340,23 +242,43 @@ const CrPlacem = (props) => {
                     </FormControl>
                   </Box>
                 </GridFlex>
+                <GridFlex item xs={12} md={6} sx={{ justifyContent: { xs: "center", md: "left" }, height: "100%" }}>
+                  <FormControl required sx={{ width: "100%" }}>
+                    <FormLabel
+                      sx={{
+                        fontSize: "18px",
+                      }}
+                    >
+                      Link
+                    </FormLabel>
+                    <Input readOnly value={link} onChange={(e) => setLink(e.target.value)} disabled size="lg" name="Size" placeholder="Link HTML" sx={{ width: "100%", borderColor: "#252525" }} />
+                  </FormControl>
+                  <Box sx={{ width: "100%", paddingTop: "20px", display: "flex", flexDirection: { xs: "column", lg: "row" }, gap: "20px" }}>
+                    <FormControl required sx={{ width: "100%" }}>
+                      <FormLabel
+                        sx={{
+                          fontSize: "18px",
+                        }}
+                      >
+                        Deskripsi
+                      </FormLabel>
+                      <Textarea value={deskripsi} onChange={(e) => setDeskripsi(e.target.value)} name="desc" placeholder="Type in here…" variant="soft" size="lg" sx={{ width: "100%", borderColor: "#252525", height: "150px" }} />
+                    </FormControl>
+                  </Box>
+                </GridFlex>
                 <GridFlex item xs={12} md={12} sx={{ justifyContent: { xs: "center", md: "left" } }}>
-                  <Box sx={{ height: "100%", width: "100%", paddingTop: "10px", display: "flex", flexDirection: "column", justifyContent: "left", gap: "30px" }}>
-                    <Box sx={{ maxWidth: { xs: "350px", sm: "600px", md: "900px", lg: "1250px" } }}>
-                      <FroalaEditorComponent tag="textarea" config={EditorConfig} model={deskripsi} onModelChange={(e) => setDeskripsi(e)} />
-                    </Box>
+                  <Box sx={{ height: "100%", width: "100%", display: "flex", flexDirection: "column", justifyContent: "left", gap: "30px" }}>
                     <Button
                       type="submit"
                       sx={{
                         width: { xs: "100%", md: "25%" },
                         height: "48px",
                         fontSize: "16px",
-                        marginTop: "50px",
                       }}
                     >
                       Submit
                     </Button>
-                    {errorMessage && <FormHelperText sx={(theme) => ({ color: theme.vars.palette.danger[400] })}>Upload Article Gagal</FormHelperText>}
+                    {errorMessage && <FormHelperText sx={(theme) => ({ color: theme.vars.palette.danger[400] })}>Upload Vitjen Gagal</FormHelperText>}
                   </Box>
                 </GridFlex>
               </SpaceGrid>
@@ -368,9 +290,9 @@ const CrPlacem = (props) => {
   );
 };
 
-CrPlacem.propTypes = {
+CrVitjen.propTypes = {
   mode: PropTypes.string,
 };
 
 // Export Code
-export default CrPlacem;
+export default CrVitjen;
