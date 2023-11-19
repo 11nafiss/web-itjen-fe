@@ -33,7 +33,7 @@ import "font-awesome/css/font-awesome.css";
 import FroalaEditorComponent from "react-froala-wysiwyg";
 
 // Import CSS
-import { EditorConfig } from "./EditorConfig"
+import { EditorConfig } from "./EditorConfig";
 
 // MUI Styling CSS
 const Kotak = styled(Box)(() => ({
@@ -228,7 +228,7 @@ const CrArticle = (props) => {
                     >
                       Judul
                     </FormLabel>
-                    <Input value={title} onChange={(e) => setTitle(e.target.value)} size="lg" name="Size" placeholder="Tulis..." sx={{ width: "100%", borderColor: "#252525" }} />
+                    <Input value={title} onChange={(e) => setTitle(e.target.value)} size="lg" name="Size" placeholder="Tulis Baru" sx={{ width: "100%", borderColor: "#252525" }} />
                   </FormControl>
                   <Box sx={{ width: "100%", paddingTop: "20px", display: "flex", flexDirection: { xs: "column", lg: "row" }, gap: "20px" }}>
                     <FormControl required sx={{ width: "100%" }}>
@@ -262,7 +262,7 @@ const CrArticle = (props) => {
                         <Select
                           value={categoryId}
                           onChange={handleChange}
-                          placeholder="Pilih…"
+                          placeholder="Pilih Kategori"
                           sx={{
                             width: "100%",
                             borderColor: "#252525",
@@ -294,7 +294,6 @@ const CrArticle = (props) => {
                     >
                       Gambar
                     </FormLabel>
-                    <FormHelperText>Harus rasio 16/9</FormHelperText>
                     <Input
                       value={featuredImage}
                       onChange={() => setFeaturedImage(inputFile.current)}
@@ -302,7 +301,7 @@ const CrArticle = (props) => {
                       readOnly
                       size="lg"
                       name="Size"
-                      placeholder="Upload..."
+                      placeholder="Gambar rasio 16/9"
                       endDecorator={
                         <IconButton aria-label="upload btn" color="neutral">
                           <input hidden type="file" ref={inputFile} onChange={handleFile}></input>
@@ -323,7 +322,7 @@ const CrArticle = (props) => {
                       >
                         Caption
                       </FormLabel>
-                      <Input value={caption} onChange={(e) => setCaption(e.target.value)} size="lg" name="Size" placeholder="Tulis..." sx={{ width: "100%", borderColor: "#252525" }} />
+                      <Input value={caption} onChange={(e) => setCaption(e.target.value)} size="lg" name="Size" placeholder="Tulis aja" sx={{ width: "100%", borderColor: "#252525" }} />
                     </FormControl>
                     <FormControl required sx={{ width: "100%" }}>
                       <FormLabel
@@ -384,7 +383,7 @@ const CrArticle = (props) => {
                 <GridFlex item xs={12} md={12} sx={{ justifyContent: { xs: "center", md: "left" } }}>
                   <Box sx={{ height: "100%", width: "100%", paddingTop: "10px", display: "flex", flexDirection: "column", justifyContent: "left", gap: "30px" }}>
                     <Box sx={{ maxWidth: { xs: "350px", sm: "600px", md: "900px", lg: "1250px" } }}>
-                      <FroalaEditorComponent tag="textarea" config={EditorConfig} model={content} onModelChange={handleModelChange} />
+                      <FroalaEditorComponent placeholder="Tulis Artikel" tag="textarea" config={EditorConfig} model={content} onModelChange={handleModelChange} />
                     </Box>
                     <Box sx={{ width: "100%", display: "flex", justifyContent: "left", padding: "50px 0px 0px 5px" }}>
                       <Checkbox checked={tampilDiBeranda} onChange={(e) => setTampilDiBeranda(e.target.checked)} label="Tampilkan di Beranda?" color="neutral" />

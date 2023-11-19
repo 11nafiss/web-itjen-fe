@@ -256,7 +256,7 @@ const CrReport = (props) => {
                     >
                       Judul
                     </FormLabel>
-                    <Input value={judul} onChange={(e) => setJudul(e.target.value)} size="lg" name="Size" placeholder="Tulis..." sx={{ width: "100%", borderColor: "#252525" }} />
+                    <Input value={judul} onChange={(e) => setJudul(e.target.value)} size="lg" name="Size" placeholder="Tulis Baru" sx={{ width: "100%", borderColor: "#252525" }} />
                   </FormControl>
                   <Box sx={{ width: "100%", paddingTop: "20px", display: "flex", flexDirection: { xs: "column", lg: "row" }, gap: "20px" }}>
                     <FormControl required sx={{ width: "100%" }}>
@@ -267,7 +267,6 @@ const CrReport = (props) => {
                       >
                         Gambar
                       </FormLabel>
-                      <FormHelperText>Harus rasio 16/9</FormHelperText>
                       <Input
                         value={pathImage}
                         onChange={() => setPathImage(inputFileImage.current)}
@@ -275,7 +274,7 @@ const CrReport = (props) => {
                         readOnly
                         size="lg"
                         name="Size"
-                        placeholder="Upload..."
+                        placeholder="Gambar rasio 16/9"
                         endDecorator={
                           <IconButton aria-label="upload btn" color="neutral">
                             <input hidden type="file" ref={inputFileImage} onChange={handleFileImage}></input>
@@ -299,7 +298,7 @@ const CrReport = (props) => {
                         <Select
                           value={jenis}
                           onChange={handleChange}
-                          placeholder="Pilih…"
+                          placeholder="Jenis Laporan"
                           sx={{
                             width: "100%",
                             borderColor: "#252525",
@@ -336,7 +335,7 @@ const CrReport = (props) => {
                         readOnly
                         size="lg"
                         name="Size"
-                        placeholder="Upload..."
+                        placeholder="Upload Pdf"
                         endDecorator={
                           <IconButton aria-label="upload btn" color="neutral">
                             <input hidden type="file" ref={inputFilePdf} onChange={handleFilePdf}></input>
@@ -378,7 +377,7 @@ const CrReport = (props) => {
                     >
                       Link
                     </FormLabel>
-                    <Input value={link} onChange={(e) => setLink(e.target.value)} size="lg" name="Size" placeholder="Tulis..." sx={{ width: "100%", borderColor: "#252525" }} />
+                    <Input value={link} onChange={(e) => setLink(e.target.value)} size="lg" name="Size" placeholder="Link Publuu" sx={{ width: "100%", borderColor: "#252525" }} />
                   </FormControl>
                   <FormControl required sx={{ width: "100%", mt: "20px" }}>
                     <FormLabel
@@ -388,7 +387,7 @@ const CrReport = (props) => {
                     >
                       Deskripsi
                     </FormLabel>
-                    <Textarea value={deskripsi} onChange={(e) => setDeskripsi(e.target.value)} name="desc" placeholder="Type in here…" variant="soft" size="lg" sx={{ width: "100%", borderColor: "#252525", height: "150px" }} />
+                    <Textarea value={deskripsi} onChange={(e) => setDeskripsi(e.target.value)} name="desc" placeholder="Deskripsi Laporan" variant="soft" size="lg" sx={{ width: "100%", borderColor: "#252525", height: "150px" }} />
                   </FormControl>
                 </GridFlex>
                 <GridFlex item xs={12} md={12} sx={{ justifyContent: { xs: "center", md: "left" } }}>

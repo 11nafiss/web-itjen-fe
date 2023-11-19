@@ -189,7 +189,7 @@ const CrVitjen = (props) => {
                     >
                       Judul
                     </FormLabel>
-                    <Input value={title} onChange={(e) => setTitle(e.target.value)} size="lg" name="Size" placeholder="Tulis..." sx={{ width: "100%", borderColor: "#252525" }} />
+                    <Input value={title} onChange={(e) => setTitle(e.target.value)} size="lg" name="Size" placeholder="Tulis Baru" sx={{ width: "100%", borderColor: "#252525" }} />
                   </FormControl>
                   <Box sx={{ width: "100%", paddingTop: "20px", display: "flex", flexDirection: { xs: "column", lg: "row" }, gap: "20px" }}>
                     <FormControl required sx={{ width: "100%" }}>
@@ -200,7 +200,6 @@ const CrVitjen = (props) => {
                       >
                         Gambar
                       </FormLabel>
-                      <FormHelperText>Harus rasio 16/9</FormHelperText>
                       <Input
                         value={image}
                         onChange={() => setImage(inputFileImage.current)}
@@ -208,7 +207,7 @@ const CrVitjen = (props) => {
                         readOnly
                         size="lg"
                         name="Size"
-                        placeholder="Upload..."
+                        placeholder="Gambar rasio 16/9"
                         endDecorator={
                           <IconButton aria-label="upload btn" color="neutral">
                             <input hidden type="file" ref={inputFileImage} onChange={handleFileImage}></input>
@@ -263,7 +262,7 @@ const CrVitjen = (props) => {
                       >
                         Deskripsi
                       </FormLabel>
-                      <Textarea value={deskripsi} onChange={(e) => setDeskripsi(e.target.value)} name="desc" placeholder="Type in here…" variant="soft" size="lg" sx={{ width: "100%", borderColor: "#252525", height: "150px" }} />
+                      <Textarea value={deskripsi} onChange={(e) => setDeskripsi(e.target.value)} name="desc" placeholder="Deskripsi Visual" variant="soft" size="lg" sx={{ width: "100%", borderColor: "#252525", height: "150px" }} />
                     </FormControl>
                   </Box>
                 </GridFlex>

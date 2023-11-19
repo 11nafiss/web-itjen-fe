@@ -190,7 +190,7 @@ const CrFeatur = (props) => {
                     >
                       Nama Icon
                     </FormLabel>
-                    <Input value={deskripsi} onChange={(e) => setDeskripsi(e.target.value)} size="lg" name="Size" placeholder="Tulis..." sx={{ width: "100%", borderColor: "#252525" }} />
+                    <Input value={deskripsi} onChange={(e) => setDeskripsi(e.target.value)} size="lg" name="Size" placeholder="Tulis Baru" sx={{ width: "100%", borderColor: "#252525" }} />
                   </FormControl>
                   <Box sx={{ width: "100%", paddingTop: "20px", display: "flex", flexDirection: { xs: "column", lg: "row" }, gap: "20px" }}>
                     <FormControl required sx={{ width: "100%" }}>
@@ -201,7 +201,7 @@ const CrFeatur = (props) => {
                       >
                         Link
                       </FormLabel>
-                      <Input value={link} onChange={(e) => setLink(e.target.value)} size="lg" name="Size" placeholder="Tulis..." sx={{ width: "100%", borderColor: "#252525" }} />
+                      <Input value={link} onChange={(e) => setLink(e.target.value)} size="lg" name="Size" placeholder="Link Menuju" sx={{ width: "100%", borderColor: "#252525" }} />
                     </FormControl>
                   </Box>
                 </GridFlex>
@@ -215,7 +215,7 @@ const CrFeatur = (props) => {
                       >
                         Singkatan
                       </FormLabel>
-                      <Input value={singkatan} onChange={(e) => setSingkatan(e.target.value)} size="lg" name="Size" placeholder="Tulis..." sx={{ width: "100%", borderColor: "#252525" }} />
+                      <Input value={singkatan} onChange={(e) => setSingkatan(e.target.value)} size="lg" name="Size" placeholder="Singkatannya" sx={{ width: "100%", borderColor: "#252525" }} />
                     </FormControl>
                     <FormControl required sx={{ width: "100%" }}>
                       <FormLabel
@@ -246,7 +246,6 @@ const CrFeatur = (props) => {
                       >
                         Gambar Icon
                       </FormLabel>
-                      <FormHelperText>Harus ekstensi SVG</FormHelperText>
                       <Input
                         value={image}
                         onChange={() => setImage(inputFileImage.current)}
@@ -254,7 +253,7 @@ const CrFeatur = (props) => {
                         readOnly
                         size="lg"
                         name="Size"
-                        placeholder="Upload SVG..."
+                        placeholder="Gambar SVG"
                         endDecorator={
                           <IconButton aria-label="upload btn" color="neutral">
                             <input hidden type="file" ref={inputFileImage} onChange={handleFileImage}></input>

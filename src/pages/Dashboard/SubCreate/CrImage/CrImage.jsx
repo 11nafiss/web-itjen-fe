@@ -183,7 +183,7 @@ const CrImage = (props) => {
                     >
                       Nama Gambar
                     </FormLabel>
-                    <Input value={namaFile} onChange={(e) => setNamaFile(e.target.value)} size="lg" name="Size" placeholder="Tulis..." sx={{ width: "100%", borderColor: "#252525" }} />
+                    <Input value={namaFile} onChange={(e) => setNamaFile(e.target.value)} size="lg" name="Size" placeholder="Tulis Baru" sx={{ width: "100%", borderColor: "#252525" }} />
                   </FormControl>
                   <Box sx={{ width: "100%", paddingTop: "20px", display: "flex", flexDirection: { xs: "column", lg: "row" }, gap: "20px" }}>
                     <FormControl required sx={{ width: "100%" }}>
@@ -194,7 +194,6 @@ const CrImage = (props) => {
                       >
                         Gambar
                       </FormLabel>
-                      <FormHelperText>Harus rasio 16/9</FormHelperText>
                       <Input
                         value={pathGambar}
                         onChange={() => setPathGambar(inputFileImage.current)}
@@ -202,7 +201,7 @@ const CrImage = (props) => {
                         readOnly
                         size="lg"
                         name="Size"
-                        placeholder="Upload..."
+                        placeholder="Gambar rasio 16/9"
                         endDecorator={
                           <IconButton aria-label="upload btn" color="neutral">
                             <input hidden type="file" ref={inputFileImage} onChange={handleFileImage}></input>

@@ -128,7 +128,7 @@ const CrMenu = (props) => {
                     >
                       Nama Menu
                     </FormLabel>
-                    <Input value={menuText} onChange={(e) => setMenuText(e.target.value)} size="lg" name="Size" placeholder="Tulis..." sx={{ width: "100%", borderColor: "#252525" }} />
+                    <Input value={menuText} onChange={(e) => setMenuText(e.target.value)} size="lg" name="Size" placeholder="Tulis Baru" sx={{ width: "100%", borderColor: "#252525" }} />
                   </FormControl>
                   <Box sx={{ width: "100%", paddingTop: "20px", display: "flex", flexDirection: { xs: "column", lg: "row" }, gap: "20px" }}>
                     {hasSubMenu === "Tidak" ? (
@@ -140,7 +140,7 @@ const CrMenu = (props) => {
                         >
                           Link
                         </FormLabel>
-                        <Input value={link} onChange={(e) => setLink(e.target.value)} size="lg" name="Size" placeholder="Tulis..." sx={{ width: "100%", borderColor: "#252525" }} />
+                        <Input value={link} onChange={(e) => setLink(e.target.value)} size="lg" name="Size" placeholder="Link Menuju" sx={{ width: "100%", borderColor: "#252525" }} />
                       </FormControl>
                     ) : (
                       <FormControl required disabled sx={{ width: "100%" }}>
@@ -170,7 +170,7 @@ const CrMenu = (props) => {
                         <Select
                           value={menuLevel}
                           onChange={(e, v) => setMenuLevel(v)}
-                          placeholder="Pilih…"
+                          placeholder="Pilih Level"
                           sx={{
                             width: "100%",
                             borderColor: "#252525",
@@ -258,7 +258,7 @@ const CrMenu = (props) => {
                         <Select
                           value={parentId}
                           onChange={(e, v) => setParentId(v)}
-                          placeholder="Pilih…"
+                          placeholder="Pilih Menu Sebelum"
                           sx={{
                             width: "100%",
                             borderColor: "#252525",

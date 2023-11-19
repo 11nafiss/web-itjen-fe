@@ -111,7 +111,7 @@ const CrCategory = (props) => {
                     >
                       Nama Kategori
                     </FormLabel>
-                    <Input value={categoryName} onChange={(e) => setCategoryName(e.target.value)} size="lg" name="Size" placeholder="Tulis..." sx={{ width: "100%", borderColor: "#252525" }} />
+                    <Input value={categoryName} onChange={(e) => setCategoryName(e.target.value)} size="lg" name="Size" placeholder="Tulis Baru" sx={{ width: "100%", borderColor: "#252525" }} />
                   </FormControl>
                 </GridFlex>
                 <GridFlex item xs={12} md={12} sx={{ justifyContent: { xs: "center", md: "left" } }}>

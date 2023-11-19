@@ -127,7 +127,7 @@ const CrEselon = (props) => {
                       >
                         Nama Eselon 1
                       </FormLabel>
-                      <Input value={nama} onChange={(e) => setNama(e.target.value)} size="lg" name="Size" placeholder="Tulis..." sx={{ width: "100%", borderColor: "#252525" }} />
+                      <Input value={nama} onChange={(e) => setNama(e.target.value)} size="lg" name="Size" placeholder="Tulis Baru" sx={{ width: "100%", borderColor: "#252525" }} />
                     </FormControl>
                     <FormControl required sx={{ width: "100%" }}>
                       <FormLabel
@@ -137,7 +137,7 @@ const CrEselon = (props) => {
                       >
                         Singakatan
                       </FormLabel>
-                      <Input value={singkatan} onChange={(e) => setSingkatan(e.target.value)} size="lg" name="Size" placeholder="Tulis..." sx={{ width: "100%", borderColor: "#252525" }} />
+                      <Input value={singkatan} onChange={(e) => setSingkatan(e.target.value)} size="lg" name="Size" placeholder="Singkatannya" sx={{ width: "100%", borderColor: "#252525" }} />
                     </FormControl>
                   </Box>
                   <Box sx={{ width: "100%", paddingTop: "20px", display: "flex", flexDirection: { xs: "column", lg: "row" }, gap: "20px" }}>
@@ -149,7 +149,7 @@ const CrEselon = (props) => {
                       >
                         Link
                       </FormLabel>
-                      <Input value={link} onChange={(e) => setLink(e.target.value)} size="lg" name="Size" placeholder="Tulis..." sx={{ width: "100%", borderColor: "#252525" }} />
+                      <Input value={link} onChange={(e) => setLink(e.target.value)} size="lg" name="Size" placeholder="Link Menuju" sx={{ width: "100%", borderColor: "#252525" }} />
                     </FormControl>
                     <FormControl required sx={{ width: "100%" }}>
                       <FormLabel

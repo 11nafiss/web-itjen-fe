@@ -213,7 +213,7 @@ const CrPlacem = (props) => {
                     >
                       Nama
                     </FormLabel>
-                    <Input value={nama} onChange={(e) => setNama(e.target.value)} size="lg" name="Size" placeholder="Tulis..." sx={{ width: "100%", borderColor: "#252525" }} />
+                    <Input value={nama} onChange={(e) => setNama(e.target.value)} size="lg" name="Size" placeholder="Tulis Baru" sx={{ width: "100%", borderColor: "#252525" }} />
                   </FormControl>
                   <Box sx={{ width: "100%", paddingTop: "20px", display: "flex", flexDirection: { xs: "column", lg: "row" }, gap: "20px" }}>
                     <FormControl required sx={{ width: "100%" }}>
@@ -224,7 +224,7 @@ const CrPlacem = (props) => {
                       >
                         Jabatan
                       </FormLabel>
-                      <Input value={jabatan} onChange={(e) => setJabatan(e.target.value)} size="lg" name="Size" placeholder="Tulis..." sx={{ width: "100%", borderColor: "#252525" }} />
+                      <Input value={jabatan} onChange={(e) => setJabatan(e.target.value)} size="lg" name="Size" placeholder="Menjabat Sebagai" sx={{ width: "100%", borderColor: "#252525" }} />
                     </FormControl>
                     <FormControl required sx={{ width: "100%" }}>
                       <FormLabel
@@ -238,7 +238,7 @@ const CrPlacem = (props) => {
                         <Select
                           value={eselon}
                           onChange={(e, v) => setEselon(v)}
-                          placeholder="Pilih…"
+                          placeholder="Pilih Eselon"
                           sx={{
                             width: "100%",
                             borderColor: "#252525",
@@ -277,7 +277,7 @@ const CrPlacem = (props) => {
                         <Select
                           value={atasanId}
                           onChange={(e, v) => setAtasanId(v)}
-                          placeholder="Pilih…"
+                          placeholder="Pilih Atasannya"
                           sx={{
                             width: "100%",
                             borderColor: "#252525",
@@ -378,7 +378,6 @@ const CrPlacem = (props) => {
                       >
                         Gambar
                       </FormLabel>
-                      <FormHelperText>Harus rasio 4/3</FormHelperText>
                       <Input
                         value={pathGambar}
                         onChange={() => setPathGambar(inputFileImage.current)}
@@ -386,7 +385,7 @@ const CrPlacem = (props) => {
                         readOnly
                         size="lg"
                         name="Size"
-                        placeholder="Upload..."
+                        placeholder="Gambar rasio 4/3"
                         endDecorator={
                           <IconButton aria-label="upload btn" color="neutral">
                             <input hidden type="file" ref={inputFileImage} onChange={handleFileImage}></input>

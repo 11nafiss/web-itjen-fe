@@ -193,7 +193,7 @@ const CrBanner = (props) => {
                       >
                         Judul
                       </FormLabel>
-                      <Input value={judul} onChange={(e) => setJudul(e.target.value)} size="lg" name="Size" placeholder="Tulis..." sx={{ width: "100%", borderColor: "#252525" }} />
+                      <Input value={judul} onChange={(e) => setJudul(e.target.value)} size="lg" name="Size" placeholder="Tulis Baru" sx={{ width: "100%", borderColor: "#252525" }} />
                     </FormControl>
                    <FormControl required sx={{ width: "100%" }}>
                       <FormLabel
@@ -203,7 +203,6 @@ const CrBanner = (props) => {
                       >
                         Gambar
                       </FormLabel>
-                      <FormHelperText>Harus rasio 16/9</FormHelperText>
                       <Input
                         value={pathGambar}
                         onChange={() => setPathGambar(inputFile.current)}
@@ -211,7 +210,7 @@ const CrBanner = (props) => {
                         readOnly
                         size="lg"
                         name="Size"
-                        placeholder="Upload..."
+                        placeholder="Gambar rasio 16/9"
                         endDecorator={
                           <IconButton aria-label="upload btn" color="neutral">
                             <input hidden type="file" ref={inputFile} onChange={handleFile}></input>
@@ -233,7 +232,7 @@ const CrBanner = (props) => {
                       >
                         Link
                       </FormLabel>
-                      <Input value={link} onChange={(e) => setLink(e.target.value)} size="lg" name="Size" placeholder="Tulis..." sx={{ width: "100%", borderColor: "#252525" }} />
+                      <Input value={link} onChange={(e) => setLink(e.target.value)} size="lg" name="Size" placeholder="Link Menuju" sx={{ width: "100%", borderColor: "#252525" }} />
                     </FormControl>
                    <FormControl required sx={{ width: "100%" }}>
                       <FormLabel
@@ -265,7 +264,7 @@ const CrBanner = (props) => {
                     >
                       Deskripsi
                     </FormLabel>
-                    <Textarea value={deskripsi} onChange={(e) => setDeskripsi(e.target.value)} name="desc" placeholder="Type in here…" variant="soft" size="lg" sx={{ width: "100%", borderColor: "#252525", height: "150px" }} />
+                    <Textarea value={deskripsi} onChange={(e) => setDeskripsi(e.target.value)} name="desc" placeholder="Deskripsi Gambar" variant="soft" size="lg" sx={{ width: "100%", borderColor: "#252525", height: "150px" }} />
                   </FormControl>
                 </GridFlex>
                 <GridFlex item xs={12} md={12} sx={{ justifyContent: { xs: "center", md: "left" } }}>
