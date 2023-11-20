@@ -1,18 +1,16 @@
 // Import Library
-import React, { useCallback, useEffect, useState } from "react";
+import React, { useState } from "react";
 import { Grid, Box, Typography, Divider } from "@mui/material";
 import { FormHelperText, Stack, Button, IconButton, Input, FormControl, FormLabel, LinearProgress } from "@mui/joy";
 import { styled } from "@mui/material/styles";
 import Visibility from "@mui/icons-material/Visibility";
 import VisibilityOff from "@mui/icons-material/VisibilityOff";
 import Key from "@mui/icons-material/Key";
-import { useNavigate, useParams } from "react-router-dom";
+import { useNavigate} from "react-router-dom";
 import PropTypes from "prop-types";
 
 // Import Api
-import { useAppDispatch, useAppSelector } from "../../../../hooks/useTypedSelector";
-import { createUser, editUser } from "../../../../features/actions/user.action";
-import { userService } from "../../../../services/user.service";
+import { useAppSelector } from "../../../../hooks/useTypedSelector";
 import { BASE_URL } from "../../../../services/api";
 import axios from "axios";
 
@@ -60,6 +58,7 @@ const CrUsers = (props) => {
   const [password, setPassword] = React.useState("");
   const [msg, setMsg] = useState(null);
   const [showPassword, setShowPassword] = React.useState(false);
+  const navigate = useNavigate();
   const minLength = 8;
   const handleClickShowPassword = () => setShowPassword((show) => !show);
   const handleMouseDownPassword = (event) => {
@@ -94,8 +93,8 @@ const CrUsers = (props) => {
         });
     }
 
-    // navigate("/dashboard/users");
-    // navigate(0);
+    navigate("/dashboard/users");
+    navigate(0);
   };
 
   console.log("ini mode", props.mode);

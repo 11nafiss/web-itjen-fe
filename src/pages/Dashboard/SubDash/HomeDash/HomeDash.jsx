@@ -153,6 +153,8 @@ const HomeDash = () => {
     ],
   };
 
+  options1.series.push({})
+
   // Main Code
   return (
     <Box component="main" sx={{ flexGrow: 1, p: 3, backgroundColor: "#D9D9D9" }}>

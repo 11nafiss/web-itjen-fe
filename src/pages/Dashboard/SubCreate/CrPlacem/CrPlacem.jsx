@@ -338,34 +338,63 @@ const CrPlacem = (props) => {
                           "--Radio-actionRadius": "8px",
                         }}
                       >
-                        {["Iya", "Tidak"].map((item) => (
-                          <Radio
-                            key={item}
-                            color="neutral"
-                            value={item}
-                            disableIcon
-                            label={item}
-                            variant="plain"
-                            sx={{
-                              px: 2,
-                              alignItems: "center",
-                              width: "100%",
-                            }}
-                            slotProps={{
-                              action: ({ checked }) => ({
-                                sx: {
-                                  ...(checked && {
-                                    bgcolor: "background.surface",
-                                    boxShadow: "md",
-                                    "&:hover": {
-                                      bgcolor: "background.surface",
+                        {eselon === 4
+                          ? ["Tidak"].map((item) => (
+                              <Radio
+                                key={item}
+                                color="neutral"
+                                value={item}
+                                disableIcon
+                                label={item}
+                                variant="plain"
+                                sx={{
+                                  px: 2,
+                                  alignItems: "center",
+                                  width: "100%",
+                                }}
+                                slotProps={{
+                                  action: ({ checked }) => ({
+                                    sx: {
+                                      ...(checked && {
+                                        bgcolor: "background.surface",
+                                        boxShadow: "md",
+                                        "&:hover": {
+                                          bgcolor: "background.surface",
+                                        },
+                                      }),
                                     },
                                   }),
-                                },
-                              }),
-                            }}
-                          />
-                        ))}
+                                }}
+                              />
+                            ))
+                          : ["Iya", "Tidak"].map((item) => (
+                              <Radio
+                                key={item}
+                                color="neutral"
+                                value={item}
+                                disableIcon
+                                label={item}
+                                variant="plain"
+                                sx={{
+                                  px: 2,
+                                  alignItems: "center",
+                                  width: "100%",
+                                }}
+                                slotProps={{
+                                  action: ({ checked }) => ({
+                                    sx: {
+                                      ...(checked && {
+                                        bgcolor: "background.surface",
+                                        boxShadow: "md",
+                                        "&:hover": {
+                                          bgcolor: "background.surface",
+                                        },
+                                      }),
+                                    },
+                                  }),
+                                }}
+                              />
+                            ))}
                       </RadioGroup>
                     </FormControl>
                   </Box>
