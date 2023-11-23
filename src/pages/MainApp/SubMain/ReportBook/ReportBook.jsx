@@ -8,6 +8,7 @@ import { useAppDispatch, useAppSelector } from "../../../../hooks/useTypedSelect
 import { getReportById } from "../../../../features/actions/report.action";
 import { useParams } from "react-router-dom";
 import { useEffect } from "react";
+import { Header } from "../../../../components/components";
 
 // MUI Styling CSS
 const Background = styled(Box)(() => ({
@@ -37,23 +38,28 @@ const ReportBook = () => {
 
   // Main Code
   return (
-    <div className="main-wrapper" style={{ height: "100%" }}>
-      <div className="content-wrapper" style={{ paddingTop: "90px", height: "100%", width: "100%" }}>
-        <Background>
-          <div style={{ width: "100%", height: "100%", position: "relative" }}>
-            <Iframe
-              src={`${dataReport.link}`}
-              style={{ position: "absolute", border: "none", left: "0", top: "0" }}
-              width="100%"
-              height="100%"
-              scrolling="no"
-              frameBorder="0"
-              allowfullscreen="true"
-              allow="transparency"
-              seamless="seamless"
-            ></Iframe>
-          </div>
-        </Background>
+    <div>
+      <div className="header-wrapper">
+        <Header mode="blue" />
+      </div>
+      <div className="main-wrapper" style={{ height: "100%" }}>
+        <div className="content-wrapper" style={{ paddingTop: "90px", height: "100%", width: "100%" }}>
+          <Background>
+            <div style={{ width: "100%", height: "100%", position: "relative" }}>
+              <Iframe
+                src={`${dataReport.link}`}
+                style={{ position: "absolute", border: "none", left: "0", top: "0" }}
+                width="100%"
+                height="100%"
+                scrolling="no"
+                frameBorder="0"
+                allowfullscreen="true"
+                allow="transparency"
+                seamless="seamless"
+              ></Iframe>
+            </div>
+          </Background>
+        </div>
       </div>
     </div>
   );

@@ -1,7 +1,8 @@
 // Import Library
-import React from "react";
+import React, { useEffect } from "react";
 import { Link } from "react-router-dom";
-import { Container, AppBar, Box, CssBaseline, Drawer, IconButton, Toolbar, useScrollTrigger } from "@mui/material";
+import PopupState, { bindTrigger, bindMenu } from "material-ui-popup-state";
+import { Grid, Typography, useScrollTrigger, Accordion, AccordionSummary, AccordionDetails, Menu, MenuItem, Box, Button, Container, AppBar, CssBaseline, Drawer, IconButton, Toolbar } from "@mui/material";
 import { styled } from "@mui/material/styles";
 import PropTypes from "prop-types";
 
@@ -10,7 +11,18 @@ import { Kemenkeu } from "../../../assets/assets";
 import { GiHamburgerMenu } from "react-icons/gi";
 
 // Import Components
-import { Navbar, DrawerBar } from "../../molecules/molecules";
+import { DrawerBar } from "../../molecules/molecules";
+
+// Import Assets
+import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
+import WidgetsIcon from "@mui/icons-material/Widgets";
+import { SearchNav } from "../../components";
+
+// Import Api
+import { useAppDispatch, useAppSelector } from "../../../hooks/useTypedSelector";
+import { getMenuData } from "../../../features/actions/menu.action";
+import { getFeatureData } from "../../../features/actions/feature.action";
+import { BASE_URL } from "../../../services/api";
 
 function ElevationScroll(props) {
   const { children, window } = props;
@@ -26,9 +38,152 @@ function ElevationScroll(props) {
     style: {
       backgroundColor: trigger ? "rgba(255, 255, 255, 0.8)" : "transparent",
       transition: trigger ? "0.3s" : "0.5s",
+      color: trigger ? "#08347C" : "#fff",
     },
   });
 }
+
+const ScrollHandler = (props) => {
+  const trigger = useScrollTrigger({
+    disableHysteresis: true,
+    threshold: 0,
+    target: props.window ? window() : undefined,
+  });
+
+  if (props.mode === "white") {
+    return React.cloneElement(props.children, {
+      style: {
+        color: trigger ? "#08347C" : "#fff",
+        transition: trigger ? "0.3s" : "0.5s",
+        boxShadow: "none",
+      },
+    });
+  } else {
+    return React.cloneElement(props.children, {
+      style: {
+        color: "#08347C",
+        transition: trigger ? "0.3s" : "0.5s",
+        boxShadow: "none",
+      },
+    });
+  }
+};
+
+// MUI Styling CSS
+const CustomContainer = styled(Container)(({ theme }) => ({
+  display: "flex",
+  justifyContent: "space-around",
+  gap: theme.spacing(5),
+  [theme.breakpoints.down("sm")]: {
+    flexDirection: "column",
+  },
+}));
+
+const LogoBox = styled(Box)(({ theme }) => ({
+  display: "flex",
+  flexGrow: 1,
+  alignItems: "center",
+  maxWidth: "100%",
+  marginLeft: "50px",
+  [theme.breakpoints.down("md")]: {
+    marginLeft: "20px",
+  },
+}));
+
+const LogoText = styled(Box)(() => ({
+  display: "flex",
+  flexDirection: "column",
+  justifyContent: "center",
+  maxWidth: "100%",
+  margin: "15px 0px 0px 10px",
+}));
+
+const CustomText = styled(Box)(({ theme }) => ({
+  fontSize: "12px",
+  fontWeight: "700",
+  textTransform: "uppercase",
+  [theme.breakpoints.down("md")]: {
+    marginLeft: "0px",
+    fontSize: "9px",
+  },
+}));
+
+// MUI Styling CSS
+const MenuButton = styled(Button)(() => ({
+  background: "transparent",
+  fontWeight: 700,
+  marginInline: "5px",
+  textTransform: "capitalize",
+  fontSize: "17px",
+}));
+
+const CustomItem = styled(MenuItem)(() => ({
+  padding: "0px",
+}));
+
+const AccorItem = styled(AccordionSummary)(() => ({
+  color: "#000000",
+  fontSize: "14px",
+  fontWeight: 700,
+}));
+
+const CustomAccor = styled(Accordion)(() => ({
+  boxShadow: "0px 0px #fff",
+  borderWidth: "0px",
+  borderRadius: "0px",
+  width: "250px",
+}));
+
+const SubItem = styled(MenuItem)(() => ({
+  color: "#252525",
+  fontSize: "14px",
+  fontWeight: 500,
+}));
+
+const TypeItem = styled(MenuItem)(() => ({
+  color: "#252525",
+  fontSize: "14px",
+  fontWeight: 700,
+}));
+
+// MUI Styling CSS
+const PopupButton = styled(Button)(() => ({
+  color: "#08347C",
+  background: "transparent",
+  textShadow: "1px 1px 3px #fff",
+  fontWeight: 700,
+  marginInline: "5px",
+}));
+
+const PopupIcon = styled(MenuItem)(() => ({
+  padding: "0px",
+  width: "100px",
+}));
+
+const PopupBox = styled(Box)(() => ({
+  display: "flex",
+  justifyContent: "center",
+  alignItems: "center",
+  borderRadius: "100%",
+  backgroundColor: "#08347C",
+  width: "70px",
+  height: "70px",
+  margin: "0px 15px",
+}));
+
+const PopupType = styled(Typography)(() => ({
+  color: "#000000",
+  fontSize: "16px",
+  fontWeight: "700",
+  textAlign: "center",
+  marginBottom: "20px",
+}));
+
+const GridCenter = styled(Grid)(() => ({
+  display: "flex",
+  justifyContent: "center",
+  alignItems: "center",
+}));
 
 // Main Declaration
 const Header = (props) => {
@@ -45,46 +200,17 @@ const Header = (props) => {
 
   const container = window !== undefined ? () => window().document.body : undefined;
 
-  // MUI Styling CSS
-  const CustomContainer = styled(Container)(({ theme }) => ({
-    display: "flex",
-    justifyContent: "space-around",
-    gap: theme.spacing(5),
-    [theme.breakpoints.down("sm")]: {
-      flexDirection: "column",
-    },
-  }));
+  const dispatch = useAppDispatch();
+  useEffect(() => {
+    dispatch(getMenuData());
+    dispatch(getFeatureData());
+  }, [dispatch]);
+  const dataMenu = useAppSelector((state) => state.menu.menuAll.dataMenu);
+  const MenuLevel1 = dataMenu.filter((item) => item.menuLevel === 1);
+  const MenuLevel2 = dataMenu.filter((item) => item.menuLevel === 2);
+  const MenuLevel3 = dataMenu.filter((item) => item.menuLevel === 3);
 
-  const LogoBox = styled(Box)(({ theme }) => ({
-    display: "flex",
-    flexGrow: 1,
-    alignItems: "center",
-    maxWidth: "100%",
-    marginLeft: "50px",
-    [theme.breakpoints.down("md")]: {
-      marginLeft: "20px",
-    },
-  }));
-
-  const LogoText = styled(Box)(() => ({
-    display: "flex",
-    flexDirection: "column",
-    justifyContent: "center",
-    maxWidth: "100%",
-    margin: "15px 0px 0px 10px",
-  }));
-
-  const CustomText = styled(Box)(({ theme }) => ({
-    color: "#08347C",
-    fontSize: "12px",
-    fontWeight: "700",
-    textTransform: "uppercase",
-    textShadow: "1px 1px 3px #fff",
-    [theme.breakpoints.down("md")]: {
-      marginLeft: "0px",
-      fontSize: "9px",
-    },
-  }));
+  const { dataFeature } = useAppSelector((state) => state.feature.featureAll);
 
   // Main Code
   return (
@@ -100,15 +226,105 @@ const Header = (props) => {
                 </IconButton>
                 <Link to="https://www.kemenkeu.go.id/home" className="link">
                   <LogoBox>
-                      <img src={Kemenkeu} style={{ width: "50px", height: "50px" }} />
-                    <LogoText>
-                      <CustomText>Kementerian Keuangan</CustomText>
-                      <CustomText>Inspektorat Jenderal</CustomText>
-                    </LogoText>
+                    <img src={Kemenkeu} style={{ width: "55px", height: "50px" }} />
+                    <ScrollHandler {...props}>
+                      <LogoText>
+                        <CustomText>Kementerian Keuangan</CustomText>
+                        <CustomText sx={{ fontSize: "11px", fontWeight: "500" }}>Inspektorat Jenderal</CustomText>
+                      </LogoText>
+                    </ScrollHandler>
                   </LogoBox>
                 </Link>
               </Box>
-              <Navbar />
+              <Box sx={{ display: "flex", alignItems: "center" }}>
+                <Box sx={{ display: { xs: "none", lg: "block" } }}>
+                  {MenuLevel1.map((m1) => (
+                    <PopupState key={m1.menuId} variant="popover" popupId="demo-popup-menu">
+                      {(popupState) => (
+                        <React.Fragment>
+                          <Link to={m1.link ? m1.link : null} className="link">
+                            <ScrollHandler {...props}>
+                              <MenuButton variant="text" {...bindTrigger(popupState)}>
+                                {m1.menuText}
+                              </MenuButton>
+                            </ScrollHandler>
+                          </Link>
+                          {m1.hasSubMenu ? (
+                            <Menu {...bindMenu(popupState)} sx={{ maxWidth: "500px" }}>
+                              {MenuLevel2.filter((m2) => m2.parentId === m1.menuId).map((m2) => {
+                                if (m2.hasSubMenu) {
+                                  return (
+                                    <CustomItem key={m2.menuId}>
+                                      <CustomAccor>
+                                        <Link to={m2.link ? m2.link : null} className="link">
+                                          <AccorItem expandIcon={<ExpandMoreIcon />} aria-controls="panel1a-content" id="panel1a-header">
+                                            {m2.menuText}
+                                          </AccorItem>
+                                        </Link>
+                                        {m2.hasSubMenu ? (
+                                          <AccordionDetails>
+                                            {MenuLevel3.filter((m3) => m3.parentId === m2.menuId).map((m3) => (
+                                              <Link key={m3.menuId} to={m3.link ? m3.link : null} className="link">
+                                                <SubItem onClick={popupState.close}>{m3.menuText}</SubItem>
+                                              </Link>
+                                            ))}
+                                          </AccordionDetails>
+                                        ) : (
+                                          popupState.close
+                                        )}
+                                      </CustomAccor>
+                                    </CustomItem>
+                                  );
+                                } else {
+                                  return (
+                                    <Link to={m2.link ? m2.link : null} key={m2.menuId} className="link">
+                                      <TypeItem onClick={popupState.close}>{m2.menuText}</TypeItem>
+                                    </Link>
+                                  );
+                                }
+                              })}
+                            </Menu>
+                          ) : null}
+                        </React.Fragment>
+                      )}
+                    </PopupState>
+                  ))}
+                </Box>
+                <SearchNav />
+                <PopupState variant="popover" popupId="demo-popup-menu">
+                  {(popupState) => (
+                    <React.Fragment>
+                      <ScrollHandler {...props}>
+                        <PopupButton variant="text" {...bindTrigger(popupState)} sx={{ color: "#08347C", mr: 2, display: { xs: "none", sm: "block" }, margin: 1, marginTop: "17px" }}>
+                          <WidgetsIcon />
+                        </PopupButton>
+                      </ScrollHandler>
+                      <Menu {...bindMenu(popupState)}>
+                        <Grid container spacing={1} sx={{ width: "300px", padding: "15px" }}>
+                          {dataFeature.map((obj, index) => (
+                            <GridCenter item key={index} xs={6}>
+                              <Link to={obj.link} className="link">
+                                <PopupIcon onClick={popupState.close}>
+                                  <Grid container spacing={1}>
+                                    <GridCenter item xs={12}>
+                                      <PopupBox style={{ padding: "30px" }}>
+                                        <img src={`${BASE_URL}images/${obj.image}`} style={{ width: "35px" }} />
+                                      </PopupBox>
+                                    </GridCenter>
+                                    <GridCenter item xs={12}>
+                                      <PopupType>{obj.singkatan}</PopupType>
+                                    </GridCenter>
+                                  </Grid>
+                                </PopupIcon>
+                              </Link>
+                            </GridCenter>
+                          ))}
+                        </Grid>
+                      </Menu>
+                    </React.Fragment>
+                  )}
+                </PopupState>
+              </Box>
             </Toolbar>
           </AppBar>
         </ElevationScroll>
@@ -124,7 +340,7 @@ const Header = (props) => {
               "& .MuiDrawer-paper": { boxSizing: "border-box", width: { xs: "60%", md: "400px" } },
             }}
           >
-            <DrawerBar role="presentation" onClick={handleDrawerClose} />
+            <DrawerBar onClick={handleDrawerClose} />
           </Drawer>
         </Box>
       </Box>

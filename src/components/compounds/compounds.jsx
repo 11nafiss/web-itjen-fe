@@ -7,7 +7,7 @@ import Footer from './Footer/footer'
 import LiveChat from './LiveChat/livechat'
 
 // Export Code
-export { 
+export {
     Header, 
     Footer,
     HeadSmall,

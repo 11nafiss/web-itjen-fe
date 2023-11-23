@@ -36,6 +36,7 @@ const CustomTitle = styled(Typography)(() => ({
   color: "#fff",
   fontWeight: "700",
   margin: "5px 0px",
+  textTransform: "uppercase",
 }));
 
 const CustomText = styled(Typography)(({ theme }) => ({
@@ -82,7 +83,7 @@ const Auditoria = () => {
   const page = 1;
 
   useEffect(() => {
-    dispatch(getAuditoriaAllTake({take, page}));
+    dispatch(getAuditoriaAllTake({ take, page }));
   }, [dispatch]);
   const { dataAuditoria } = useAppSelector((state) => state.auditoria.auditoriaAllTake);
 

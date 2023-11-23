@@ -77,7 +77,7 @@ const Features = () => {
     display: "flex",
     justifyContent: "space-around",
     gap: theme.spacing(5),
-    padding: "50px 0px",
+    padding: "30px 0px",
     [theme.breakpoints.down("md")]: {
       flexDirection: "column",
       textAlign: "center",

@@ -166,54 +166,62 @@ const Footer = () => {
               </Typography>
 
               <IconBox sx={{ margin: "auto" }}>
-                <IconButton
-                  color="inherit"
-                  aria-label="facebook"
-                  sx={{
-                    width: { xs: "70px", md: "35px" },
-                    "&:hover": {
-                      color: "#7A7A7E",
-                    },
-                  }}
-                >
-                  <AiFillFacebook style={{ cursor: "pointer" }} />
-                </IconButton>
-                <IconButton
-                  color="inherit"
-                  aria-label="twitter"
-                  sx={{
-                    width: { xs: "70px", md: "35px" },
-                    "&:hover": {
-                      color: "#7A7A7E",
-                    },
-                  }}
-                >
-                  <AiOutlineTwitter style={{ cursor: "pointer" }} />
-                </IconButton>
-                <IconButton
-                  color="inherit"
-                  aria-label="youtube"
-                  sx={{
-                    width: { xs: "70px", md: "35px" },
-                    "&:hover": {
-                      color: "#7A7A7E",
-                    },
-                  }}
-                >
-                  <AiFillYoutube style={{ cursor: "pointer" }} />
-                </IconButton>
-                <IconButton
-                  color="inherit"
-                  aria-label="instagram"
-                  sx={{
-                    width: { xs: "70px", md: "35px" },
-                    "&:hover": {
-                      color: "#7A7A7E",
-                    },
-                  }}
-                >
-                  <AiFillInstagram style={{ cursor: "pointer" }} />
-                </IconButton>
+                <Link to={"https://www.facebook.com/ItjenKemenkeu"} className="link" style={{ color: "#fff" }}>
+                  <IconButton
+                    color="inherit"
+                    aria-label="facebook"
+                    sx={{
+                      width: { xs: "70px", md: "35px" },
+                      "&:hover": {
+                        color: "#7A7A7E",
+                      },
+                    }}
+                  >
+                    <AiFillFacebook style={{ cursor: "pointer" }} />
+                  </IconButton>
+                </Link>
+                <Link to={"https://twitter.com/itjenkemenkeu"} className="link" style={{ color: "#fff" }}>
+                  <IconButton
+                    color="inherit"
+                    aria-label="twitter"
+                    sx={{
+                      width: { xs: "70px", md: "35px" },
+                      "&:hover": {
+                        color: "#7A7A7E",
+                      },
+                    }}
+                  >
+                    <AiOutlineTwitter style={{ cursor: "pointer" }} />
+                  </IconButton>
+                </Link>
+                <Link to={"https://www.youtube.com/channel/UCxmHJ_xmllNCGvYQFaU7h3A/featured"} className="link" style={{ color: "#fff" }}>
+                  <IconButton
+                    color="inherit"
+                    aria-label="youtube"
+                    sx={{
+                      width: { xs: "70px", md: "35px" },
+                      "&:hover": {
+                        color: "#7A7A7E",
+                      },
+                    }}
+                  >
+                    <AiFillYoutube style={{ cursor: "pointer" }} />
+                  </IconButton>
+                </Link>
+                <Link to={"https://www.instagram.com/itjenkemenkeu"} className="link" style={{ color: "#fff" }}>
+                  <IconButton
+                    color="inherit"
+                    aria-label="instagram"
+                    sx={{
+                      width: { xs: "70px", md: "35px" },
+                      "&:hover": {
+                        color: "#7A7A7E",
+                      },
+                    }}
+                  >
+                    <AiFillInstagram style={{ cursor: "pointer" }} />
+                  </IconButton>
+                </Link>
               </IconBox>
             </Box>
           </Grid>

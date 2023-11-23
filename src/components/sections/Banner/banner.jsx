@@ -21,15 +21,27 @@ function Banner() {
   return (
     <div>
       <Carousel navButtonsAlwaysVisible={true} fullHeightHover={false}>
-        {dataBanner.map((obj, index) => (
-          <Link to={obj.link} key={index} className="link">
-            <AspectRatio ratio="16/9" sx={{ maxHeight: { xs: "100%", lg: "100vh" }, background: "transparent" }}>
-              <Box sx={{ maxHeight: { xs: "100%", lg: "100vh" }, display: { xs: "flex", lg: "none" } }}>
-                <img style={{ objectFit: "cover", height: "100%", width: "100%" }} src={`${BASE_URL}images/${obj.pathGambar}`} alt="" />
-              </Box>
-            </AspectRatio>
-          </Link>
-        ))}
+        {dataBanner.map((obj, index) => {
+          if (obj.link === "" || obj.link === null) {
+            return (
+              <AspectRatio ratio="16/9" key={index} sx={{ maxHeight: { xs: "100%", lg: "100vh" }, background: "transparent" }}>
+                <Box sx={{ maxHeight: { xs: "100%", lg: "100vh" }, display: { xs: "flex", lg: "none" } }}>
+                  <img style={{ objectFit: "cover", height: "100%", width: "100%" }} src={`${BASE_URL}images/${obj.pathGambar}`} alt="" />
+                </Box>
+              </AspectRatio>
+            );
+          } else {
+            return (
+              <Link to={obj.link} key={index} className="link">
+                <AspectRatio ratio="16/9" sx={{ maxHeight: { xs: "100%", lg: "100vh" }, background: "transparent" }}>
+                  <Box sx={{ maxHeight: { xs: "100%", lg: "100vh" }, display: { xs: "flex", lg: "none" } }}>
+                    <img style={{ objectFit: "cover", height: "100%", width: "100%" }} src={`${BASE_URL}images/${obj.pathGambar}`} alt="" />
+                  </Box>
+                </AspectRatio>
+              </Link>
+            );
+          }
+        })}
       </Carousel>
     </div>
   );

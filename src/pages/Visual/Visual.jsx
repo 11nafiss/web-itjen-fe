@@ -1,9 +1,6 @@
 // Import Library
 import { Routes, Route } from "react-router-dom";
 
-// Import Components
-import { HeadVisual } from "../../components/components";
-
 // Import MainApp Pages
 import NotFound from "../NotFound/NotFound";
 import { Front, Locker, Present } from "./SubVisual/SubVisual";
@@ -13,9 +10,6 @@ const MainApp = () => {
   // Main Code
   return (
     <div className="main-wrapper">
-      <div className="header-wrapper">
-        <HeadVisual />
-      </div>
       <div className="content-wrapper">
         <Routes>
           <Route path="/" element={<Front />} />

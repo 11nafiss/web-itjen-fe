@@ -18,6 +18,7 @@ import { articleSearchSlice } from "../../../../features/slice/article.slice";
 import { getArticleSearchCount, getArticleSearch } from "../../../../features/actions/article.action";
 import { BASE_URL } from "../../../../services/api";
 import { getCategory } from "../../../../features/actions/category.action";
+import { Header } from "../../../../components/components";
 
 // Additional Code
 const theme = createTheme({
@@ -157,109 +158,114 @@ const Search = () => {
 
   // Main Code
   return (
-    <Background>
-      <main style={{ paddingTop: "90px" }}>
-        <CustomContainer>
-          <Grid container spacing={1}>
-            <GridCenter item xs={12}>
-              <CustomTitle>Temukan Bacaan Untukmu</CustomTitle>
-            </GridCenter>
-            <GridCenter item xs={12}>
-              <form onSubmit={handleSubmit}>
-                <Input
-                  placeholder="Silahkan cari disini.."
-                  startDecorator={<SearchIcon style={{ color: "#08347C" }} />}
-                  value={searchInput}
-                  onChange={(e) => setSearchInput(e.target.value)}
-                  endDecorator={
-                    <Button
-                      type="submit"
-                      sx={{
-                        height: "50px",
-                        width: "100px",
-                        left: "5px",
-                        borderRadius: "0px 10px 10px 0px",
-                        backgroundColor: "#08347C",
-                        fontSize: "16px",
-                      }}
-                    >
-                      Search
-                    </Button>
-                  }
-                  sx={{
-                    display: { xs: "none", sm: "flex" },
-                    margin: "30px 50px",
-                    width: "800px",
-                    height: "50px",
-                    borderRadius: "10px",
-                  }}
-                />
-              </form>
-            </GridCenter>
-          </Grid>
-        </CustomContainer>
-        <BoxBg>
+    <div>
+      <div className="header-wrapper">
+        <Header mode="white" />
+      </div>
+      <Background>
+        <main style={{ paddingTop: "90px" }}>
           <CustomContainer>
-            <SubText>Hasil Pencarian</SubText>
-            {dataArticle.length === 0 ? (
-              <div style={{ display: "flex", justifyContent: "center" }}>Data Tidak Ditemukan</div>
-            ) : (
-              <Grid container spacing={{ xs: 3, md: 4 }} column={{ xs: 4, sm: 8, md: 12 }} sx={{ justifyContent: "center" }}>
-                {dataArticle.map((obj, index) => (
-                  <GridCenter item key={index} xs={12} sm={6} md={4}>
-                    <Card variant="outlined" sx={{ width: "270px", maxWidth: "100%", height: "380px", borderRadius: "20px", boxShadow: "lg", gap: "5px" }}>
-                      <CardOverflow>
-                        <AspectRatio ratio="16/9">
-                          <img src={obj.featuredImage === "" ? Juanda : `${BASE_URL}thumbnail/${obj.featuredImage}`} loading="lazy" alt="" />
-                        </AspectRatio>
-                      </CardOverflow>
-                      <CardContent sx={{ display: "flex", textAlign: "center" }}>
-                        <Typography
-                          gutterBottom
-                          sx={{
-                            fontSize: "14px",
-                            color: "#0D5CAB",
-                            fontWeight: "500",
-                            margin: "10px 0px 10px 0px",
-                          }}
-                        >
-                          {formatDate(obj.publishedAt)}
-                        </Typography>
-                        <Typography
-                          sx={{
-                            fontSize: "14px",
-                            fontWeight: "600",
-                            marginBottom: "2px",
-                          }}
-                        >
-                          {obj.title}
-                        </Typography>
-                      </CardContent>
-                      <CardOverflow variant="soft" sx={{ bgcolor: "background.level1", padding: "0px" }}>
-                        <CardContent sx={{ width: "100%", padding: "0px" }}>
-                          <Link to={`/artikel/${handleUrlCategory(obj.categoryId)}/${obj.title.replace(/ /g, "-")}`} className="link">
-                            <ClickButton variant="solid" size="lg">
-                              Baca Artikel
-                            </ClickButton>
-                          </Link>
-                        </CardContent>
-                      </CardOverflow>
-                    </Card>
-                  </GridCenter>
-                ))}
-                <GridCenter item xs={12}>
-                  <Stack spacing={2}>
-                    <ThemeProvider theme={theme}>
-                      <Pagination color="primary" count={Math.ceil(jumlahArticle / take)} onChange={handlePageChange} renderItem={(item) => <PaginationItem slots={{ previous: ArrowBackIcon, next: ArrowForwardIcon }} {...item} />} />
-                    </ThemeProvider>
-                  </Stack>
-                </GridCenter>
-              </Grid>
-            )}
+            <Grid container spacing={1}>
+              <GridCenter item xs={12}>
+                <CustomTitle>Temukan Bacaan Untukmu</CustomTitle>
+              </GridCenter>
+              <GridCenter item xs={12}>
+                <form onSubmit={handleSubmit}>
+                  <Input
+                    placeholder="Silahkan cari disini.."
+                    startDecorator={<SearchIcon style={{ color: "#08347C" }} />}
+                    value={searchInput}
+                    onChange={(e) => setSearchInput(e.target.value)}
+                    endDecorator={
+                      <Button
+                        type="submit"
+                        sx={{
+                          height: "50px",
+                          width: "100px",
+                          left: "5px",
+                          borderRadius: "0px 10px 10px 0px",
+                          backgroundColor: "#08347C",
+                          fontSize: "16px",
+                        }}
+                      >
+                        Search
+                      </Button>
+                    }
+                    sx={{
+                      display: { xs: "none", sm: "flex" },
+                      margin: "30px 50px",
+                      width: "800px",
+                      height: "50px",
+                      borderRadius: "10px",
+                    }}
+                  />
+                </form>
+              </GridCenter>
+            </Grid>
           </CustomContainer>
-        </BoxBg>
-      </main>
-    </Background>
+          <BoxBg>
+            <CustomContainer>
+              <SubText>Hasil Pencarian</SubText>
+              {dataArticle.length === 0 ? (
+                <div style={{ display: "flex", justifyContent: "center" }}>Data Tidak Ditemukan</div>
+              ) : (
+                <Grid container spacing={{ xs: 3, md: 4 }} column={{ xs: 4, sm: 8, md: 12 }} sx={{ justifyContent: "center" }}>
+                  {dataArticle.map((obj, index) => (
+                    <GridCenter item key={index} xs={12} sm={6} md={4}>
+                      <Card variant="outlined" sx={{ width: "270px", maxWidth: "100%", height: "380px", borderRadius: "20px", boxShadow: "lg", gap: "5px" }}>
+                        <CardOverflow>
+                          <AspectRatio ratio="16/9">
+                            <img src={obj.featuredImage === "" ? Juanda : `${BASE_URL}thumbnail/${obj.featuredImage}`} loading="lazy" alt="" />
+                          </AspectRatio>
+                        </CardOverflow>
+                        <CardContent sx={{ display: "flex", textAlign: "center" }}>
+                          <Typography
+                            gutterBottom
+                            sx={{
+                              fontSize: "14px",
+                              color: "#0D5CAB",
+                              fontWeight: "500",
+                              margin: "10px 0px 10px 0px",
+                            }}
+                          >
+                            {formatDate(obj.publishedAt)}
+                          </Typography>
+                          <Typography
+                            sx={{
+                              fontSize: "14px",
+                              fontWeight: "600",
+                              marginBottom: "2px",
+                            }}
+                          >
+                            {obj.title}
+                          </Typography>
+                        </CardContent>
+                        <CardOverflow variant="soft" sx={{ bgcolor: "background.level1", padding: "0px" }}>
+                          <CardContent sx={{ width: "100%", padding: "0px" }}>
+                            <Link to={`/artikel/${handleUrlCategory(obj.categoryId)}/${obj.title.replace(/ /g, "-")}`} className="link">
+                              <ClickButton variant="solid" size="lg">
+                                Baca Artikel
+                              </ClickButton>
+                            </Link>
+                          </CardContent>
+                        </CardOverflow>
+                      </Card>
+                    </GridCenter>
+                  ))}
+                  <GridCenter item xs={12}>
+                    <Stack spacing={2}>
+                      <ThemeProvider theme={theme}>
+                        <Pagination color="primary" count={Math.ceil(jumlahArticle / take)} onChange={handlePageChange} renderItem={(item) => <PaginationItem slots={{ previous: ArrowBackIcon, next: ArrowForwardIcon }} {...item} />} />
+                      </ThemeProvider>
+                    </Stack>
+                  </GridCenter>
+                </Grid>
+              )}
+            </CustomContainer>
+          </BoxBg>
+        </main>
+      </Background>
+    </div>
   );
 };
 

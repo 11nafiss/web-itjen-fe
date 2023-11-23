@@ -9,6 +9,7 @@ import { useAppDispatch, useAppSelector } from "../../../../hooks/useTypedSelect
 import { getImageData } from "../../../../features/actions/image.action";
 import { BASE_URL } from "../../../../services/api";
 import { formatDate } from "../../../../utils/custom-format-date";
+import { Header } from "../../../../components/components";
 
 // MUI Styling CSS
 const Background = styled(Box)(() => ({
@@ -72,43 +73,45 @@ const Gallery = () => {
 
   // Main Code
   return (
-    <Background>
-      <main style={{ paddingTop: "90px" }}>
-        <Background>
-          <CustomContainer>
-            <Grid container spacing={1}>
-              <GridCenter item xs={12}>
-                <CustomTitle>Galeri</CustomTitle>
-              </GridCenter>
-            </Grid>
-          </CustomContainer>
-        </Background>
-        <BoxBg>
-          <CustomContainer>
-            <SubText>Daftar Gambar</SubText>
-            <ImageList sx={{ width: "100%", height: "100%", maxHeight: "900px", overflowY: "scroll", borderRadius: "50px" }} cols={3} gap={5}>
-              {dataImage.map((item) => (
-                <ImageListItem key={item.id} sx={{ height: "100%", width: "100%" }}>
-                  <AspectRatio ratio="16/9">
-                    <img
-                      src={`${BASE_URL}images/${item.pathGambar}?w=248&fit=crop&auto=format`}
-                      srcSet={`${BASE_URL}images/${item.pathGambar}?w=248&fit=crop&auto=format&dpr=2 2x`}
-                      alt={item.namaFile}
-                      loading="lazy"
-                      style={{ width: "100%", height: "100%" }}
-                    />
-                  </AspectRatio>
-                  <ImageListItemBar
-                    title={item.namaFile}
-                    subtitle={formatDate(item.publishedAt)}
-                  />
-                </ImageListItem>
-              ))}
-            </ImageList>
-          </CustomContainer>
-        </BoxBg>
-      </main>
-    </Background>
+    <div>
+      <div className="header-wrapper">
+        <Header mode="white" />
+      </div>
+      <Background>
+        <main style={{ paddingTop: "90px" }}>
+          <Background>
+            <CustomContainer>
+              <Grid container spacing={1}>
+                <GridCenter item xs={12}>
+                  <CustomTitle>Galeri</CustomTitle>
+                </GridCenter>
+              </Grid>
+            </CustomContainer>
+          </Background>
+          <BoxBg>
+            <CustomContainer>
+              <SubText>Daftar Gambar</SubText>
+              <ImageList sx={{ width: "100%", height: "100%", maxHeight: "900px", overflowY: "scroll", borderRadius: "50px" }} cols={3} gap={5}>
+                {dataImage.map((item) => (
+                  <ImageListItem key={item.id} sx={{ height: "100%", width: "100%" }}>
+                    <AspectRatio ratio="16/9">
+                      <img
+                        src={`${BASE_URL}images/${item.pathGambar}?w=248&fit=crop&auto=format`}
+                        srcSet={`${BASE_URL}images/${item.pathGambar}?w=248&fit=crop&auto=format&dpr=2 2x`}
+                        alt={item.namaFile}
+                        loading="lazy"
+                        style={{ width: "100%", height: "100%" }}
+                      />
+                    </AspectRatio>
+                    <ImageListItemBar title={item.namaFile} subtitle={formatDate(item.publishedAt)} />
+                  </ImageListItem>
+                ))}
+              </ImageList>
+            </CustomContainer>
+          </BoxBg>
+        </main>
+      </Background>
+    </div>
   );
 };
 

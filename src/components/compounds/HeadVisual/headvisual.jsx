@@ -27,6 +27,32 @@ function ElevationScroll(props) {
   });
 }
 
+const ScrollHandler = (props) => {
+  const trigger = useScrollTrigger({
+    disableHysteresis: true,
+    threshold: 0,
+    target: props.window ? window() : undefined,
+  });
+
+  if (props.mode === "white") {
+    return React.cloneElement(props.children, {
+      style: {
+        color: trigger ? "#08347C" : "#fff",
+        transition: trigger ? "0.3s" : "0.5s",
+        boxShadow: "none",
+      },
+    });
+  } else {
+    return React.cloneElement(props.children, {
+      style: {
+        color: "#08347C",
+        transition: trigger ? "0.3s" : "0.5s",
+        boxShadow: "none",
+      },
+    });
+  }
+};
+
 // MUI Styling CSS
 const CustomContainer = styled(Container)(({ theme }) => ({
   display: "flex",
@@ -57,11 +83,10 @@ const LogoText = styled(Box)(() => ({
 }));
 
 const CustomText = styled(Box)(({ theme }) => ({
-  color: "#08347C",
   fontSize: "12px",
   fontWeight: "700",
   textTransform: "uppercase",
-  textShadow: "0.5px 0.5px 0.5px #fff",
+
   [theme.breakpoints.down("md")]: {
     marginLeft: "0px",
     fontSize: "9px",
@@ -71,7 +96,6 @@ const CustomText = styled(Box)(({ theme }) => ({
 const MenuButton = styled(Button)(() => ({
   color: "#08347C",
   background: "transparent",
-  textShadow: "0.5px 0.5px 1.5px #fff",
   fontWeight: 700,
   marginInline: "5px",
 }));
@@ -89,31 +113,37 @@ const HeadVisual = (props) => {
               <Box sx={{ display: "flex", alignItems: "center" }}>
                 <Link to="/" className="link">
                   <LogoBox>
-                    <img src={Kemenkeu} style={{ width: "50px", height: "50px" }} />
-                    <LogoText>
-                      <CustomText>Kementerian Keuangan</CustomText>
-                      <CustomText>Inspektorat Jenderal</CustomText>
-                    </LogoText>
+                    <img src={Kemenkeu} style={{ width: "55px", height: "50px" }} />
+                    <ScrollHandler {...props}>
+                      <LogoText>
+                        <CustomText>Kementerian Keuangan</CustomText>
+                        <CustomText sx={{ fontSize: "11px", fontWeight: "500" }}>Inspektorat Jenderal</CustomText>
+                      </LogoText>
+                    </ScrollHandler>
                   </LogoBox>
                 </Link>
               </Box>
               <Box sx={{ display: "flex", alignItems: "center", marginRight: { xs: "10px", md: "65px" } }}>
                 <Box sx={{ display: "flex", alignItems: "center" }}>
                   <Link to="/visual" className="link">
-                    <MenuButton variant="text" sx={{ fontSize: "16px", display: "flex", alignItems: "center" }}>
-                      <Box sx={{ fontSize: "30px", mt: "10px", mr: "10px" }}>
-                        <RiHomeSmileFill />
-                      </Box>
-                      Beranda
-                    </MenuButton>
+                    <ScrollHandler {...props}>
+                      <MenuButton variant="text" sx={{ fontSize: "16px", display: "flex", alignItems: "center" }}>
+                        <Box sx={{ fontSize: "30px", mt: "10px", mr: "10px" }}>
+                          <RiHomeSmileFill />
+                        </Box>
+                        Beranda
+                      </MenuButton>
+                    </ScrollHandler>
                   </Link>
                   <Link to="/visual/semua" className="link">
-                    <MenuButton variant="text" sx={{ fontSize: "16px", display: "flex", alignItems: "center" }}>
-                      <Box sx={{ fontSize: "30px", mt: "10px", mr: "10px" }}>
-                        <FaListAlt />
-                      </Box>
-                      Lihat Semua
-                    </MenuButton>
+                    <ScrollHandler {...props}>
+                      <MenuButton variant="text" sx={{ fontSize: "16px", display: "flex", alignItems: "center" }}>
+                        <Box sx={{ fontSize: "30px", mt: "10px", mr: "10px" }}>
+                          <FaListAlt />
+                        </Box>
+                        Lihat Semua
+                      </MenuButton>
+                    </ScrollHandler>
                   </Link>
                 </Box>
               </Box>

@@ -5,7 +5,7 @@ import { Button, AspectRatio, Card, CardOverflow } from "@mui/joy";
 import { styled } from "@mui/material/styles";
 
 // Import Components
-import { Footer } from "../../../../components/components";
+import { Footer, HeadVisual } from "../../../../components/components";
 
 // Import Assets
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
@@ -86,13 +86,12 @@ const ButtonVitjen = styled(Button)(() => ({
 
 const CustomPagi = styled(Pagination)(() => ({
   color: "#fff",
-  margin: "30px 0px"
+  margin: "30px 0px",
 }));
 
 const CustomPagiItem = styled(PaginationItem)(() => ({
   color: "#fff",
 }));
-
 
 const Locker = () => {
   const [searchParams] = useSearchParams();
@@ -101,7 +100,7 @@ const Locker = () => {
   const take = 6;
   const location = useLocation();
   const query = new URLSearchParams(location.search);
-  const page = parseInt(query.get('page') || '1');
+  const page = parseInt(query.get("page") || "1");
 
   useEffect(() => {
     dispatch(getVitjenAll({ take, page }));
@@ -121,6 +120,9 @@ const Locker = () => {
 
   return (
     <BackgroundImg>
+      <div className="header-wrapper">
+        <HeadVisual mode="white" />
+      </div>
       <main style={{ padding: "80px 0px" }}>
         <CustomContainer>
           <CustomTitle>Daftar Visual Auditoria</CustomTitle>
@@ -148,11 +150,21 @@ const Locker = () => {
             ))}
           </Gridbox>
           <div className="pagination">
-            <CustomPagi color="secondary" size="large" defaultPage={1} page={page} count={Math.ceil(jumlahVitjen / take)} onChange={handlePageChange} renderItem={(item) => <CustomPagiItem component={Link} slots={{ previous: ArrowBackIcon, next: ArrowForwardIcon }} {...item} />} />
+            <CustomPagi
+              color="secondary"
+              size="large"
+              defaultPage={1}
+              page={page}
+              count={Math.ceil(jumlahVitjen / take)}
+              onChange={handlePageChange}
+              renderItem={(item) => <CustomPagiItem component={Link} slots={{ previous: ArrowBackIcon, next: ArrowForwardIcon }} {...item} />}
+            />
           </div>
         </CustomContainer>
       </main>
-      <Footer />
+      <div className="footer-wrapper">
+        <Footer />
+      </div>
     </BackgroundImg>
   );
 };

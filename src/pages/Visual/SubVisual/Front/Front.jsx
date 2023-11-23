@@ -22,7 +22,7 @@ const DescVitjen = styled(Typography)(() => ({
   color: "#fff",
   fontSize: "32px",
   textAlign: "left",
-  margin: "10px 0 30px 0"
+  margin: "10px 0 30px 0",
 }));
 
 const ButtonVitjen = styled(Button)(() => ({
@@ -45,6 +45,7 @@ const ButtonVitjen = styled(Button)(() => ({
 
 // Import CSS
 import { styles } from "./styles";
+import { HeadVisual } from "../../../../components/components";
 
 export default function App() {
   const dispatch = useAppDispatch();
@@ -58,45 +59,50 @@ export default function App() {
   const dataVitjen = useAppSelector((state) => state.vitjen.vitjenAll.dataVitjen);
 
   return (
-    <div style={{ height: "100vh", overflowY: "hidden" }}>
-      <Splide
-        hasTrack={false}
-        options={{
-          direction: "ttb",
-          height: "100vh",
-          wheel: true,
-          focus: "center",
-          pagination: false,
-          arrow: true,
-          lazyLoad: 'nearby',
-        }}
-        aria-label="Visual Auditoria"
-      >
-        <div className="custom-wrapper">
-          <SplideTrack>
-            {dataVitjen.map((obj) => (
-              <SplideSlide key={obj.id}>
-                <img src={`${BASE_URL}images/${obj.image}`} style={{ width: "100vw", height: "100%" }} />
-                <div style={{ ...styles.textBox }}>
-                  <TitleVitjen>{obj.title}</TitleVitjen>
-                  <DescVitjen>{obj.deskripsi}</DescVitjen>
-                  <Link to={`/visual/lihat/${obj.id}`} style={{ width: "100px" }}>
-                    <ButtonVitjen variant="outlined">Lihat</ButtonVitjen>
-                  </Link>
-                </div>
-              </SplideSlide>
-            ))}
-          </SplideTrack>
-          <div className="splide__arrows">
-            <button className="splide__arrow--prev">
-              <Arrow left />
-            </button>
-            <button className="splide__arrow--next">
-              <Arrow />
-            </button>
+    <div>
+      <div className="header-wrapper">
+        <HeadVisual mode="white" />
+      </div>
+      <div style={{ height: "100vh", overflowY: "hidden" }}>
+        <Splide
+          hasTrack={false}
+          options={{
+            direction: "ttb",
+            height: "100vh",
+            wheel: true,
+            focus: "center",
+            pagination: false,
+            arrow: true,
+            lazyLoad: "nearby",
+          }}
+          aria-label="Visual Auditoria"
+        >
+          <div className="custom-wrapper">
+            <SplideTrack>
+              {dataVitjen.map((obj) => (
+                <SplideSlide key={obj.id}>
+                  <img src={`${BASE_URL}images/${obj.image}`} style={{ width: "100vw", height: "100%" }} />
+                  <div style={{ ...styles.textBox }}>
+                    <TitleVitjen>{obj.title}</TitleVitjen>
+                    <DescVitjen>{obj.deskripsi}</DescVitjen>
+                    <Link to={`/visual/lihat/${obj.id}`} style={{ width: "100px" }}>
+                      <ButtonVitjen variant="outlined">Lihat</ButtonVitjen>
+                    </Link>
+                  </div>
+                </SplideSlide>
+              ))}
+            </SplideTrack>
+            <div className="splide__arrows">
+              <button className="splide__arrow--prev">
+                <Arrow left />
+              </button>
+              <button className="splide__arrow--next">
+                <Arrow />
+              </button>
+            </div>
           </div>
-        </div>
-      </Splide>
+        </Splide>
+      </div>
     </div>
   );
 }

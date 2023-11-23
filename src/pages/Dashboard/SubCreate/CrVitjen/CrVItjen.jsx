@@ -251,7 +251,7 @@ const CrVitjen = (props) => {
                     >
                       Link
                     </FormLabel>
-                    <Input readOnly value={link} onChange={(e) => setLink(e.target.value)} disabled size="lg" name="Size" placeholder="Link HTML" sx={{ width: "100%", borderColor: "#252525" }} />
+                    <Input value={link} onChange={(e) => setLink(e.target.value)} size="lg" name="Size" placeholder="Nama File HTML" sx={{ width: "100%", borderColor: "#252525" }} />
                   </FormControl>
                   <Box sx={{ width: "100%", paddingTop: "20px", display: "flex", flexDirection: { xs: "column", lg: "row" }, gap: "20px" }}>
                     <FormControl required sx={{ width: "100%" }}>

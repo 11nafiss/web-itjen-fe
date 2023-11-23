@@ -30,6 +30,29 @@ Arrow.propTypes = {
   left: PropTypes.bool,
 };
 
+// MUI Styling CSS
+const CustomBox = styled(Box)(({ theme }) => ({
+  display: "flex",
+  justifyContent: "center",
+  alignItems: "center",
+  borderRadius: "25px",
+  padding: "20px",
+  backgroundColor: "#08347C",
+  width: "220px",
+  height: "150px",
+  margin: "35px auto",
+  cursor: "pointer",
+  [theme.breakpoints.down("lg")]: {
+    width: "150px",
+  },
+}));
+
+const CustomType = styled(Typography)(() => ({
+  color: "#fff",
+  fontWeight: "700",
+  fontSize: "14px",
+  textAlign: "center",
+}));
 
 // Main Declaration & Export
 export default function Eselons() {
@@ -89,42 +112,17 @@ export default function Eselons() {
   }, [dispatch]);
   const { dataEselon } = useAppSelector((state) => state.eselon.eselonAll);
 
-  // MUI Styling CSS
-const CustomContainer = styled(Container)(({ theme }) => ({
-  display: "flex",
-  justifyContent: "space-around",
-  gap: theme.spacing(5),
-  padding: "50px 0px",
-  [theme.breakpoints.down("md")]: {
-    flexDirection: "column",
-    textAlign: "center",
-  },
-}));
-
-  const CustomBox = styled(Box)(({ theme }) => ({
+  const CustomContainer = styled(Container)(({ theme }) => ({
     display: "flex",
-    justifyContent: "center",
-    alignItems: "center",
-    borderRadius: "25px",
-    padding: "20px",
-    backgroundColor: "#08347C",
-    width: "220px",
-    height: "150px",
-    margin: "35px auto",
-    cursor: "pointer",
-    [theme.breakpoints.down("lg")]: {
-      width: "150px",
+    justifyContent: "space-around",
+    gap: theme.spacing(5),
+    padding: "30px 0px",
+    [theme.breakpoints.down("md")]: {
+      flexDirection: "column",
+      textAlign: "center",
     },
   }));
-
-  const CustomType = styled(Typography)(() => ({
-    color: "#fff",
-    fontWeight: "700",
-    fontSize: "14px",
-    textAlign: "center",
-  }));
   
-
 
   // Main Code
   return (

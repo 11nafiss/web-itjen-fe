@@ -175,7 +175,7 @@ const Updates = () => {
     display: "flex",
     justifyContent: "space-around",
     gap: theme.spacing(5),
-    padding: "50px 0px 70px 0px",
+    padding: "50px 0px 40px 0px",
     [theme.breakpoints.down("md")]: {
       flexDirection: "column",
       textAlign: "center",

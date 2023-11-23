@@ -1,13 +1,13 @@
 // Import Library
 import { useEffect } from "react";
-import { Grid, Container, Box } from "@mui/material";
+import { Grid, Container, Box, Typography } from "@mui/material";
 import { Button } from "@mui/joy";
 import { styled } from "@mui/material/styles";
 import { RWebShare } from "react-web-share";
 import FroalaEditorView from "react-froala-wysiwyg/FroalaEditorView";
 
 // Import Components
-import { Trending } from "../../../../components/components";
+import { Header, Trending } from "../../../../components/components";
 
 // Import Assets
 import { Juanda } from "../../../../assets/assets";
@@ -80,6 +80,13 @@ const ContentBox = styled(Box)(({ theme }) => ({
   },
 }));
 
+const CustomTitle = styled(Typography)(() => ({
+  fontSize: "32px",
+  fontWeight: "700",
+  textTransform: "capitalize",
+  marginBottom: "50px",
+}));
+
 // Main Declaration
 const Profile = () => {
   const { id } = useParams();
@@ -93,49 +100,55 @@ const Profile = () => {
 
   // Main Code
   return (
-    <Background>
-      <main style={{ paddingTop: "90px", height: "100%" }}>
-        <Grid container sx={{ height: "100%" }}>
-          <GridCenter item xs={12} sx={{ alignItems: "start" }}>
-            <CustomContainer>
-              <CustomBox>
-                <Grid container spacing={0}>
-                  <GridCenter item xs={12}>
-                    <Box style={{ maxWidth: "1600px", maxHeight: "900px" }}>
-                      <img src={Juanda} style={{ width: "100%", height: "100%", objectFit: "cover" }} />
-                    </Box>
-                  </GridCenter>
-                  <GridCenter item xs={12}>
-                    <TimeBox>
-                      <RWebShare
-                        data={{
-                          text: `${dataPlacem.jabatan}`,
-                          url: `https://itjen.kemenkeu.go.id/pejabat/${id}`,
-                          title: `${dataPlacem.jabatan}`,
-                        }}
-                        onClick={() => console.log("shared successfully!")}
-                      >
-                        <Button variant="soft" endDecorator={<HiShare style={{ fontSize: "20px" }} />} color="neutral" sx={{ backgroundColor: "#252525", color: "#ECBC2A", fontSize: "16px" }}>
-                          Share
-                        </Button>
-                      </RWebShare>
-                    </TimeBox>
-                  </GridCenter>
-                  <GridCenter item xs={12}>
-                    <ContentBox>
-                      <FroalaEditorView model={dataPlacem.deskripsi} />
-                    </ContentBox>
-                  </GridCenter>
-                </Grid>
-              </CustomBox>
-            </CustomContainer>
-          </GridCenter>
-          <GridCenter item xs={12} sx={{ alignItems: "start" }}>
-            <Trending />
-          </GridCenter>
-        </Grid>
-      </main>
-    </Background>
+    <div>
+      <div className="header-wrapper">
+        <Header mode="blue" />
+      </div>
+      <Background>
+        <main style={{ paddingTop: "90px", height: "100%" }}>
+          <Grid container sx={{ height: "100%" }}>
+            <GridCenter item xs={12} sx={{ alignItems: "start" }}>
+              <CustomContainer>
+                <CustomBox>
+                  <Grid container spacing={0}>
+                    <GridCenter item xs={12}>
+                      <Box style={{ maxWidth: "1600px", maxHeight: "900px" }}>
+                        <img src={Juanda} style={{ width: "100%", height: "100%", objectFit: "cover" }} />
+                      </Box>
+                    </GridCenter>
+                    <GridCenter item xs={12}>
+                      <TimeBox>
+                        <RWebShare
+                          data={{
+                            text: `${dataPlacem.jabatan}`,
+                            url: `https://itjen.kemenkeu.go.id/pejabat/${id}`,
+                            title: `${dataPlacem.jabatan}`,
+                          }}
+                          onClick={() => console.log("shared successfully!")}
+                        >
+                          <Button variant="soft" endDecorator={<HiShare style={{ fontSize: "20px" }} />} color="neutral" sx={{ backgroundColor: "#252525", color: "#ECBC2A", fontSize: "16px" }}>
+                            Share
+                          </Button>
+                        </RWebShare>
+                      </TimeBox>
+                    </GridCenter>
+                    <GridCenter item xs={12}>
+                      <ContentBox>
+                        <CustomTitle>{dataPlacem.jabatan}</CustomTitle>
+                        <FroalaEditorView model={dataPlacem.deskripsi} />
+                      </ContentBox>
+                    </GridCenter>
+                  </Grid>
+                </CustomBox>
+              </CustomContainer>
+            </GridCenter>
+            <GridCenter item xs={12} sx={{ alignItems: "start" }}>
+              <Trending />
+            </GridCenter>
+          </Grid>
+        </main>
+      </Background>
+    </div>
   );
 };
 

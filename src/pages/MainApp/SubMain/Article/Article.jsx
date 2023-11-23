@@ -15,7 +15,7 @@ import { HiShare } from "react-icons/hi";
 import { Juanda } from "../../../../assets/assets";
 
 // Import Components
-import { Trending } from "../../../../components/components";
+import { Header, Trending } from "../../../../components/components";
 
 // Import Api
 import { useAppDispatch, useAppSelector } from "../../../../hooks/useTypedSelector";
@@ -92,6 +92,13 @@ const ContentBox = styled(Box)(({ theme }) => ({
   },
 }));
 
+const CustomTitle = styled(Typography)(() => ({
+  fontSize: "32px",
+  fontWeight: "700",
+  textTransform: "capitalize",
+  marginBottom: "50px",
+}));
+
 // Main Declaration
 const Article = () => {
   const { title } = useParams();
@@ -108,50 +115,56 @@ const Article = () => {
 
   // Main Code
   return (
-    <Background>
-      <main style={{ paddingTop: "25px", height: "100%" }}>
-        <Grid container sx={{ height: "100%" }}>
-          <GridCenter item xs={12} sx={{ alignItems: "start" }}>
-            <CustomContainer>
-              <CustomBox>
-                <Grid container spacing={0}>
-                  <GridCenter item xs={12}>
-                    <Box style={{ maxWidth: "1600px", maxHeight: "900px", padding: "0" }}>
-                      <img src={dataArticle.featuredImage === "" ? Juanda : `${BASE_URL}thumbnail/${dataArticle.featuredImage}`} style={{ width: "100%", height: "100%", objectFit: "cover" }} />
-                    </Box>
-                  </GridCenter>
-                  <GridCenter item xs={12}>
-                    <TimeBox>
-                      <TimeText>{formatDate(dataArticle.publishedAt)}</TimeText>
-                      <RWebShare
-                        data={{
-                          text: `${dataArticle.title}`,
-                          url: `https://itjen.kemenkeu.go.id/artikel/${category}/${dataArticle.title?.replace(/ /g, "-")}`,
-                          title: `${dataArticle.title}`,
-                        }}
-                        onClick={() => console.log("shared successfully!")}
-                      >
-                        <Button variant="soft" endDecorator={<HiShare style={{ fontSize: "20px" }} />} color="neutral" sx={{ backgroundColor: "#252525", color: "#ECBC2A", fontSize: "16px" }}>
-                          Share
-                        </Button>
-                      </RWebShare>
-                    </TimeBox>
-                  </GridCenter>
-                  <GridCenter item xs={12}>
-                    <ContentBox>
-                      <FroalaEditorView model={dataArticle.content} />
-                    </ContentBox>
-                  </GridCenter>
-                </Grid>
-              </CustomBox>
-            </CustomContainer>
-          </GridCenter>
-          <GridCenter item xs={12} sx={{ alignItems: "start" }}>
-            <Trending />
-          </GridCenter>
-        </Grid>
-      </main>
-    </Background>
+    <div>
+      <div className="header-wrapper">
+        <Header mode="blue" />
+      </div>
+      <Background>
+        <main style={{ paddingTop: "25px", height: "100%" }}>
+          <Grid container sx={{ height: "100%" }}>
+            <GridCenter item xs={12} sx={{ alignItems: "start" }}>
+              <CustomContainer>
+                <CustomBox>
+                  <Grid container spacing={0}>
+                    <GridCenter item xs={12}>
+                      <Box style={{ maxWidth: "1600px", maxHeight: "900px", padding: "0" }}>
+                        <img src={dataArticle.featuredImage === "" ? Juanda : `${BASE_URL}thumbnail/${dataArticle.featuredImage}`} style={{ width: "100%", height: "100%", objectFit: "cover" }} />
+                      </Box>
+                    </GridCenter>
+                    <GridCenter item xs={12}>
+                      <TimeBox>
+                        <TimeText>{formatDate(dataArticle.publishedAt)}</TimeText>
+                        <RWebShare
+                          data={{
+                            text: `${dataArticle.title}`,
+                            url: `https://itjen.kemenkeu.go.id/artikel/${category}/${dataArticle.title?.replace(/ /g, "-")}`,
+                            title: `${dataArticle.title}`,
+                          }}
+                          onClick={() => console.log("shared successfully!")}
+                        >
+                          <Button variant="soft" endDecorator={<HiShare style={{ fontSize: "20px" }} />} color="neutral" sx={{ backgroundColor: "#252525", color: "#ECBC2A", fontSize: "16px" }}>
+                            Share
+                          </Button>
+                        </RWebShare>
+                      </TimeBox>
+                    </GridCenter>
+                    <GridCenter item xs={12}>
+                      <ContentBox>
+                        <CustomTitle>{dataArticle.title}</CustomTitle>
+                        <FroalaEditorView model={dataArticle.content} />
+                      </ContentBox>
+                    </GridCenter>
+                  </Grid>
+                </CustomBox>
+              </CustomContainer>
+            </GridCenter>
+            <GridCenter item xs={12} sx={{ alignItems: "start" }}>
+              <Trending />
+            </GridCenter>
+          </Grid>
+        </main>
+      </Background>
+    </div>
   );
 };
 

@@ -10,6 +10,7 @@ import { styled } from "@mui/material/styles";
 import { useAppDispatch, useAppSelector } from "../../../../hooks/useTypedSelector";
 import { getPlacemData } from "../../../../features/actions/placem.action";
 import { BASE_URL } from "../../../../services/api";
+import { Header } from "../../../../components/components";
 
 // MUI Styling CSS
 const Background = styled(Box)(() => ({
@@ -176,98 +177,103 @@ const Organ = () => {
 
   // Main Code
   return (
-    <Background>
-      <main style={{ paddingTop: "90px" }}>
-        <Background>
-          <CustomContainer>
-            <Grid container spacing={1}>
-              <GridCenter item xs={12}>
-                <CustomTitle>Organisasi</CustomTitle>
-              </GridCenter>
-            </Grid>
-          </CustomContainer>
-        </Background>
-        <BoxBg>
-          <CustomContainer>
-            <SubText>Struktur Organisasi</SubText>
-            <Grid container spacing={{ xs: 3, md: 4 }} sx={{ justifyContent: "center", overflowX: { sm: "scroll", lg: "visible" } }}>
-              <GridCenter item>
-                <ContentBox>
-                  <Orgchart>
-                    {pejabatEs1.map((p1) => (
-                      <Tree
-                        key={p1.id}
-                        lineWidth={"3px"}
-                        lineHeight={"30px"}
-                        lineColor={"black"}
-                        lineBorderRadius={"10px"}
-                        label={
-                          <Link to={`/pejabat/${p1.id}`} className="link">
-                            <BgHorizontal color="warning">
-                              <ProfileBox sx={{ height: "90%" }}>
-                                <Avatar alt={p1.jabatan} src={`${BASE_URL}images/${p1.pathGambar}`} size="lg" sx={{ width: "70px", height: "70px" }} />
-                                <NbHorizontal>
-                                  <Pfposition sx={{ color: "#252525", fontSize: "16px" }}>{p1.jabatan}</Pfposition>
-                                  <Pfname sx={{ fontSize: "16px" }}> {p1.nama}</Pfname>
-                                </NbHorizontal>
-                              </ProfileBox>
-                            </BgHorizontal>
-                          </Link>
-                        }
-                      >
-                        {pejabatEs2
-                          .filter((p2) => p2.atasanId === p1.id)
-                          .map((p2) => {
-                            if (p2.hasSubJabatan) {
-                              return (
-                                <TreeNode
-                                  key={p2.id}
-                                  label={
-                                    <Link to={`/organisasi/${p2.eselon}/${p2.id}`} className="link">
-                                      <BgVertical color="warning">
-                                        <ProfileBox>
-                                          <NbVertical>
-                                            <Avatar alt={p2.jabatan} src={`${BASE_URL}images/${p2.pathGambar}`} size="lg" sx={{ width: "70px", height: "70px" }} />
-                                            <Pfname>{p2.nama}</Pfname>
-                                          </NbVertical>
-                                        </ProfileBox>
-                                        <Pfposition>{p2.jabatan}</Pfposition>
-                                      </BgVertical>
-                                    </Link>
-                                  }
-                                />
-                              );
-                            } else {
-                              return (
-                                <TreeNode
-                                  key={p2.id}
-                                  label={
-                                    <Link to={`/pejabat/${p2.id}`} className="link">
-                                      <BgVertical color="warning">
-                                        <ProfileBox>
-                                          <NbVertical>
-                                            <Avatar alt={p2.jabatan} src={`${BASE_URL}images/${p2.pathGambar}`} size="lg" sx={{ width: "70px", height: "70px" }} />
-                                            <Pfname>{p2.nama}</Pfname>
-                                          </NbVertical>
-                                        </ProfileBox>
-                                        <Pfposition>{p2.jabatan}</Pfposition>
-                                      </BgVertical>
-                                    </Link>
-                                  }
-                                />
-                              );
-                            }
-                          })}
-                      </Tree>
-                    ))}
-                  </Orgchart>
-                </ContentBox>
-              </GridCenter>
-            </Grid>
-          </CustomContainer>
-        </BoxBg>
-      </main>
-    </Background>
+    <div>
+      <div className="header-wrapper">
+        <Header mode="white" />
+      </div>
+      <Background>
+        <main style={{ paddingTop: "90px" }}>
+          <Background>
+            <CustomContainer>
+              <Grid container spacing={1}>
+                <GridCenter item xs={12}>
+                  <CustomTitle>Organisasi</CustomTitle>
+                </GridCenter>
+              </Grid>
+            </CustomContainer>
+          </Background>
+          <BoxBg>
+            <CustomContainer>
+              <SubText>Struktur Organisasi</SubText>
+              <Grid container spacing={{ xs: 3, md: 4 }} sx={{ justifyContent: "center", overflowX: { sm: "scroll", lg: "visible" } }}>
+                <GridCenter item>
+                  <ContentBox>
+                    <Orgchart>
+                      {pejabatEs1.map((p1) => (
+                        <Tree
+                          key={p1.id}
+                          lineWidth={"3px"}
+                          lineHeight={"30px"}
+                          lineColor={"black"}
+                          lineBorderRadius={"10px"}
+                          label={
+                            <Link to={`/pejabat/${p1.id}`} className="link">
+                              <BgHorizontal color="warning">
+                                <ProfileBox sx={{ height: "90%" }}>
+                                  <Avatar alt={p1.jabatan} src={`${BASE_URL}images/${p1.pathGambar}`} size="lg" sx={{ width: "70px", height: "70px" }} />
+                                  <NbHorizontal>
+                                    <Pfposition sx={{ color: "#252525", fontSize: "16px" }}>{p1.jabatan}</Pfposition>
+                                    <Pfname sx={{ fontSize: "16px" }}> {p1.nama}</Pfname>
+                                  </NbHorizontal>
+                                </ProfileBox>
+                              </BgHorizontal>
+                            </Link>
+                          }
+                        >
+                          {pejabatEs2
+                            .filter((p2) => p2.atasanId === p1.id)
+                            .map((p2) => {
+                              if (p2.hasSubJabatan) {
+                                return (
+                                  <TreeNode
+                                    key={p2.id}
+                                    label={
+                                      <Link to={`/organisasi/${p2.eselon}/${p2.id}`} className="link">
+                                        <BgVertical color="warning">
+                                          <ProfileBox>
+                                            <NbVertical>
+                                              <Avatar alt={p2.jabatan} src={`${BASE_URL}images/${p2.pathGambar}`} size="lg" sx={{ width: "70px", height: "70px" }} />
+                                              <Pfname>{p2.nama}</Pfname>
+                                            </NbVertical>
+                                          </ProfileBox>
+                                          <Pfposition>{p2.jabatan}</Pfposition>
+                                        </BgVertical>
+                                      </Link>
+                                    }
+                                  />
+                                );
+                              } else {
+                                return (
+                                  <TreeNode
+                                    key={p2.id}
+                                    label={
+                                      <Link to={`/pejabat/${p2.id}`} className="link">
+                                        <BgVertical color="warning">
+                                          <ProfileBox>
+                                            <NbVertical>
+                                              <Avatar alt={p2.jabatan} src={`${BASE_URL}images/${p2.pathGambar}`} size="lg" sx={{ width: "70px", height: "70px" }} />
+                                              <Pfname>{p2.nama}</Pfname>
+                                            </NbVertical>
+                                          </ProfileBox>
+                                          <Pfposition>{p2.jabatan}</Pfposition>
+                                        </BgVertical>
+                                      </Link>
+                                    }
+                                  />
+                                );
+                              }
+                            })}
+                        </Tree>
+                      ))}
+                    </Orgchart>
+                  </ContentBox>
+                </GridCenter>
+              </Grid>
+            </CustomContainer>
+          </BoxBg>
+        </main>
+      </Background>
+    </div>
   );
 };
 

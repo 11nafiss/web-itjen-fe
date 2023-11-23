@@ -224,7 +224,7 @@ const CrBanner = (props) => {
                     </FormControl>
                   </Box>
                   <Box sx={{ width: "100%", paddingTop: "20px", display: "flex", flexDirection: { xs: "column", lg: "row" }, gap: "20px" }}>
-                   <FormControl required sx={{ width: "100%" }}>
+                   <FormControl sx={{ width: "100%" }}>
                       <FormLabel
                         sx={{
                           fontSize: "18px",

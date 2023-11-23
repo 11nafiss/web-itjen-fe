@@ -7,6 +7,7 @@ import { useAppDispatch, useAppSelector } from "../../../../hooks/useTypedSelect
 import { getVitjenById } from "../../../../features/actions/vitjen.action";
 import { BASE_URL } from "../../../../services/api";
 import { useParams } from "react-router-dom";
+import { HeadVisual } from "../../../../components/components";
 
 const Present = () => {
   const { id } = useParams();
@@ -19,11 +20,16 @@ const Present = () => {
   const dataVitjen = useAppSelector((state) => state.vitjen.vitjenId.dataVitjen);
 
   return (
-    <Box sx={{ width: "100vw", height: "88vh" }}>
-      <Box sx={{ width: "100%", height: "100%", marginTop: "80px" }}>
-        <Iframe url={`${BASE_URL}vitjen/${dataVitjen.link}`} width="100%" height="100%" />
+    <div>
+      <div className="header-wrapper">
+        <HeadVisual mode="blue" />
+      </div>
+      <Box sx={{ width: "100vw", height: "88vh" }}>
+        <Box sx={{ width: "100%", height: "100%", marginTop: "80px" }}>
+          <Iframe url={`${BASE_URL}vitjen/${dataVitjen.link}`} width="100%" height="100%" />
+        </Box>
       </Box>
-    </Box>
+    </div>
   );
 };
 

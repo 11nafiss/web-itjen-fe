@@ -7,48 +7,49 @@ import { Link } from "react-router-dom";
 // Import Assets
 import { TbCircleArrowUpRight } from "react-icons/tb";
 
+// MUI Styling CSS
+const CustomContainer = styled(Container)(({ theme }) => ({
+  display: "flex",
+  justifyContent: "space-around",
+  gap: theme.spacing(5),
+  padding: "30px 0px",
+  [theme.breakpoints.down("md")]: {
+    flexDirection: "column",
+    textAlign: "center",
+  },
+}));
+
+const CustomTitle = styled(Typography)(() => ({
+  fontSize: "32px",
+  color: "#000000",
+  fontWeight: "700",
+  margin: "5px 0px",
+}));
+
+const CustomText = styled(Typography)(({ theme }) => ({
+  fontSize: "16px",
+  color: "#000000",
+  fontWeight: "500",
+  margin: "20px 0px",
+  [theme.breakpoints.down("md")]: {
+    margin: "20px",
+  },
+}));
+
+const ButtonText = styled(Typography)(() => ({
+  fontSize: "16px",
+  color: "#fff",
+  fontWeight: "600",
+}));
+
+const IconBox = styled(Box)(() => ({
+  display: "flex",
+  fontSize: "24px",
+  marginLeft: "10px",
+}));
+
 // Main Declaration
 const Wisedesc = () => {
-  // MUI Styling CSS
-  const CustomContainer = styled(Container)(({ theme }) => ({
-    display: "flex",
-    justifyContent: "space-around",
-    gap: theme.spacing(5),
-    padding: "50px 0px",
-    [theme.breakpoints.down("md")]: {
-      flexDirection: "column",
-      textAlign: "center",
-    },
-  }));
-
-  const CustomTitle = styled(Typography)(() => ({
-    fontSize: "32px",
-    color: "#000000",
-    fontWeight: "700",
-    margin: "5px 0px",
-  }));
-
-  const CustomText = styled(Typography)(({ theme }) => ({
-    fontSize: "16px",
-    color: "#000000",
-    fontWeight: "500",
-    margin: "20px 0px",
-    [theme.breakpoints.down("md")]: {
-      margin: "20px",
-    },
-  }));
-
-  const ButtonText = styled(Typography)(() => ({
-    fontSize: "16px",
-    color: "#fff",
-    fontWeight: "600",
-  }));
-
-  const IconBox = styled(Box)(() => ({
-    display: "flex",
-    fontSize: "24px",
-    marginLeft: "10px",
-  }));
 
   // Main Code
   return (

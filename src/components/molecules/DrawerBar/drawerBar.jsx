@@ -1,5 +1,5 @@
 // Import Library
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { Box, Divider, List, ListItemButton, ListItemText, Collapse, Typography } from "@mui/material";
 import { styled } from "@mui/material/styles";
@@ -9,38 +9,41 @@ import { ItjenLogo } from "../../../assets/assets";
 import ExpandLess from "@mui/icons-material/ExpandLess";
 import ExpandMore from "@mui/icons-material/ExpandMore";
 
+// Import Api
+import { useAppDispatch, useAppSelector } from "../../../hooks/useTypedSelector";
+import { getMenuData } from "../../../features/actions/menu.action";
+
+// MUI Styling CSS
+const Headlist = styled(Typography)(() => ({
+  color: "#08347C",
+  fontWeight: 700,
+  textTransform: "capitalize",
+}));
+
+const Sublist = styled(Typography)(() => ({
+  color: "#000000",
+  fontWeight: 600,
+  textTransform: "capitalize",
+}));
+
+const Textlist = styled(Typography)(() => ({
+  textTransform: "capitalize",
+}));
+
 // Main Declaration
 const DrawerBar = () => {
-  const [open, setOpen] = useState(false);
-  const [open2, setOpen2] = useState(false);
-  const [open3, setOpen3] = useState(false);
-  const [open4, setOpen4] = useState(false);
-  const [open5, setOpen5] = useState(false);
-  const [open6, setOpen6] = useState(false);
-  const [open7, setOpen7] = useState(false);
-  const [open8, setOpen8] = useState(false);
-  const [open9, setOpen9] = useState(false);
+  const [open, setOpen] = useState(-1);
+  const [open2, setOpen2] = useState(-1);
 
-  const handleClose = (event) => {
-    event.preventDefault();
-  };
+  const dispatch = useAppDispatch();
+  useEffect(() => {
+    dispatch(getMenuData());
+  }, [dispatch]);
 
-  // MUI Styling CSS
-  const Headlist = styled(Typography)(() => ({
-    color: "#08347C",
-    fontWeight: 700,
-    textTransform: "capitalize",
-  }));
-
-  const Sublist = styled(Typography)(() => ({
-    color: "#000000",
-    fontWeight: 600,
-    textTransform: "capitalize",
-  }));
-
-  const Textlist = styled(Typography)(() => ({
-    textTransform: "capitalize",
-  }));
+  const dataMenu = useAppSelector((state) => state.menu.menuAll.dataMenu);
+  const MenuLevel1 = dataMenu.filter((item) => item.menuLevel === 1);
+  const MenuLevel2 = dataMenu.filter((item) => item.menuLevel === 2);
+  const MenuLevel3 = dataMenu.filter((item) => item.menuLevel === 3);
 
   // Main Code
   return (
@@ -51,283 +54,77 @@ const DrawerBar = () => {
       <Divider />
       <Box>
         <List sx={{ width: "100%", bgcolor: "background.paper" }} component="nav" aria-labelledby="nested-list-subheader">
-          <Link to="/" className="link">
-            <ListItemButton>
-              <Headlist onClick={handleClose}>Beranda</Headlist>
-            </ListItemButton>
-          </Link>
-          <ListItemButton onClick={() => setOpen((bool) => !bool)}>
-            <ListItemText>
-              <Headlist>Profil Instansi</Headlist>
-            </ListItemText>
-            {open ? <ExpandLess /> : <ExpandMore />}
-          </ListItemButton>
-          <Collapse in={open} timeout="auto" unmountOnExit>
-            <List component="div" disablePadding>
-              <Link to="/profil/visi" className="link">
-                <ListItemButton sx={{ pl: 4 }}>
-                  <ListItemText>
-                    <Sublist>visi misi</Sublist>
-                  </ListItemText>
-                </ListItemButton>
-              </Link>
-              <ListItemButton sx={{ pl: 4 }}>
-                <ListItemText>
-                  <Sublist>Sejarah Singkat</Sublist>
-                </ListItemText>
-              </ListItemButton>
-              <Link to="/profil/nilai-kemenkeu" className="link">
-                <ListItemButton sx={{ pl: 4 }}>
-                  <ListItemText>
-                    <Sublist>Nilai-nilai Kemenkeu</Sublist>
-                  </ListItemText>
-                </ListItemButton>
-              </Link>
-              <Link to="/profil/organisasi" className="link">
-                <ListItemButton sx={{ pl: 4 }}>
-                  <ListItemText>
-                    <Sublist>Struktur Organisasi</Sublist>
-                  </ListItemText>
-                </ListItemButton>
-              </Link>
-              <ListItemButton sx={{ pl: 4 }} onClick={() => setOpen4((bool) => !bool)}>
-                <ListItemText>
-                  <Sublist>Tujuan dan Fungsi</Sublist>
-                </ListItemText>
-                {open4 ? <ExpandLess /> : <ExpandMore />}
-              </ListItemButton>
-              <Collapse in={open4} timeout="auto" unmountOnExit>
-                <List component="div" disablePadding>
-                  <ListItemButton sx={{ pl: 6 }}>
+          {MenuLevel1.map((m1) => {
+            if (m1.hasSubMenu) {
+              return (
+                <div key={m1.menuId}>
+                  <ListItemButton onClick={() => setOpen(open === m1.menuId ? -1 : m1.menuId)}>
                     <ListItemText>
-                      <Textlist>Sekretariat ItJen</Textlist>
+                      <Headlist>{m1.menuText}</Headlist>
                     </ListItemText>
+                    {open === m1.menuId ? <ExpandLess /> : <ExpandMore />}
                   </ListItemButton>
-                  <ListItemButton sx={{ pl: 6 }}>
-                    <ListItemText>
-                      <Textlist>Inspektorat I</Textlist>
-                    </ListItemText>
-                  </ListItemButton>
-                  <ListItemButton sx={{ pl: 6 }}>
-                    <ListItemText>
-                      <Textlist>Inspektorat II</Textlist>
-                    </ListItemText>
-                  </ListItemButton>
-                  <ListItemButton sx={{ pl: 6 }}>
-                    <ListItemText>
-                      <Textlist>Inspektorat III</Textlist>
-                    </ListItemText>
-                  </ListItemButton>
-                  <ListItemButton sx={{ pl: 6 }}>
-                    <ListItemText>
-                      <Textlist>Inspektorat IV</Textlist>
-                    </ListItemText>
-                  </ListItemButton>
-                  <ListItemButton sx={{ pl: 6 }}>
-                    <ListItemText>
-                      <Textlist>Inspektorat V</Textlist>
-                    </ListItemText>
-                  </ListItemButton>
-                  <ListItemButton sx={{ pl: 6 }}>
-                    <ListItemText>
-                      <Textlist>Inspektorat VI</Textlist>
-                    </ListItemText>
-                  </ListItemButton>
-                  <ListItemButton sx={{ pl: 6 }}>
-                    <ListItemText>
-                      <Textlist>Inspektorat VII</Textlist>
-                    </ListItemText>
-                  </ListItemButton>
-                  <ListItemButton sx={{ pl: 6 }}>
-                    <ListItemText>
-                      <Textlist>Inspektorat B.I</Textlist>
-                    </ListItemText>
-                  </ListItemButton>
-                </List>
-              </Collapse>
-              <Link to="/profil/pejabat" className="link">
-                <ListItemButton sx={{ pl: 4 }}>
-                  <ListItemText>
-                    <Sublist>Profil Pejabat</Sublist>
-                  </ListItemText>
-                </ListItemButton>
-              </Link>
-            </List>
-          </Collapse>
-          <ListItemButton onClick={() => setOpen2((bool) => !bool)}>
-            <ListItemText>
-              <Headlist>informasi publik</Headlist>
-            </ListItemText>
-            {open2 ? <ExpandLess /> : <ExpandMore />}
-          </ListItemButton>
-          <Collapse in={open2} timeout="auto" unmountOnExit>
-            <List component="div" disablePadding>
-              <ListItemButton sx={{ pl: 4 }} onClick={() => setOpen5((bool) => !bool)}>
-                <ListItemText>
-                  <Sublist>Daftar Info publik</Sublist>
-                </ListItemText>
-                {open5 ? <ExpandLess /> : <ExpandMore />}
-              </ListItemButton>
-              <Collapse in={open5} timeout="auto" unmountOnExit>
-                <List component="div" disablePadding>
-                  <ListItemButton sx={{ pl: 6 }}>
-                    <ListItemText>
-                      <Textlist>info secara berkala</Textlist>
-                    </ListItemText>
-                  </ListItemButton>
-                  <ListItemButton sx={{ pl: 6 }}>
-                    <ListItemText>
-                      <Textlist>info secara merata</Textlist>
-                    </ListItemText>
-                  </ListItemButton>
-                  <ListItemButton sx={{ pl: 6 }}>
-                    <ListItemText>
-                      <Textlist>info wajib tersedia</Textlist>
-                    </ListItemText>
-                  </ListItemButton>
-                </List>
-              </Collapse>
-              <ListItemButton sx={{ pl: 4 }} onClick={() => setOpen6((bool) => !bool)}>
-                <ListItemText>
-                  <Sublist>Permohonan Info publik</Sublist>
-                </ListItemText>
-                {open6 ? <ExpandLess /> : <ExpandMore />}
-              </ListItemButton>
-              <Collapse in={open6} timeout="auto" unmountOnExit>
-                <List component="div" disablePadding>
-                  <ListItemButton sx={{ pl: 6 }}>
-                    <ListItemText>
-                      <Textlist>mekanisme permohonan</Textlist>
-                    </ListItemText>
-                  </ListItemButton>
-                  <ListItemButton sx={{ pl: 6 }}>
-                    <ListItemText>
-                      <Textlist>formulir permohonan</Textlist>
-                    </ListItemText>
-                  </ListItemButton>
-                  <ListItemButton sx={{ pl: 6 }}>
-                    <ListItemText>
-                      <Textlist>maklumat pelayanan</Textlist>
-                    </ListItemText>
-                  </ListItemButton>
-                </List>
-              </Collapse>
-              <ListItemButton sx={{ pl: 4 }} onClick={() => setOpen7((bool) => !bool)}>
-                <ListItemText>
-                  <Sublist>anggaran dan realisasi</Sublist>
-                </ListItemText>
-                {open7 ? <ExpandLess /> : <ExpandMore />}
-              </ListItemButton>
-              <Collapse in={open7} timeout="auto" unmountOnExit>
-                <List component="div" disablePadding>
-                  <ListItemButton sx={{ pl: 6 }}>
-                    <ListItemText>
-                      <Textlist>raker dan anggaran</Textlist>
-                    </ListItemText>
-                  </ListItemButton>
-                  <ListItemButton sx={{ pl: 6 }}>
-                    <ListItemText>
-                      <Textlist>pelaksanaan anggaran</Textlist>
-                    </ListItemText>
-                  </ListItemButton>
-                  <ListItemButton sx={{ pl: 6 }}>
-                    <ListItemText>
-                      <Textlist>laporan keuangan</Textlist>
-                    </ListItemText>
-                  </ListItemButton>
-                </List>
-              </Collapse>
-              <ListItemButton sx={{ pl: 4 }} onClick={() => setOpen8((bool) => !bool)}>
-                <ListItemText>
-                  <Sublist>PPID ItJen Kemenkeu</Sublist>
-                </ListItemText>
-                {open8 ? <ExpandLess /> : <ExpandMore />}
-              </ListItemButton>
-              <Collapse in={open8} timeout="auto" unmountOnExit>
-                <List component="div" disablePadding>
-                  <ListItemButton sx={{ pl: 6 }}>
-                    <ListItemText>
-                      <Textlist>profil PPID</Textlist>
-                    </ListItemText>
-                  </ListItemButton>
-                  <ListItemButton sx={{ pl: 6 }}>
-                    <ListItemText>
-                      <Textlist>PID kemenkeu</Textlist>
-                    </ListItemText>
-                  </ListItemButton>
-                  <ListItemButton sx={{ pl: 6 }}>
-                    <ListItemText>
-                      <Textlist>standar pelayanan</Textlist>
-                    </ListItemText>
-                  </ListItemButton>
-                </List>
-              </Collapse>
-              <Link to="/galeri" className="link">
-                <ListItemButton sx={{ pl: 4 }}>
-                  <ListItemText>
-                    <Sublist>galeri itJen kemenkeu</Sublist>
-                  </ListItemText>
-                </ListItemButton>
-              </Link>
-            </List>
-          </Collapse>
-          <ListItemButton onClick={() => setOpen3((bool) => !bool)}>
-            <ListItemText>
-              <Headlist>artikel</Headlist>
-            </ListItemText>
-            {open3 ? <ExpandLess /> : <ExpandMore />}
-          </ListItemButton>
-          <Collapse in={open3} timeout="auto" unmountOnExit>
-            <List component="div" disablePadding>
-              <ListItemButton sx={{ pl: 4 }}>
-                <ListItemText>
-                  <Sublist>berita</Sublist>
-                </ListItemText>
-              </ListItemButton>
-              <ListItemButton sx={{ pl: 4 }}>
-                <ListItemText>
-                  <Sublist>pengumuman</Sublist>
-                </ListItemText>
-              </ListItemButton>
-              <ListItemButton sx={{ pl: 4 }} onClick={() => setOpen9((bool) => !bool)}>
-                <ListItemText>
-                  <Sublist>Laporan</Sublist>
-                </ListItemText>
-                {open9 ? <ExpandLess /> : <ExpandMore />}
-              </ListItemButton>
-              <Collapse in={open9} timeout="auto" unmountOnExit>
-                <List component="div" disablePadding>
-                  <ListItemButton sx={{ pl: 6 }}>
-                    <ListItemText>
-                      <Textlist>laporan kinerja</Textlist>
-                    </ListItemText>
-                  </ListItemButton>
-                  <ListItemButton sx={{ pl: 6 }}>
-                    <ListItemText>
-                      <Textlist>laporan tahunan</Textlist>
-                    </ListItemText>
-                  </ListItemButton>
-                  <ListItemButton sx={{ pl: 6 }}>
-                    <ListItemText>
-                      <Textlist>laporan layanan</Textlist>
-                    </ListItemText>
-                  </ListItemButton>
-                </List>
-              </Collapse>
-              <ListItemButton sx={{ pl: 4 }}>
-                <ListItemText>
-                  <Sublist>siaran pers</Sublist>
-                </ListItemText>
-              </ListItemButton>
-              <Link to="/auditoria" className="link">
-                <ListItemButton sx={{ pl: 4 }}>
-                  <ListItemText>
-                    <Sublist>auditoria</Sublist>
-                  </ListItemText>
-                </ListItemButton>
-              </Link>
-            </List>
-          </Collapse>
+                  {m1.hasSubMenu ? (
+                    <Collapse in={open === m1.menuId} timeout="auto" unmountOnExit>
+                      <List component="div" disablePadding>
+                        {MenuLevel2.filter((m2) => m2.parentId === m1.menuId).map((m2) => {
+                          if (m2.hasSubMenu) {
+                            return (
+                              <div key={m2.menuId}>
+                                <ListItemButton sx={{ pl: 4 }} onClick={() => setOpen2(open2 === m2.menuId ? -1 : m2.menuId)}>
+                                  <ListItemText>
+                                    <Sublist>{m2.menuText}</Sublist>
+                                  </ListItemText>
+                                  {open2 === m2.menuId ? <ExpandLess /> : <ExpandMore />}
+                                </ListItemButton>
+                                {m2.hasSubMenu ? (
+                                  <Collapse in={open2 === m2.menuId} timeout="auto" unmountOnExit>
+                                    <List component="div" disablePadding>
+                                      {MenuLevel3.filter((m3) => m3.parentId === m2.menuId).map((m3) => (
+                                        <Link key={m3.menuId} to={m3.link} className="link">
+                                          <ListItemButton sx={{ pl: 6 }}>
+                                            <ListItemText>
+                                              <Textlist>{m3.menuText}</Textlist>
+                                            </ListItemText>
+                                          </ListItemButton>
+                                        </Link>
+                                      ))}
+                                    </List>
+                                  </Collapse>
+                                ) : null}
+                              </div>
+                            );
+                          } else {
+                            return (
+                              <Link key={m2.menuId} to={m2.link} className="link">
+                                <ListItemButton sx={{ pl: 4 }}>
+                                  <ListItemText>
+                                    <Sublist>{m2.menuText}</Sublist>
+                                  </ListItemText>
+                                </ListItemButton>
+                              </Link>
+                            );
+                          }
+                        })}
+                      </List>
+                    </Collapse>
+                  ) : null}
+                </div>
+              );
+            } else {
+              return (
+                <div key={m1.menuId}>
+                  <Link to={m1.link} className="link">
+                    <ListItemButton>
+                      <ListItemText>
+                        <Headlist>{m1.menuText}</Headlist>
+                      </ListItemText>
+                    </ListItemButton>
+                  </Link>
+                </div>
+              );
+            }
+          })}
         </List>
       </Box>
     </Box>

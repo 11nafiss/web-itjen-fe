@@ -8,36 +8,36 @@ import { RiWhatsappFill } from "react-icons/ri";
 import { MdEmail } from "react-icons/md";
 import { IoIosBrowsers } from "react-icons/io";
 
+// MUI Styling CSS
+const CustomContainer = styled(Container)(({ theme }) => ({
+  display: "flex",
+  justifyContent: "space-around",
+  gap: theme.spacing(5),
+  padding: "10px 0px 80px 0px",
+  [theme.breakpoints.down("md")]: {
+    flexDirection: "column",
+    textAlign: "center",
+  },
+}));
+
+const CustomType = styled(Typography)(() => ({
+  fontSize: "16px",
+  color: "#00000",
+  fontWeight: "300",
+}));
+
+const CustomBox = styled(Box)(({ theme }) => ({
+  display: "flex",
+  alignItems: "center",
+  justifyContent: "flex-start",
+  [theme.breakpoints.down("md")]: {
+    justifyContent: "center",
+  },
+}));
+
 
 // Main Declaration
 const Consmaps = () => {
-
-// MUI Styling CSS
-  const CustomContainer = styled(Container)(({ theme }) => ({
-    display: "flex",
-    justifyContent: "space-around",
-    gap: theme.spacing(5),
-    padding: "60px 0px 80px 0px",
-    [theme.breakpoints.down("md")]: {
-      flexDirection: "column",
-      textAlign: "center",
-    },
-  }));
-
-  const CustomType = styled(Typography)(() => ({
-    fontSize: "16px",
-    color: "#00000",
-    fontWeight: "300",
-  }));
-
-  const CustomBox = styled(Box)(({ theme }) => ({
-    display: "flex",
-    alignItems: "center",
-    justifyContent: "flex-start",
-    [theme.breakpoints.down("md")]: {
-      justifyContent: "center",
-    },
-  }));
 
 // Main Code
   return (

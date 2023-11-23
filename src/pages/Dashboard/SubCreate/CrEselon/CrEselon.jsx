@@ -129,7 +129,7 @@ const CrEselon = (props) => {
                       </FormLabel>
                       <Input value={nama} onChange={(e) => setNama(e.target.value)} size="lg" name="Size" placeholder="Tulis Baru" sx={{ width: "100%", borderColor: "#252525" }} />
                     </FormControl>
-                    <FormControl required sx={{ width: "100%" }}>
+                    <FormControl sx={{ width: "100%" }}>
                       <FormLabel
                         sx={{
                           fontSize: "18px",

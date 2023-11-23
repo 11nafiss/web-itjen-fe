@@ -2,7 +2,7 @@
 import { Routes, Route } from "react-router-dom";
 
 // Import Components
-import { Footer, Header, LiveChat } from "../../components/components";
+import { Footer, LiveChat } from "../../components/components";
 
 // Import MainApp Pages
 import NotFound from "../NotFound/NotFound";
@@ -13,9 +13,6 @@ const MainApp = () => {
   // Main Code
   return (
     <div className="main-wrapper">
-      <div className="header-wrapper">
-        <Header />
-      </div>
       <div className="content-wrapper">
         <Routes>
           <Route path="*" element={<NotFound />} />
