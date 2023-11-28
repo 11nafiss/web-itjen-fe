@@ -14,10 +14,13 @@ import vitjenReducer from "./features/slice/vitjen.slice";
 
 import { persistReducer } from "redux-persist";
 import storage from "redux-persist/lib/storage";
+import expireReducer from "redux-persist-expire";
+
 
 const persistConfig = {
   key: "root",
   storage,
+  transforms: [expireReducer("login", { expireSeconds: 10 })],
 };
 
 const persistedReducer = persistReducer(persistConfig, userReducer);

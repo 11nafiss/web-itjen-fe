@@ -6,7 +6,7 @@ import { styled } from "@mui/material/styles";
 import Visibility from "@mui/icons-material/Visibility";
 import VisibilityOff from "@mui/icons-material/VisibilityOff";
 import Key from "@mui/icons-material/Key";
-import { useNavigate} from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import PropTypes from "prop-types";
 
 // Import Api
@@ -67,13 +67,19 @@ const CrUsers = (props) => {
 
   const { errorMessage } = useAppSelector((state) => state.user.createUser);
 
-  const handleUploadUser = (e) => {
+  const handleUploadUser = async (e) => {
     e.preventDefault();
     const url = `${BASE_URL}user/register`;
     const formData = new FormData();
     formData.append("username", username);
     formData.append("email", email);
     formData.append("password", password);
+
+    // let input = {
+    //   username,
+    //   email,
+    //   password,
+    // };
 
     if (username && email && password) {
       axios

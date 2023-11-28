@@ -10,6 +10,7 @@ import { Profile, OrganSub, News, Home, Organ, Placem, Gallery, Audit, AuditBook
 
 // Main Declaration
 const MainApp = () => {
+
   // Main Code
   return (
     <div className="main-wrapper">

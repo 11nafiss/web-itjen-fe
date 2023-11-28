@@ -16,6 +16,7 @@ import {
   getArticleAllCount,
   getArticleTypeCount,
   getArticleTypeAll,
+  getArticleAll,
 } from "../actions/article.action";
 import { PayloadAction, createSlice, combineReducers } from "@reduxjs/toolkit";
 
@@ -446,12 +447,37 @@ export const articleTypeCountSlice = createSlice({
   },
 });
 
+export const articleAllSlice = createSlice({
+  name: "articleAllReducer",
+  initialState,
+  reducers: {},
+  extraReducers: (builder) => {
+    builder.addCase(getArticleAll.pending, (state) => {
+      (state.isLoading = true), (state.errorMessage = "");
+      console.log("PENDING ARTIKEL....");
+    });
+
+    builder.addCase(getArticleAll.fulfilled, (state, action: PayloadAction<ArticleData[]>) => {
+      state.dataArticle = action.payload;
+      console.log("Filled ARTIKEL");
+    });
+
+    builder.addCase(getArticleAll.rejected, (state, { payload }) => {
+      if (payload) {
+        console.log("FAILED ARTIKEL");
+        state.isSuccess = false;
+      }
+    });
+  },
+});
+
 const articleReducer = combineReducers({
   createArticle: createArticleSlice.reducer,
   editArticle: editArticleSlice.reducer,
   deleteArticle: deleteArticleSlice.reducer,
   articleCategory: articleByCategorySlice.reducer,
   articleTitle: articleTitleSlice.reducer,
+  articleAll: articleAllSlice.reducer,
   articleAllTake: articleAllTakeSlice.reducer,
   articleAllCount: articleAllCountSlice.reducer,
   articleId: articleByIdSlice.reducer,

@@ -10,7 +10,11 @@ import { AiFillCalendar } from "react-icons/ai";
 import { MdVisibility } from "react-icons/md";
 
 // Import Api
-import { useAppSelector } from "../../../../hooks/useTypedSelector";
+import { useAppDispatch, useAppSelector } from "../../../../hooks/useTypedSelector";
+import { getArticleAll } from "../../../../features/actions/article.action";
+import { getUserData } from "../../../../features/actions/user.action";
+import { useEffect, useState } from "react";
+import { formatYear } from "../../../../utils/custom-format-year";
 
 // MUI Styling CSS
 const CustomBox = styled(Box)(() => ({
@@ -19,18 +23,6 @@ const CustomBox = styled(Box)(() => ({
   width: "100%",
   minHeight: "150px",
   padding: "30px",
-}));
-
-const CustomSquare = styled(Box)(() => ({
-  display: "flex",
-  justifyContent: "start",
-  flexDirection: "column",
-  alignItems: "center",
-  borderRadius: "15px",
-  backgroundColor: "#fff",
-  width: "100%",
-  height: "100%",
-  padding: "20px",
 }));
 
 const CustomTitle = styled(Typography)(() => ({
@@ -69,6 +61,18 @@ const IconBox = styled(Box)(() => ({
   fontSize: "24px",
 }));
 
+const CustomSquare = styled(Box)(() => ({
+  display: "flex",
+  justifyContent: "start",
+  flexDirection: "column",
+  alignItems: "center",
+  borderRadius: "15px",
+  backgroundColor: "#fff",
+  width: "100%",
+  height: "100%",
+  padding: "20px",
+}));
+
 const ImgBox = styled(Box)(() => ({
   display: "flex",
   justifyContent: "center",
@@ -76,10 +80,33 @@ const ImgBox = styled(Box)(() => ({
 
 // Main Declaration
 const HomeDash = () => {
-  const dataUser = useAppSelector((state) => state.user.loginUser.currentUser);
-  console.log("ini", dataUser.username);
+  const yearNow = new Date().getFullYear().toString();
+  const [year, setYear] = useState(yearNow);
+  const [visits, setVisits] = useState(0);
 
-  const options1 = {
+  useEffect(() => {
+    const storedCount = localStorage.getItem("visitCounter");
+    const storedVisits = Number(storedCount) || 0;
+    setVisits(storedVisits);
+  }, []);
+
+  const dispatch = useAppDispatch();
+
+  useEffect(() => {
+    dispatch(getUserData());
+    dispatch(getArticleAll());
+  }, [dispatch]);
+
+  const handleYear = (event, newValue) => {
+    setYear(newValue);
+  };
+
+  const userNow = useAppSelector((state) => state.user.loginUser.currentUser);
+  const dataUser = useAppSelector((state) => state.user.userAll.dataUser);
+  const dataArticle = useAppSelector((state) => state.article.articleAll.dataArticle);
+  const tahunArticle = dataArticle.map((item) => formatYear(item.publishedAt)).filter((value, index, current_value) => current_value.indexOf(value) === index);
+
+  const chartKuartal = {
     chart: {
       type: "line",
     },
@@ -105,18 +132,32 @@ const HomeDash = () => {
         enableMouseTracking: true,
       },
     },
-    series: [
-      {
-        name: 'tebe',
-        data: [2.4, 3.4]
-      }, {
-        name: 'taufan',
-        data: [3.9, 4.2, 5.7, 8.5]
-      }
-    ],
+    series: [],
   };
 
-  const options2 = {
+  if (year) {
+    for (const key of dataUser) {
+      const artikelQ1 = dataArticle.filter((item) => {
+        return item.authorName === key.username && new Date(item.publishedAt).getFullYear() == year && Math.ceil((new Date(item.publishedAt).getMonth() + 1) / 3) === 1;
+      });
+      const artikelQ2 = dataArticle.filter((item) => {
+        return item.authorName === key.username && new Date(item.publishedAt).getFullYear() == year && Math.ceil((new Date(item.publishedAt).getMonth() + 1) / 3) === 2;
+      });
+      const artikelQ3 = dataArticle.filter((item) => {
+        return item.authorName === key.username && new Date(item.publishedAt).getFullYear() == year && Math.ceil((new Date(item.publishedAt).getMonth() + 1) / 3) === 3;
+      });
+      const artikelQ4 = dataArticle.filter((item) => {
+        return item.authorName === key.username && new Date(item.publishedAt).getFullYear() == year && Math.ceil((new Date(item.publishedAt).getMonth() + 1) / 3) === 4;
+      });
+
+      chartKuartal.series.push({
+        name: key.username,
+        data: [artikelQ1.length, artikelQ2.length, artikelQ3.length, artikelQ4.length],
+      });
+    }
+  }
+
+  const chartBulan = {
     chart: {
       type: "line",
     },
@@ -142,18 +183,54 @@ const HomeDash = () => {
         enableMouseTracking: true,
       },
     },
-    series: [
-      {
-        name: 'tebe',
-        data: [2.4, 3.4]
-      }, {
-        name: 'taufan',
-        data: [3.9, 4.2, 5.7, 8.5]
-      }
-    ],
+    series: [],
   };
 
-  options1.series.push({})
+  if (year) {
+    for (const key of dataUser) {
+      const artikelB1 = dataArticle.filter((item) => {
+        return item.authorName === key.username && new Date(item.publishedAt).getFullYear() == year && new Date(item.publishedAt).getMonth() === 0;
+      });
+      const artikelB2 = dataArticle.filter((item) => {
+        return item.authorName === key.username && new Date(item.publishedAt).getFullYear() == year && new Date(item.publishedAt).getMonth() === 1;
+      });
+      const artikelB3 = dataArticle.filter((item) => {
+        return item.authorName === key.username && new Date(item.publishedAt).getFullYear() == year && new Date(item.publishedAt).getMonth() === 2;
+      });
+      const artikelB4 = dataArticle.filter((item) => {
+        return item.authorName === key.username && new Date(item.publishedAt).getFullYear() == year && new Date(item.publishedAt).getMonth() === 3;
+      });
+      const artikelB5 = dataArticle.filter((item) => {
+        return item.authorName === key.username && new Date(item.publishedAt).getFullYear() == year && new Date(item.publishedAt).getMonth() === 4;
+      });
+      const artikelB6 = dataArticle.filter((item) => {
+        return item.authorName === key.username && new Date(item.publishedAt).getFullYear() == year && new Date(item.publishedAt).getMonth() === 5;
+      });
+      const artikelB7 = dataArticle.filter((item) => {
+        return item.authorName === key.username && new Date(item.publishedAt).getFullYear() == year && new Date(item.publishedAt).getMonth() === 6;
+      });
+      const artikelB8 = dataArticle.filter((item) => {
+        return item.authorName === key.username && new Date(item.publishedAt).getFullYear() == year && new Date(item.publishedAt).getMonth() === 7;
+      });
+      const artikelB9 = dataArticle.filter((item) => {
+        return item.authorName === key.username && new Date(item.publishedAt).getFullYear() == year && new Date(item.publishedAt).getMonth() === 8;
+      });
+      const artikelB10 = dataArticle.filter((item) => {
+        return item.authorName === key.username && new Date(item.publishedAt).getFullYear() == year && new Date(item.publishedAt).getMonth() === 9;
+      });
+      const artikelB11 = dataArticle.filter((item) => {
+        return item.authorName === key.username && new Date(item.publishedAt).getFullYear() == year && new Date(item.publishedAt).getMonth() === 10;
+      });
+      const artikelB12 = dataArticle.filter((item) => {
+        return item.authorName === key.username && new Date(item.publishedAt).getFullYear() == year && new Date(item.publishedAt).getMonth() === 11;
+      });
+
+      chartBulan.series.push({
+        name: key.username,
+        data: [artikelB1.length, artikelB2.length, artikelB3.length, artikelB4.length, artikelB5.length, artikelB6.length, artikelB7.length, artikelB8.length, artikelB9.length, artikelB10.length, artikelB11.length, artikelB12.length],
+      });
+    }
+  }
 
   // Main Code
   return (
@@ -161,7 +238,7 @@ const HomeDash = () => {
       <Grid container spacing={3}>
         <Grid item xs={12} md={12}>
           <CustomBox>
-            <CustomTitle>Halo, {dataUser.username}</CustomTitle>
+            <CustomTitle>Halo, {userNow.username}</CustomTitle>
             <Divider sx={{ borderSize: "20px" }} />
             <SpaceGrid container>
               <GridFlex item xs={12} md={6} sx={{ display: "flex", justifyContent: { xs: "center", md: "start " }, margin: { xs: "30px 0px", md: "0px 0px" } }}>
@@ -169,7 +246,7 @@ const HomeDash = () => {
                 <IconBox>
                   <MdVisibility />
                 </IconBox>
-                <CustomText sx={{ display: "flex" }}>4.437</CustomText>
+                <CustomText sx={{ display: "flex" }}>{visits}</CustomText>
               </GridFlex>
               <Grid item xs={12} md={6}>
                 <Grid container>
@@ -178,14 +255,19 @@ const HomeDash = () => {
                   </GridFlex>
                   <GridFlex item xs={12} md={6} sx={{ display: "flex", justifyContent: { xs: "center", md: "center" } }}>
                     <Select
+                      value={year}
+                      onChange={handleYear}
                       placeholder="Pilih Tahun"
                       startDecorator={<AiFillCalendar style={{ fontSize: "22px" }} />}
                       sx={{ width: "100%", marginLeft: { xs: "0px", md: "30px" }, borderWidth: "3px", borderColor: "#252525", fontWeight: "700", height: "20px" }}
                     >
-                      <Option value="2019">2019</Option>
-                      <Option value="2020">2020</Option>
-                      <Option value="2021">2021</Option>
-                      <Option value="2022">2022</Option>
+                      {tahunArticle.map((obj) => {
+                        return (
+                          <Option key={obj} value={obj} label={obj.toString()}>
+                            {obj}
+                          </Option>
+                        );
+                      })}
                     </Select>
                   </GridFlex>
                 </Grid>
@@ -196,14 +278,14 @@ const HomeDash = () => {
         <Grid item xs={12} md={6}>
           <CustomSquare>
             <ImgBox>
-              <HighchartsReact highcharts={Highcharts} options={options1} />
+              <HighchartsReact highcharts={Highcharts} options={chartKuartal} />
             </ImgBox>
           </CustomSquare>
         </Grid>
         <Grid item xs={12} md={6}>
           <CustomSquare>
             <ImgBox>
-              <HighchartsReact highcharts={Highcharts} options={options2} />
+              <HighchartsReact highcharts={Highcharts} options={chartBulan} />
             </ImgBox>
           </CustomSquare>
         </Grid>

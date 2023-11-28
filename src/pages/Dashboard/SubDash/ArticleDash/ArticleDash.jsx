@@ -8,6 +8,7 @@ import { styled } from "@mui/material/styles";
 // Import Components
 import { AddButton } from "../../../../components/components";
 import { formatDate } from "../../../../utils/custom-format-date";
+import { ViewCount } from "../../../../utils/visitor-counter";
 
 // Import Assets
 import DeleteIcon from "@mui/icons-material/Delete";
@@ -23,6 +24,7 @@ import { getArticleAllTake, getArticlePublished, getArticleAllCount, getArticleS
 import { BASE_URL } from "../../../../services/api";
 import { articleSearchSlice } from "../../../../features/slice/article.slice";
 import axios from "axios";
+import { getCategory } from "../../../../features/actions/category.action";
 
 // MUI Styling CSS
 const CustomBox = styled(Box)(() => ({
@@ -61,6 +63,7 @@ const ArticleDash = () => {
   const dataSearch = useAppSelector((state) => state.article.articleSearchAll.dataArticle);
   const isLoading = useAppSelector((state) => state.article.articleAllTake.isLoading);
   const dataArticle = useAppSelector((state) => state.article.articleAllTake.dataArticle);
+  const dataCategory = useAppSelector((state) => state.category.categoryAll.dataCategory);
   const jumlahArticle = useAppSelector((state) => state.article.articleAllCount.dataArticle);
   const pageCount = Math.ceil(jumlahArticle / take);
 
@@ -70,6 +73,7 @@ const ArticleDash = () => {
     dispatch(getArticleSearchAll({ take, page, keyword }));
     dispatch(getArticleAllTake({ take, page }));
     dispatch(getArticleAllCount());
+    dispatch(getCategory());
   }, [dispatch, searchParams]);
 
   const handlePageChange = (event, value) => {

@@ -1,5 +1,5 @@
 // Import Library
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { Grid, Container, Box, Typography } from "@mui/material";
 import { Button } from "@mui/joy";
 import { styled } from "@mui/material/styles";
@@ -96,22 +96,27 @@ const CustomTitle = styled(Typography)(() => ({
   fontSize: "32px",
   fontWeight: "700",
   textTransform: "capitalize",
-  marginBottom: "50px",
 }));
 
 // Main Declaration
 const Article = () => {
   const { title } = useParams();
   const { category } = useParams();
+  const [visits, setVisits] = useState(0);
+  console.log("ini jumlah visit", visits);
 
-  console.log("ini kategori artikel", category);
+  const dataArticle = useAppSelector((state) => state.article.articleTitle.dataArticle);
 
   const dispatch = useAppDispatch();
   useEffect(() => {
+    const storedCount = localStorage.getItem(`${title}`);
+    const storedVisits = Number(storedCount) || 0;
+    console.info("stored : ", storedVisits);
+    setVisits(storedVisits);
+    localStorage.setItem(`${title}`, storedVisits + 1);
+    
     dispatch(getArticleTitle(title));
   }, [dispatch, title]);
-
-  const { dataArticle } = useAppSelector((state) => state.article.articleTitle);
 
   // Main Code
   return (
@@ -151,7 +156,10 @@ const Article = () => {
                     <GridCenter item xs={12}>
                       <ContentBox>
                         <CustomTitle>{dataArticle.title}</CustomTitle>
-                        <FroalaEditorView model={dataArticle.content} />
+                        <TimeText sx={{ color: "#B7B7B7", mt: "10px" }}>{"views: " + visits}</TimeText>
+                        <Box sx={{ height: "100%", width: "100%", mt: "50px" }}>
+                          <FroalaEditorView model={dataArticle.content} />
+                        </Box>
                       </ContentBox>
                     </GridCenter>
                   </Grid>

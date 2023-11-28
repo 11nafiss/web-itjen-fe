@@ -39,6 +39,7 @@ import {
 
 // Main Declaration
 const Dashboard = () => {
+
   // Main Code
   return (
     <div className="main-wrapper" style={{ backgroundColor: "#D9D9D9", height: "100%" }}>
@@ -49,7 +50,7 @@ const Dashboard = () => {
         <div className="content-wrapper" style={{ paddingTop: "90px", height: "100%" }}>
           <Routes>
             <Route path="*" element={<NotFound />} />
-            <Route path="/" element={<HomeDash />} />
+            <Route path="/" element={<HomeDash visits />} />
             <Route path="/artikel" element={<ArticleDash />} />
             <Route path="/banner" element={<BannerDash />} />
             <Route path="/auditoria" element={<AuditDash />} />

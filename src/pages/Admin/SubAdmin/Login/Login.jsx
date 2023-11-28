@@ -18,6 +18,7 @@ import { TbArrowRight } from "react-icons/tb";
 import { useAppDispatch, useAppSelector } from "../../../../hooks/useTypedSelector";
 import { loginUser } from "../../../../features/actions/user.action";
 import { useNavigate } from "react-router-dom";
+import { runLogoutTimer } from "../../../../services/auth";
 
 // MUI Styling CSS
 const FormBox = styled(Box)(() => ({
@@ -92,6 +93,7 @@ const Admin = () => {
     };
     dispatch(loginUser(userCredentials));
     navigate('/dashboard');
+    runLogoutTimer(100)
   };
 
   // Main Code

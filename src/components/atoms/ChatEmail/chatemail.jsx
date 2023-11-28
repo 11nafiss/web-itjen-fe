@@ -19,7 +19,7 @@ const ChatEmail = (props) => {
   const sendEmail = (e) => {
     e.preventDefault();
     setLoading(true);
-    emailjs.sendForm('service_dzkytxv', 'template_ksymijj', form.current, 'Cn_tbf-bN-PpyJlHb')
+    emailjs.sendForm('service_c29bq9h', 'template_xyn0j2g', form.current, 'YGUlkLKeDUDMa4jH2')
       .then((result) => {
           console.log("pesan terkirim", result.text);
           alert("Pesan Email Terkirim");
