@@ -46,17 +46,7 @@ const AuditBook = () => {
         <div className="content-wrapper" style={{ paddingTop: "90px", height: "100%", width: "100%" }}>
           <Background>
             <div style={{ width: "100%", height: "100%", position: "relative" }}>
-              <Iframe
-                src={`${dataAuditoria.link}`}
-                style={{ position: "absolute", border: "none", left: "0", top: "0" }}
-                width="100%"
-                height="100%"
-                scrolling="no"
-                frameBorder="0"
-                allowfullscreen="true"
-                allow="transparency"
-                seamless="seamless"
-              ></Iframe>
+              <Iframe src={`${dataAuditoria.link}`} width="100%" height="100%" scrolling="no" frameborder="0" allowfullscreen="" allow="clipboard-write" class="publuuflip"></Iframe>
             </div>
           </Background>
         </div>

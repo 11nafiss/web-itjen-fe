@@ -8,7 +8,6 @@ import { styled } from "@mui/material/styles";
 // Import Components
 import { AddButton } from "../../../../components/components";
 import { formatDate } from "../../../../utils/custom-format-date";
-import { ViewCount } from "../../../../utils/visitor-counter";
 
 // Import Assets
 import DeleteIcon from "@mui/icons-material/Delete";
@@ -55,7 +54,7 @@ const ArticleDash = () => {
   const [searchParams, setSearchParams] = useSearchParams();
   const [searchInput, setSearchInput] = useState("");
   const [loading, setLoading] = useState(false);
-  const [msg, SetMsg] = useState(null);
+  const [msg, setMsg] = useState(null);
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
   const take = 8;
@@ -63,7 +62,6 @@ const ArticleDash = () => {
   const dataSearch = useAppSelector((state) => state.article.articleSearchAll.dataArticle);
   const isLoading = useAppSelector((state) => state.article.articleAllTake.isLoading);
   const dataArticle = useAppSelector((state) => state.article.articleAllTake.dataArticle);
-  const dataCategory = useAppSelector((state) => state.category.categoryAll.dataCategory);
   const jumlahArticle = useAppSelector((state) => state.article.articleAllCount.dataArticle);
   const pageCount = Math.ceil(jumlahArticle / take);
 
@@ -126,21 +124,21 @@ const ArticleDash = () => {
 
     if (confirmation) {
       dispatch(deleteArticle(id));
-      if(image) {
+      if (image) {
         axios
-        .delete(BASE_URL + "api/upload/imageartikelthumbnaildelete/" + image, {
-          headers: {
-            "Content-Type": "application/json",
-          },
-        })
-        .then((response) => {
-          SetMsg("Delete Successful");
-          console.log(response.data);
-        })
-        .catch((err) => {
-          SetMsg("Delete failed");
-          console.log(err);
-        });
+          .delete(BASE_URL + "api/upload/imageartikelthumbnaildelete/" + image, {
+            headers: {
+              "Content-Type": "application/json",
+            },
+          })
+          .then((response) => {
+            setMsg("Delete Successful");
+            console.log(response.data);
+          })
+          .catch((err) => {
+            setMsg("Delete failed");
+            console.log(err);
+          });
       }
       setLoading(false);
     }
@@ -286,7 +284,7 @@ const ArticleDash = () => {
                             <DeleteIcon />
                           </IconButton>
                         </CardOverflow>
-                        <Box sx={{ display: "flex", alignItems: "start", mt: "35px" }}>
+                        <Box sx={{ display: "flex", flexDirection: "column", alignItems: "start", mt: "35px" }}>
                           <Typography level="body3" sx={{ fontWeight: "md", color: "blue", fontSize: "14px" }}>
                             {formatDate(obj.publishedAt)}
                           </Typography>
@@ -339,7 +337,7 @@ const ArticleDash = () => {
                             <DeleteIcon />
                           </IconButton>
                         </CardOverflow>
-                        <Box sx={{ display: "flex", alignItems: "start", mt: "35px" }}>
+                        <Box sx={{ display: "flex", flexDirection: "column", alignItems: "start", mt: "35px" }}>
                           <Typography level="body3" sx={{ fontWeight: "md", color: "blue", fontSize: "14px" }}>
                             {formatDate(obj.publishedAt)}
                           </Typography>
