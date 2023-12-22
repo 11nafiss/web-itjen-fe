@@ -130,7 +130,7 @@ const Placem = () => {
               <Grid container spacing={{ xs: 3, md: 4 }} column={{ xs: 4, sm: 8, md: 12 }} sx={{ justifyContent: "center" }}>
                 {dataPlacem.map((obj) => (
                   <GridCenter item key={obj.id} xs={12} sm={6} md={4}>
-                    <Card variant="outlined" sx={{ width: "270px", maxWidth: "100%", height: "380px", borderRadius: "20px", boxShadow: "lg", gap: "5px" }}>
+                    <Card variant="outlined" sx={{ width: "270px", maxWidth: "100%", height: "350px", borderRadius: "20px", boxShadow: "lg", gap: "5px" }}>
                       <CardOverflow>
                         <AspectRatio ratio="4/3">
                           <img src={obj.pathGambar === "" ? Juanda : `${BASE_URL}images/${obj.pathGambar}`} loading="lazy" alt="" />
@@ -140,10 +140,10 @@ const Placem = () => {
                         <Typography
                           gutterBottom
                           sx={{
-                            fontSize: "14px",
+                            fontSize: "12px",
                             color: "#0D5CAB",
                             fontWeight: "500",
-                            margin: "20px 0px 10px 0px",
+                            margin: "20px 0px 5px 0px",
                           }}
                         >
                           {obj.jabatan}

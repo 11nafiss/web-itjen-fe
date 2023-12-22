@@ -77,7 +77,7 @@ const MenuGroup = styled(ButtonGroup)(({ theme }) => ({
   borderRadius: "12px",
   borderWidth: "0px",
   borderColor: "#08245C",
-  height: "380px",
+  height: "320px",
   overflow: "hidden",
 
   [theme.breakpoints.down("md")]: {
@@ -102,6 +102,19 @@ const ClickButton = styled(Button)(() => ({
   "&:hover": {
     backgroundColor: "#0D5CAB",
   },
+}));
+
+const TitleText = styled(Typography)(() => ({
+  fontSize: "14px",
+  fontWeight: "600",
+  marginBottom: "2px",
+  overflow: "hidden",
+  textOverflow: "ellipsis",
+  maxWidth: "98%",
+  whiteSpace: "pre-line",
+  display: "-webkit-box",
+  "-webkit-box-orient": "vertical",
+  "-webkit-line-clamp": "2",
 }));
 
 // Main Declaration
@@ -195,7 +208,7 @@ const Updates = () => {
               mb: 2,
             }}
           >
-            Infromasi Terbaru
+            Informasi Terbaru
           </Typography>
         </Grid>
         <Grid item xs={12} md={3}>
@@ -239,7 +252,7 @@ const Updates = () => {
               <div ref={sliderRef} className="keen-slider" style={{ height: "400px" }}>
                 {dataReport.map((obj) => (
                   <div key={obj.laporanId} className="keen-slider__slide" style={{ display: "flex", justifyContent: "center" }}>
-                    <Card variant="outlined" sx={{ width: "270px", maxWidth: "100%", height: "380px", borderRadius: "20px", boxShadow: "lg", gap: "5px" }}>
+                    <Card variant="outlined" sx={{ width: "270px", maxWidth: "100%", height: "320px", borderRadius: "20px", boxShadow: "lg", gap: "5px" }}>
                       <CardOverflow>
                         <AspectRatio ratio="16/9">
                           <img src={obj.pathImage === "" ? Juanda : `${BASE_URL}images/${obj.pathImage}`} loading="lazy" alt="" />
@@ -257,15 +270,7 @@ const Updates = () => {
                         >
                           Laporan {obj.jenis}
                         </Typography>
-                        <Typography
-                          sx={{
-                            fontSize: "14px",
-                            fontWeight: "600",
-                            marginBottom: "2px",
-                          }}
-                        >
-                          {obj.judul}
-                        </Typography>
+                        <TitleText>{obj.judul}</TitleText>
                       </CardContent>
                       <CardOverflow variant="soft" sx={{ bgcolor: "background.level1", padding: "0px" }}>
                         <CardContent sx={{ width: "100%", padding: "0px" }}>
@@ -281,7 +286,7 @@ const Updates = () => {
                 ))}
                 {dataArticle.map((obj) => (
                   <div key={obj.id} className="keen-slider__slide" style={{ display: "flex", justifyContent: "center" }}>
-                    <Card variant="outlined" sx={{ width: "270px", maxWidth: "100%", height: "380px", borderRadius: "20px", boxShadow: "lg", gap: "5px" }}>
+                    <Card variant="outlined" sx={{ width: "270px", maxWidth: "100%", height: "320px", borderRadius: "20px", boxShadow: "lg", gap: "5px" }}>
                       <CardOverflow>
                         <AspectRatio ratio="16/9">
                           <img src={obj.featuredImage === "" ? Juanda : `${BASE_URL}thumbnail/${obj.featuredImage}`} loading="lazy" alt="" />
@@ -299,15 +304,7 @@ const Updates = () => {
                         >
                           {formatDate(obj.publishedAt)}
                         </Typography>
-                        <Typography
-                          sx={{
-                            fontSize: "14px",
-                            fontWeight: "600",
-                            marginBottom: "2px",
-                          }}
-                        >
-                          {obj.title}
-                        </Typography>
+                        <TitleText>{obj.title}</TitleText>
                       </CardContent>
                       <CardOverflow variant="soft" sx={{ bgcolor: "background.level1", padding: "0px" }}>
                         <CardContent sx={{ width: "100%", padding: "0px" }}>

@@ -36,14 +36,6 @@ import FroalaEditorComponent from "react-froala-wysiwyg";
 import { EditorConfig } from "./EditorConfig";
 
 // MUI Styling CSS
-const Kotak = styled(Box)(() => ({
-  borderRadius: "15px",
-  backgroundColor: "#fff",
-  width: "100%",
-  minHeight: "555px",
-  padding: "30px",
-}));
-
 const Judul = styled(Typography)(() => ({
   fontSize: "30px",
   fontWeight: "700",
@@ -72,6 +64,19 @@ const GridFlex = styled(Grid)(({ theme }) => ({
   },
 }));
 
+const Kotak = styled(Box)(() => ({
+  borderRadius: "15px",
+  backgroundColor: "#fff",
+  width: "100%",
+  minHeight: "555px",
+  padding: "30px",
+}));
+
+const ViewBox = styled(Box)(() => ({
+  width: "100%",
+  height: "100%",
+}));
+
 // Main Declaration
 const CrArticle = (props) => {
   const { id } = useParams();
@@ -88,6 +93,7 @@ const CrArticle = (props) => {
   const [file, setFile] = useState();
   const [progress, setProgress] = useState({ started: false, pc: 0 });
   const [msg, setMsg] = useState(null);
+  const [visits, setVisits] = useState(0);
 
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
@@ -104,17 +110,25 @@ const CrArticle = (props) => {
     setContent(response.content);
     setFeaturedImage(response.featuredImage);
     setThumbnail(response.thumbnail);
-    setCaption(response.caption);
     setPublishedAt(moment(response.publishedAt));
     setTampilDiBeranda(response.tampilDiBeranda);
     setCategoryId(response.categoryId);
     setPublished(response.published === true ? "published" : "pending");
   }, [id]);
 
+  const TimeText = styled(Typography)(() => ({
+    fontSize: "16px",
+    fontWeight: "700",
+    textTransform: "capitalize",
+  }));
+
   useEffect(() => {
     dispatch(getCategory());
     if (props.mode === "Edit") {
       fetchArticleById();
+      const storedCount = localStorage.getItem(`${title.replace(/ /g, "-")}`);
+      const storedVisits = Number(storedCount) || 0;
+      setVisits(storedVisits);
     }
   }, [fetchArticleById, props, dispatch]);
 
@@ -187,7 +201,7 @@ const CrArticle = (props) => {
       published: published === "published" ? true : false,
       pending: false,
       tampilDiBeranda,
-      caption,
+      caption: "",
       publishedAt: moment(publishedAt),
       thumbnail,
     };
@@ -231,25 +245,6 @@ const CrArticle = (props) => {
                     <Input value={title} onChange={(e) => setTitle(e.target.value)} size="lg" name="Size" placeholder="Tulis Baru" sx={{ width: "100%", borderColor: "#252525" }} />
                   </FormControl>
                   <Box sx={{ width: "100%", paddingTop: "20px", display: "flex", flexDirection: { xs: "column", lg: "row" }, gap: "20px" }}>
-                    <FormControl required sx={{ width: "100%" }}>
-                      <FormLabel
-                        sx={{
-                          fontSize: "18px",
-                        }}
-                      >
-                        Tanggal
-                      </FormLabel>
-                      <LocalizationProvider dateAdapter={AdapterMoment}>
-                        <DemoContainer components={["DatePicker"]} sx={{ padding: "0px", borderColor: "#252525" }}>
-                          <DatePicker
-                            placeholder="Pilih Tanggal"
-                            value={publishedAt}
-                            onChange={(e) => setPublishedAt(e)}
-                            sx={{ width: "100%", "& .MuiOutlinedInput-root": { height: "48px", fontSize: "15px", overflow: "hidden", borderRadius: "7px" }, "& .MuiOutlinedInput-notchedOutline": { borderColor: "#252525", padding: "0px" } }}
-                          />
-                        </DemoContainer>
-                      </LocalizationProvider>
-                    </FormControl>
                     <FormControl required sx={{ width: "100%" }}>
                       <FormLabel
                         sx={{
@@ -314,15 +309,24 @@ const CrArticle = (props) => {
                     {msg && <span>{msg}</span>}
                   </FormControl>
                   <Box sx={{ width: "100%", paddingTop: "20px", display: "flex", flexDirection: { xs: "column", lg: "row" }, gap: "20px" }}>
-                    <FormControl sx={{ width: "100%" }}>
+                  <FormControl required sx={{ width: "100%" }}>
                       <FormLabel
                         sx={{
                           fontSize: "18px",
                         }}
                       >
-                        Caption
+                        Tanggal
                       </FormLabel>
-                      <Input value={caption} onChange={(e) => setCaption(e.target.value)} size="lg" name="Size" placeholder="Tulis aja" sx={{ width: "100%", borderColor: "#252525" }} />
+                      <LocalizationProvider dateAdapter={AdapterMoment}>
+                        <DemoContainer components={["DatePicker"]} sx={{ padding: "0px", borderColor: "#252525" }}>
+                          <DatePicker
+                            placeholder="Pilih Tanggal"
+                            value={publishedAt}
+                            onChange={(e) => setPublishedAt(e)}
+                            sx={{ width: "100%", "& .MuiOutlinedInput-root": { height: "48px", fontSize: "15px", overflow: "hidden", borderRadius: "7px" }, "& .MuiOutlinedInput-notchedOutline": { borderColor: "#252525", padding: "0px" } }}
+                          />
+                        </DemoContainer>
+                      </LocalizationProvider>
                     </FormControl>
                     <FormControl required sx={{ width: "100%" }}>
                       <FormLabel
@@ -382,6 +386,9 @@ const CrArticle = (props) => {
                 </GridFlex>
                 <GridFlex item xs={12} md={12} sx={{ justifyContent: { xs: "center", md: "left" } }}>
                   <Box sx={{ height: "100%", width: "100%", paddingTop: "10px", display: "flex", flexDirection: "column", justifyContent: "left", gap: "30px" }}>
+                  <ViewBox>
+                    <TimeText sx={{ color: "#B7B7B7" }}>{"views: " + visits}</TimeText>
+                  </ViewBox>
                     <Box sx={{ maxWidth: { xs: "350px", sm: "600px", md: "900px", lg: "1250px" } }}>
                       <FroalaEditorComponent placeholder="Tulis Artikel" tag="textarea" config={EditorConfig} model={content} onModelChange={handleModelChange} />
                     </Box>

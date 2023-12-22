@@ -11,15 +11,14 @@ import { useNavigate } from "react-router-dom";
 const Search = styled("div")(({ theme }) => ({
   position: "relative",
   borderRadius: theme.shape.borderRadius,
-  backgroundColor: "#08347C",
+  background: "transparent",
   "&:hover": {
-    backgroundColor: "#08347C",
+    background: "transparent",
   },
   marginLeft: 0,
   transition: theme.transitions.create("width"),
   width: "15ch",
-  borderWidth: "10px",
-  borderColor: "#fff",
+  border: '2px solid white',
   [theme.breakpoints.up("sm")]: {
     marginLeft: theme.spacing(1),
     width: "auto",
@@ -35,6 +34,13 @@ const StyledInputBase = styled(Input)(({ theme }) => ({
     transition: theme.transitions.create("width"),
     width: "100%",
     minWidth: "60px",
+    borderWidth: "20px",
+    borderColor: "#fff",
+    '&::placeholder': {
+      textOverflow: 'ellipsis !important',
+      color: 'white',
+      fontWeight: "600"
+    },
     [theme.breakpoints.up("sm")]: {
       width: "0.1ch",
       "&:focus": {

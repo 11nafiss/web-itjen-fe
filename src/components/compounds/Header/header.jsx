@@ -1,14 +1,15 @@
 // Import Library
 import React, { useEffect } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import PopupState, { bindTrigger, bindMenu } from "material-ui-popup-state";
-import { Grid, Typography, useScrollTrigger, Accordion, AccordionSummary, AccordionDetails, Menu, MenuItem, Box, Button, Container, AppBar, CssBaseline, Drawer, IconButton, Toolbar } from "@mui/material";
+import { Grid, Input, Typography, useScrollTrigger, Accordion, AccordionSummary, AccordionDetails, Menu, MenuItem, Box, Button, Container, AppBar, CssBaseline, Drawer, IconButton, Toolbar } from "@mui/material";
 import { styled } from "@mui/material/styles";
 import PropTypes from "prop-types";
 
 // Import Assets
 import { Kemenkeu } from "../../../assets/assets";
 import { GiHamburgerMenu } from "react-icons/gi";
+import SearchIcon from "@mui/icons-material/Search";
 
 // Import Components
 import { DrawerBar } from "../../molecules/molecules";
@@ -22,6 +23,7 @@ import { SearchNav } from "../../components";
 import { useAppDispatch, useAppSelector } from "../../../hooks/useTypedSelector";
 import { getMenuData } from "../../../features/actions/menu.action";
 import { getFeatureData } from "../../../features/actions/feature.action";
+import { articleSearchSlice } from "../../../features/slice/article.slice";
 import { BASE_URL } from "../../../services/api";
 
 function ElevationScroll(props) {
@@ -56,6 +58,10 @@ const ScrollHandler = (props) => {
         color: trigger ? "#08347C" : "#fff",
         transition: trigger ? "0.3s" : "0.5s",
         boxShadow: "none",
+        borderColor: trigger ? "#08347C" : "#fff",
+        '&::placeholder': {
+          color: trigger ? "#08347C" : "#fff",
+        },
       },
     });
   } else {
@@ -64,6 +70,7 @@ const ScrollHandler = (props) => {
         color: "#08347C",
         transition: trigger ? "0.3s" : "0.5s",
         boxShadow: "none",
+        borderColor: "#08347C",
       },
     });
   }
@@ -185,6 +192,47 @@ const GridCenter = styled(Grid)(() => ({
   alignItems: "center",
 }));
 
+const Search = styled("div")(({ theme }) => ({
+  position: "relative",
+  borderRadius: theme.shape.borderRadius,
+  background: "transparent",
+  "&:hover": {
+    background: "transparent",
+  },
+  marginLeft: 0,
+  transition: theme.transitions.create("width"),
+  width: "15ch",
+  border: '2px solid',
+  [theme.breakpoints.up("sm")]: {
+    marginLeft: theme.spacing(1),
+    width: "auto",
+  },
+}));
+
+const StyledInputBase = styled(Input)(({ theme }) => ({
+  color: "#fff",
+  "& .MuiInputBase-input": {
+    padding: theme.spacing(1, 1, 1, 0),
+    // vertical padding + font size from searchIcon
+    paddingLeft: `calc(1em + ${theme.spacing(0)})`,
+    transition: theme.transitions.create("width"),
+    width: "100%",
+    minWidth: "60px",
+    borderWidth: "20px",
+    borderColor: "#fff",
+    '&::placeholder': {
+      textOverflow: 'ellipsis !important',
+      fontWeight: "600"
+    },
+    [theme.breakpoints.up("sm")]: {
+      width: "0.1ch",
+      "&:focus": {
+        width: "20ch",
+      },
+    },
+  },
+}));
+
 // Main Declaration
 const Header = (props) => {
   const { window } = props;
@@ -201,10 +249,19 @@ const Header = (props) => {
   const container = window !== undefined ? () => window().document.body : undefined;
 
   const dispatch = useAppDispatch();
+  const navigate = useNavigate();
+
+  const keyword = useAppSelector((state) => state.article.articleSearch.searchKeyword);
+
+  const navigateToSearch = () => {
+    navigate(`/cari?keyword=${keyword}&page=1`);
+  };
+
   useEffect(() => {
     dispatch(getMenuData());
     dispatch(getFeatureData());
   }, [dispatch]);
+
   const dataMenu = useAppSelector((state) => state.menu.menuAll.dataMenu);
   const MenuLevel1 = dataMenu.filter((item) => item.menuLevel === 1);
   const MenuLevel2 = dataMenu.filter((item) => item.menuLevel === 2);
@@ -290,7 +347,29 @@ const Header = (props) => {
                     </PopupState>
                   ))}
                 </Box>
-                <SearchNav />
+                <ScrollHandler {...props}>
+                <Search sx={{ display: "flex", flexDirection: "row" }}>
+                <ScrollHandler {...props}>
+                <StyledInputBase
+                value={keyword}
+                onChange={(e) => dispatch(articleSearchSlice.actions.setSearchKeyword(e.target.value))}
+                placeholder="Cari…"
+                inputProps={{ "aria-label": "search" }}
+                onKeyDown={(ev) => {
+                if (ev.key === "Enter") {
+                    ev.preventDefault();
+                    navigateToSearch();
+                    }
+                  }}
+                />
+                </ScrollHandler>
+                <ScrollHandler {...props}>
+                <Button sx={{ borderWidth: "thick" }} onClick={navigateToSearch}>
+                  <SearchIcon />
+                </Button>
+                </ScrollHandler>
+                </Search>
+                </ScrollHandler>
                 <PopupState variant="popover" popupId="demo-popup-menu">
                   {(popupState) => (
                     <React.Fragment>

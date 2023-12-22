@@ -83,7 +83,7 @@ const ContentBox = styled(Box)(({ theme }) => ({
   display: "flex",
   justifyContent: "left",
   flexDirection: "column",
-  padding: "30px 50px 150px 50px",
+  padding: "30px 50px 100px 50px",
   height: "100%",
   width: "100%",
   backgroundColor: "#fff",
@@ -96,6 +96,17 @@ const CustomTitle = styled(Typography)(() => ({
   fontSize: "32px",
   fontWeight: "700",
   textTransform: "capitalize",
+}));
+
+const CloseBox = styled(Box)(({ theme }) => ({
+  display: "flex",
+  justifyContent: "left",
+  flexDirection: "column",
+  height: "50px",
+  width: "100%",
+  backgroundColor: "#fff",
+  position: "relative",
+  bottom: "40px",
 }));
 
 // Main Declaration
@@ -117,6 +128,8 @@ const Article = () => {
     
     dispatch(getArticleTitle(title));
   }, [dispatch, title]);
+  
+  console.log("getTitleName = ", title)
 
   // Main Code
   return (
@@ -155,11 +168,11 @@ const Article = () => {
                     </GridCenter>
                     <GridCenter item xs={12}>
                       <ContentBox>
-                        <CustomTitle>{dataArticle.title}</CustomTitle>
-                        <TimeText sx={{ color: "#B7B7B7", mt: "10px" }}>{"views: " + visits}</TimeText>
+                        <CustomTitle>{ dataArticle.title }</CustomTitle>
                         <Box sx={{ height: "100%", width: "100%", mt: "50px" }}>
                           <FroalaEditorView model={dataArticle.content} />
                         </Box>
+                        <CloseBox />
                       </ContentBox>
                     </GridCenter>
                   </Grid>

@@ -202,9 +202,6 @@ const OrganSub = () => {
               <SubText>Struktur Organisasi</SubText>
               <Grid container spacing={{ xs: 3, md: 4 }} sx={{ justifyContent: "center" }}>
                 <GridCenter item>
-                  <Box sx={{ width: "100%", display: "flex", justifyContent: "center" }}>
-                    <BackButton />
-                  </Box>
                   <ContentBox>
                     <Orgchart>
                       {eselonId === 2
@@ -291,7 +288,7 @@ const OrganSub = () => {
                                       <ProfileBox sx={{ height: "90%" }}>
                                         <Avatar alt={p3.jabatan} src={`${BASE_URL}images/${p3.pathGambar}`} size="lg" sx={{ width: "70px", height: "70px" }} />
                                         <NbHorizontal>
-                                          <Pfposition sx={{ color: "#252525", fontSize: "16px" }}>{p3.jabatan}</Pfposition>
+                                          <Pfposition sx={{ color: "#252525", fontSize: "14px" }}>{p3.jabatan}</Pfposition>
                                           <Pfname sx={{ fontSize: "16px" }}> {p3.nama}</Pfname>
                                         </NbHorizontal>
                                       </ProfileBox>
@@ -345,6 +342,9 @@ const OrganSub = () => {
                               </Tree>
                             ))}
                     </Orgchart>
+                    <Box sx={{ width: "100%", display: "flex", justifyContent: "left", mt: "50px" }}>
+                    <BackButton />
+                  </Box>
                   </ContentBox>
                 </GridCenter>
               </Grid>

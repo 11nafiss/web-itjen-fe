@@ -84,6 +84,19 @@ const CustomTitle = styled(Typography)(({ theme }) => ({
   },
 }));
 
+const TitleText = styled(Typography)(({ theme }) => ({
+  fontSize: "14px",
+  fontWeight: "600",
+  marginBottom: "2px",
+  overflow: "hidden",
+  textOverflow: "ellipsis",
+  maxWidth: "98%",
+    whiteSpace: "pre-line",
+    display: "-webkit-box",
+    "-webkit-box-orient": "vertical",
+    "-webkit-line-clamp": "2",
+}));
+
 // Main Declaration
 const Report = () => {
   const { jenis } = useParams();
@@ -131,7 +144,7 @@ const Report = () => {
               <Grid container spacing={{ xs: 3, md: 4 }} column={{ xs: 4, sm: 8, md: 12 }} sx={{ justifyContent: "center" }}>
                 {dataReport.map((obj) => (
                   <GridCenter item key={obj.laporanId} xs={12} sm={6} md={4}>
-                    <Card variant="outlined" sx={{ width: "270px", maxWidth: "100%", height: "380px", borderRadius: "20px", boxShadow: "lg", gap: "5px" }}>
+                    <Card variant="outlined" sx={{ width: "270px", maxWidth: "100%", height: "320px", borderRadius: "20px", boxShadow: "lg", gap: "5px" }}>
                       <CardOverflow>
                         <AspectRatio ratio="16/9">
                           <img src={obj.pathImage === "" ? Juanda : `${BASE_URL}images/${obj.pathImage}`} loading="lazy" alt="" />
@@ -149,15 +162,10 @@ const Report = () => {
                         >
                           Laporan {obj.jenis}
                         </Typography>
-                        <Typography
-                          sx={{
-                            fontSize: "14px",
-                            fontWeight: "600",
-                            marginBottom: "2px",
-                          }}
+                        <TitleText
                         >
                           {obj.judul}
-                        </Typography>
+                        </TitleText>
                       </CardContent>
                       <CardOverflow variant="soft" sx={{ bgcolor: "background.level1", padding: "0px" }}>
                         <CardContent sx={{ width: "100%", padding: "0px" }}>

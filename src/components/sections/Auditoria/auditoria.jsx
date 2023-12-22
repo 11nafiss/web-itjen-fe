@@ -107,7 +107,7 @@ const Auditoria = () => {
                     </IconBox>
                   </ButtonAudit>
                 </Link>
-                <Link to="https://book746789.publuu.com" className="link">
+                <Link to="/auditoria" className="link">
                   <ButtonAudit variant="outlined" sx={{ marginLeft: "10px" }}>
                     <ButtonText>Edisi Lainnya</ButtonText>
                     <IconBox>
