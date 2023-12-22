@@ -79,12 +79,19 @@ const SubList = styled(ListItemText)(() => ({
 const ListText = styled(Typography)(({ theme }) => ({
   fontSize: "14px",
   fontWeight: "600",
-  display: "flex",
   textAlign: "center",
+  overflow: "hidden",
+  textOverflow: "ellipsis",
+  maxWidth: "98%",
+  whiteSpace: "pre-line",
+  display: "-webkit-box",
+  "-webkit-box-orient": "vertical",
+  "-webkit-line-clamp": "2",
   [theme.breakpoints.down("md")]: {
     margin: "0px 60px",
   },
 }));
+
 
 // Main Declaration
 const Trending = () => {

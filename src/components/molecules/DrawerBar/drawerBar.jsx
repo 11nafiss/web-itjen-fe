@@ -125,6 +125,13 @@ const DrawerBar = () => {
               );
             }
           })}
+          <Link to="/cari?keyword=&page=1" className="link">
+            <ListItemButton>
+              <ListItemText>
+                <Headlist>Cari Artikel</Headlist>
+              </ListItemText>
+            </ListItemButton>
+          </Link>
         </List>
       </Box>
     </Box>

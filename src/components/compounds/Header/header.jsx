@@ -17,7 +17,6 @@ import { DrawerBar } from "../../molecules/molecules";
 // Import Assets
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import WidgetsIcon from "@mui/icons-material/Widgets";
-import { SearchNav } from "../../components";
 
 // Import Api
 import { useAppDispatch, useAppSelector } from "../../../hooks/useTypedSelector";
@@ -59,7 +58,7 @@ const ScrollHandler = (props) => {
         transition: trigger ? "0.3s" : "0.5s",
         boxShadow: "none",
         borderColor: trigger ? "#08347C" : "#fff",
-        '&::placeholder': {
+        "&::placeholder": {
           color: trigger ? "#08347C" : "#fff",
         },
       },
@@ -98,7 +97,6 @@ const LogoBox = styled(Box)(({ theme }) => ({
 }));
 
 const LogoText = styled(Box)(() => ({
-  display: "flex",
   flexDirection: "column",
   justifyContent: "center",
   maxWidth: "100%",
@@ -202,7 +200,7 @@ const Search = styled("div")(({ theme }) => ({
   marginLeft: 0,
   transition: theme.transitions.create("width"),
   width: "15ch",
-  border: '2px solid',
+  border: "2px solid",
   [theme.breakpoints.up("sm")]: {
     marginLeft: theme.spacing(1),
     width: "auto",
@@ -220,9 +218,9 @@ const StyledInputBase = styled(Input)(({ theme }) => ({
     minWidth: "60px",
     borderWidth: "20px",
     borderColor: "#fff",
-    '&::placeholder': {
-      textOverflow: 'ellipsis !important',
-      fontWeight: "600"
+    "&::placeholder": {
+      textOverflow: "ellipsis !important",
+      fontWeight: "600",
     },
     [theme.breakpoints.up("sm")]: {
       width: "0.1ch",
@@ -285,7 +283,7 @@ const Header = (props) => {
                   <LogoBox>
                     <img src={Kemenkeu} style={{ width: "55px", height: "50px" }} />
                     <ScrollHandler {...props}>
-                      <LogoText>
+                      <LogoText sx={{ display: {xs: "none", md: "flex"} }}>
                         <CustomText>Kementerian Keuangan</CustomText>
                         <CustomText sx={{ fontSize: "11px", fontWeight: "500" }}>Inspektorat Jenderal</CustomText>
                       </LogoText>
@@ -348,27 +346,27 @@ const Header = (props) => {
                   ))}
                 </Box>
                 <ScrollHandler {...props}>
-                <Search sx={{ display: "flex", flexDirection: "row" }}>
-                <ScrollHandler {...props}>
-                <StyledInputBase
-                value={keyword}
-                onChange={(e) => dispatch(articleSearchSlice.actions.setSearchKeyword(e.target.value))}
-                placeholder="Cari…"
-                inputProps={{ "aria-label": "search" }}
-                onKeyDown={(ev) => {
-                if (ev.key === "Enter") {
-                    ev.preventDefault();
-                    navigateToSearch();
-                    }
-                  }}
-                />
-                </ScrollHandler>
-                <ScrollHandler {...props}>
-                <Button sx={{ borderWidth: "thick" }} onClick={navigateToSearch}>
-                  <SearchIcon />
-                </Button>
-                </ScrollHandler>
-                </Search>
+                  <Search sx={{ display: {xs: "none", md: "flex"}, flexDirection: "row" }}>
+                    <ScrollHandler {...props}>
+                      <StyledInputBase
+                        value={keyword}
+                        onChange={(e) => dispatch(articleSearchSlice.actions.setSearchKeyword(e.target.value))}
+                        placeholder="Cari…"
+                        inputProps={{ "aria-label": "search" }}
+                        onKeyDown={(ev) => {
+                          if (ev.key === "Enter") {
+                            ev.preventDefault();
+                            navigateToSearch();
+                          }
+                        }}
+                      />
+                    </ScrollHandler>
+                    <ScrollHandler {...props}>
+                      <Button sx={{ borderWidth: "thick" }} onClick={navigateToSearch}>
+                        <SearchIcon />
+                      </Button>
+                    </ScrollHandler>
+                  </Search>
                 </ScrollHandler>
                 <PopupState variant="popover" popupId="demo-popup-menu">
                   {(popupState) => (
