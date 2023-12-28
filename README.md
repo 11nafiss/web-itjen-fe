@@ -4,12 +4,19 @@
 
 -   [ReactJS](https://reactjs.org)
 -   [Vite](https://vitejs.dev)
--   [TypeScript](https://www.typescriptlang.org)
+-   [Redux Toolkit](https://redux-toolkit.js.org/)
 -   [Material UI](https://mui.com/)
 -   [Keen Slider](https://keen-slider.io/examples)
 -   [React Icons](https://react-icons.github.io/)
 -   [React Router](https://reactrouter.com/en/main)
 -   [React Chart](https://www.npmjs.com/package/react-organizational-chart)
+-   [React Carousel](https://www.npmjs.com/package/react-material-ui-carousel)
+-   [React Iframe](https://www.npmjs.com/package/react-iframe)
+-   [React Persist](https://www.npmjs.com/package/redux-persist)
+-   [Froala](https://froala.com/wysiwyg-editor/docs/framework-plugins/react/)
+-   [EmailJS](https://www.emailjs.com/docs/examples/reactjs/)
+-   [Publuu](https://publuu.com/)
+-   [SASS](https://sass-lang.com/)
 -   [ESLint](https://eslint.org)
 
 ## Getting started
