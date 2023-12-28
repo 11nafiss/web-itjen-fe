@@ -3,7 +3,6 @@
 ## What's inside?
 
 -   [ReactJS](https://reactjs.org)
--   [Vite](https://vitejs.dev)
 -   [Redux Toolkit](https://redux-toolkit.js.org/)
 -   [Material UI](https://mui.com/)
 -   [Keen Slider](https://keen-slider.io/examples)
@@ -18,7 +17,6 @@
 -   [EmailJS](https://www.emailjs.com/docs/examples/reactjs/)
 -   [Publuu](https://publuu.com/)
 -   [SASS](https://sass-lang.com/)
--   [ESLint](https://eslint.org)
 
 ## Getting started
 Please install Node JS first before opening this file,
