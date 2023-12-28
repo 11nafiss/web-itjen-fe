@@ -20,6 +20,7 @@
 -   [ESLint](https://eslint.org)
 
 ## Getting started
+Please install Node JS first before opening this file,
 
 1. Clone the repository.
 
