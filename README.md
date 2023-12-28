@@ -13,6 +13,7 @@
 -   [React Carousel](https://www.npmjs.com/package/react-material-ui-carousel)
 -   [React Iframe](https://www.npmjs.com/package/react-iframe)
 -   [React Persist](https://www.npmjs.com/package/redux-persist)
+-   [Highcharts](https://www.highcharts.com/docs/getting-started/install-from-npm)
 -   [Froala](https://froala.com/wysiwyg-editor/docs/framework-plugins/react/)
 -   [EmailJS](https://www.emailjs.com/docs/examples/reactjs/)
 -   [Publuu](https://publuu.com/)
